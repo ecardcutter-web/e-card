@@ -914,4 +914,4 @@ if __name__ == '__main__':
     
     print("\n🌐 Server running on: http://localhost:5000")
     
-    app.run(debug=True, port=5000, host='127.0.0.1')
+    app.run(debug=False, port=5000, host='0.0.0.0')
