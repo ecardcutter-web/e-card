@@ -371,23 +371,27 @@ def convert_text_to_xml(text, title):
     """Convert extracted text to XML format"""
     lines = [line.strip() for line in text.split('\n') if line.strip()]
     
-    xml_content = f'''<?xml version="1.0" encoding="UTF-8"?>
-<document>
-    <metadata>
-        <title>{title}</title>
-        <pages>{len([p for p in text.split('\n\n') if p.strip()])}</pages>
-        <lines>{len(lines)}</lines>
-        <conversion_date>{datetime.now().isoformat()}</conversion_date>
-    </metadata>
-    <content>
-'''
+    # Build XML using list join method (no backslash issues)
+    xml_lines = []
+    xml_lines.append('<?xml version="1.0" encoding="UTF-8"?>')
+    xml_lines.append('<document>')
+    xml_lines.append('    <metadata>')
+    xml_lines.append('        <title>' + title + '</title>')
+    xml_lines.append('        <pages>' + str(len([p for p in text.split('\n\n') if p.strip()])) + '</pages>')
+    xml_lines.append('        <lines>' + str(len(lines)) + '</lines>')
+    xml_lines.append('        <conversion_date>' + datetime.now().isoformat() + '</conversion_date>')
+    xml_lines.append('    </metadata>')
+    xml_lines.append('    <content>')
     
     for i, line in enumerate(lines, 1):
         escaped_line = line.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-        xml_content += f'        <line number="{i}">{escaped_line}</line>\n'
+        xml_lines.append('        <line number="' + str(i) + '">' + escaped_line + '</line>')
     
-    xml_content += '    </content>\n</document>'
-    return xml_content
+    xml_lines.append('    </content>')
+    xml_lines.append('</document>')
+    
+    # Join with newlines
+    return '\n'.join(xml_lines)
 
 def convert_text_to_html(text, title):
     """Convert extracted text to HTML format"""
