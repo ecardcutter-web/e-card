@@ -117,9 +117,9 @@ def upload_file():
         pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], pdf_filename)
         file.save(pdf_path)
         
-        print(f"✂️ Processing {card_type} card from PDF")
-        print(f"🎯 Quality: 300 DPI (Premium)")
-        print(f"🕒 Files will auto-delete in 5 minutes")
+        print("✂️ Processing " + card_type + " card from PDF")
+        print("🎯 Quality: 300 DPI (Premium)")
+        print("🕒 Files will auto-delete in 5 minutes")
         
         try:
             if password:
@@ -139,7 +139,7 @@ def upload_file():
             
             pix = page.get_pixmap(matrix=matrix)
             w, h = pix.width, pix.height
-            print(f"📐 Image dimensions: {w} x {h}")
+            print("📐 Image dimensions: " + str(w) + " x " + str(h))
             
             if card_type == "aadhaar":
                 left = int(w * 0.06)
@@ -172,7 +172,7 @@ def upload_file():
             card_width = min(card_width, w - left)
             card_height = min(card_height, h - top)
             
-            print(f"✂️ Cropping area: {left},{top} to {left+card_width},{top+card_height}")
+            print("✂️ Cropping area: " + str(left) + "," + str(top) + " to " + str(left+card_width) + "," + str(top+card_height))
             
             img_data = pix.tobytes("ppm")
             img = Image.open(io.BytesIO(img_data))
@@ -182,24 +182,24 @@ def upload_file():
             cropped_path = os.path.join(app.config['CROPPED_FOLDER'], cropped_filename)
             cropped_img.save(cropped_path, dpi=(dpi, dpi), format='PNG', optimize=True)
             
-            print(f"✅ Cropped image saved: {cropped_filename} ({cropped_img.size[0]}x{cropped_img.size[1]})")
+            print("✅ Cropped image saved: " + cropped_filename + " (" + str(cropped_img.size[0]) + "x" + str(cropped_img.size[1]) + ")")
             
             pdf_document.close()
             cropped_files_info.append(cropped_filename)
             
             return jsonify({
                 'success': True,
-                'message': f'{card_type.title()} card cropped successfully at 300 DPI! File auto-deletes in 5 minutes.',
+                'message': card_type.title() + ' card cropped successfully at 300 DPI! File auto-deletes in 5 minutes.',
                 'file_id': file_id,
                 'card_type': card_type
             })
             
         except Exception as e:
-            print(f"❌ Card cropping error: {str(e)}")
-            return jsonify({'success': False, 'error': f'Card cropping failed: {str(e)}'})
+            print("❌ Card cropping error: " + str(e))
+            return jsonify({'success': False, 'error': 'Card cropping failed: ' + str(e)})
         
     except Exception as e:
-        return jsonify({'success': False, 'error': f'Upload failed: {str(e)}'})
+        return jsonify({'success': False, 'error': 'Upload failed: ' + str(e)})
 
 # ==================== IMAGE CONVERTER ====================
 
@@ -227,8 +227,8 @@ def convert_image():
         original_path = os.path.join(app.config['UPLOAD_FOLDER'], original_filename)
         file.save(original_path)
         
-        print(f"🔄 Converting image to {format_type.upper()} (Quality: {quality}%)")
-        print(f"📁 Original file: {file.filename}")
+        print("🔄 Converting image to " + format_type.upper() + " (Quality: " + str(quality) + "%)")
+        print("📁 Original file: " + file.filename)
         
         try:
             # Open the image
@@ -297,7 +297,7 @@ def convert_image():
                 else:
                     # For other formats, save with default settings
                     img.save(output_buffer, format_type.upper())
-                    mime_type = f'image/{format_type}'
+                    mime_type = 'image/' + format_type
                     ext = format_type
                 
                 output_buffer.seek(0)
@@ -309,9 +309,9 @@ def convert_image():
             
             # Create response
             original_name = os.path.splitext(file.filename)[0]
-            download_name = f"{original_name}.{ext}"
+            download_name = original_name + "." + ext
             
-            converted_filename = f"{file_id}.{ext}"
+            converted_filename = file_id + "." + ext
             converted_path = os.path.join(app.config['CONVERTED_FOLDER'], converted_filename)
             
             with open(converted_path, 'wb') as f:
@@ -327,14 +327,14 @@ def convert_image():
             )
             
         except Exception as e:
-            print(f"❌ Image conversion error: {str(e)}")
+            print("❌ Image conversion error: " + str(e))
             # Clean up original file if it exists
             if os.path.exists(original_path):
                 os.remove(original_path)
-            return jsonify({'success': False, 'error': f'Image conversion failed: {str(e)}'})
+            return jsonify({'success': False, 'error': 'Image conversion failed: ' + str(e)})
         
     except Exception as e:
-        return jsonify({'success': False, 'error': f'Upload failed: {str(e)}'})
+        return jsonify({'success': False, 'error': 'Upload failed: ' + str(e)})
 
 # ==================== PDF CONVERTER ENHANCED FUNCTIONS ====================
 
@@ -347,8 +347,8 @@ def convert_text_to_csv(text):
         if line:
             escaped_line = line.replace('"', '""')
             if ',' in line or '"' in line:
-                escaped_line = f'"{escaped_line}"'
-            csv_lines.append(f'{i},{escaped_line}')
+                escaped_line = '"' + escaped_line + '"'
+            csv_lines.append(str(i) + ',' + escaped_line)
     
     return '\n'.join(csv_lines)
 
@@ -397,113 +397,118 @@ def convert_text_to_html(text, title):
     """Convert extracted text to HTML format"""
     lines = [line.strip() for line in text.split('\n') if line.strip()]
     
-    html_content = f'''<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>{title}</title>
-    <style>
-        body {{ font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }}
-        .content {{ max-width: 800px; margin: 0 auto; }}
-        .line {{ margin-bottom: 10px; padding: 5px; border-left: 3px solid #007bff; }}
-        .metadata {{ background: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 30px; }}
-    </style>
-</head>
-<body>
-    <div class="content">
-        <div class="metadata">
-            <h1>{title}</h1>
-            <p>Pages: {len([p for p in text.split('\n\n') if p.strip()])} | Lines: {len(lines)}</p>
-            <p>Converted on: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
-        </div>
-        <div class="text-content">
-'''
+    html_lines = []
+    html_lines.append('<!DOCTYPE html>')
+    html_lines.append('<html>')
+    html_lines.append('<head>')
+    html_lines.append('    <meta charset="UTF-8">')
+    html_lines.append('    <title>' + title + '</title>')
+    html_lines.append('    <style>')
+    html_lines.append('        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }')
+    html_lines.append('        .content { max-width: 800px; margin: 0 auto; }')
+    html_lines.append('        .line { margin-bottom: 10px; padding: 5px; border-left: 3px solid #007bff; }')
+    html_lines.append('        .metadata { background: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 30px; }')
+    html_lines.append('    </style>')
+    html_lines.append('</head>')
+    html_lines.append('<body>')
+    html_lines.append('    <div class="content">')
+    html_lines.append('        <div class="metadata">')
+    html_lines.append('            <h1>' + title + '</h1>')
+    html_lines.append('            <p>Pages: ' + str(len([p for p in text.split('\n\n') if p.strip()])) + ' | Lines: ' + str(len(lines)) + '</p>')
+    html_lines.append('            <p>Converted on: ' + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '</p>')
+    html_lines.append('        </div>')
+    html_lines.append('        <div class="text-content">')
     
     for i, line in enumerate(lines, 1):
         escaped_line = line.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-        html_content += f'            <div class="line"><strong>{i}.</strong> {escaped_line}</div>\n'
+        html_lines.append('            <div class="line"><strong>' + str(i) + '.</strong> ' + escaped_line + '</div>')
     
-    html_content += '''        </div>
-    </div>
-</body>
-</html>'''
-    return html_content
+    html_lines.append('        </div>')
+    html_lines.append('    </div>')
+    html_lines.append('</body>')
+    html_lines.append('</html>')
+    
+    return '\n'.join(html_lines)
 
 def create_document_content(text, format_type, title):
     """Create enhanced document content with proper structure"""
     lines = [line.strip() for line in text.split('\n') if line.strip()]
     
     if format_type in ['doc', 'docx']:
-        doc_content = f"""TITLE: {title}
-CONVERSION DATE: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-PAGES: {len([p for p in text.split('\n\n') if p.strip()])}
-TOTAL LINES: {len(lines)}
-
-DOCUMENT CONTENT:
-{'=' * 60}
-
-"""
+        doc_lines = []
+        doc_lines.append("TITLE: " + title)
+        doc_lines.append("CONVERSION DATE: " + datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        doc_lines.append("PAGES: " + str(len([p for p in text.split('\n\n') if p.strip()])))
+        doc_lines.append("TOTAL LINES: " + str(len(lines)))
+        doc_lines.append("")
+        doc_lines.append("DOCUMENT CONTENT:")
+        doc_lines.append("=" * 60)
+        doc_lines.append("")
+        
         for i, line in enumerate(lines, 1):
             if line:
-                doc_content += f"{i}. {line}\n"
+                doc_lines.append(str(i) + ". " + line)
         
-        return doc_content
+        return '\n'.join(doc_lines)
     
     elif format_type == 'rtf':
-        rtf_content = f"""{{\\rtf1\\ansi\\deff0
-{{\\fonttbl {{\\f0 Times New Roman;}}}}
-\\f0\\fs24
-
-{{\\b {title}}}\\\\
-\\par
-Conversion Date: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\\\\
-Pages: {len([p for p in text.split('\n\n') if p.strip()])}\\\\
-Lines: {len(lines)}\\\\
-\\par
-\\par
-{{\\b DOCUMENT CONTENT:}}\\\\
-\\par
-{'=' * 60}
-\\par
-\\par
-"""
+        rtf_lines = []
+        rtf_lines.append("{\\rtf1\\ansi\\deff0")
+        rtf_lines.append("{\\fonttbl {\\f0 Times New Roman;}}")
+        rtf_lines.append("\\f0\\fs24")
+        rtf_lines.append("")
+        rtf_lines.append("{\\b " + title + "}\\\\")
+        rtf_lines.append("\\par")
+        rtf_lines.append("Conversion Date: " + datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "\\\\")
+        rtf_lines.append("Pages: " + str(len([p for p in text.split('\n\n') if p.strip()])) + "\\\\")
+        rtf_lines.append("Lines: " + str(len(lines)) + "\\\\")
+        rtf_lines.append("\\par")
+        rtf_lines.append("\\par")
+        rtf_lines.append("{\\b DOCUMENT CONTENT:}\\\\")
+        rtf_lines.append("\\par")
+        rtf_lines.append("=" * 60)
+        rtf_lines.append("\\par")
+        rtf_lines.append("\\par")
+        
         for i, line in enumerate(lines, 1):
             if line:
-                rtf_content += f"{i}. {line}\\\\\\par\n"
+                rtf_lines.append(str(i) + ". " + line + "\\\\\\\\\\par")
         
-        rtf_content += "}"
-        return rtf_content
+        rtf_lines.append("}")
+        return '\n'.join(rtf_lines)
     
     elif format_type == 'odt':
-        odt_content = f"""<?xml version="1.0" encoding="UTF-8"?>
-<document>
-  <title>{title}</title>
-  <metadata>
-    <creator>PDF Converter</creator>
-    <date>{datetime.now().isoformat()}</date>
-  </metadata>
-  <content>
-"""
+        odt_lines = []
+        odt_lines.append('<?xml version="1.0" encoding="UTF-8"?>')
+        odt_lines.append('<document>')
+        odt_lines.append('  <title>' + title + '</title>')
+        odt_lines.append('  <metadata>')
+        odt_lines.append('    <creator>PDF Converter</creator>')
+        odt_lines.append('    <date>' + datetime.now().isoformat() + '</date>')
+        odt_lines.append('  </metadata>')
+        odt_lines.append('  <content>')
+        
         for i, line in enumerate(lines, 1):
             if line:
-                odt_content += f"    <line number='{i}'>{line}</line>\n"
+                odt_lines.append('    <line number="' + str(i) + '">' + line + '</line>')
         
-        odt_content += "  </content>\n</document>"
-        return odt_content
+        odt_lines.append('  </content>')
+        odt_lines.append('</document>')
+        return '\n'.join(odt_lines)
     
     else:
-        return f"{title}\n\n{text}"
+        return title + "\n\n" + text
 
 def create_svg_from_page(page, quality):
     width, height = page.rect.width, page.rect.height
     scale = quality / 100.0
     
-    svg_content = f'''<svg width="{width * scale}" height="{height * scale}" xmlns="http://www.w3.org/2000/svg">
-    <rect width="100%" height="100%" fill="white"/>
-    <text x="50" y="50" font-family="Arial" font-size="12" fill="black">
-        PDF to SVG Conversion
-    </text>
-</svg>'''
+    svg_content = '<svg width="' + str(width * scale) + '" height="' + str(height * scale) + '" xmlns="http://www.w3.org/2000/svg">\n'
+    svg_content += '    <rect width="100%" height="100%" fill="white"/>\n'
+    svg_content += '    <text x="50" y="50" font-family="Arial" font-size="12" fill="black">\n'
+    svg_content += '        PDF to SVG Conversion\n'
+    svg_content += '    </text>\n'
+    svg_content += '</svg>'
     return svg_content
 
 def convert_text_to_excel(text, format_type):
@@ -513,35 +518,39 @@ def convert_text_to_excel(text, format_type):
 def create_presentation_content(text, format_type, title):
     pages = [p.strip() for p in text.split('\n\n') if p.strip()]
     
-    ppt_content = f"""PRESENTATION: {title}
-SLIDES: {len(pages)}
-CONVERSION DATE: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
-
-SLIDE CONTENT:
-{'=' * 50}
-
-"""
+    ppt_lines = []
+    ppt_lines.append("PRESENTATION: " + title)
+    ppt_lines.append("SLIDES: " + str(len(pages)))
+    ppt_lines.append("CONVERSION DATE: " + datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    ppt_lines.append("")
+    ppt_lines.append("SLIDE CONTENT:")
+    ppt_lines.append("=" * 50)
+    ppt_lines.append("")
     
     for i, page in enumerate(pages, 1):
-        ppt_content += f"\nSLIDE {i}:\n{page}\n{'-' * 40}\n"
+        ppt_lines.append("")
+        ppt_lines.append("SLIDE " + str(i) + ":")
+        ppt_lines.append(page)
+        ppt_lines.append("-" * 40)
     
-    return ppt_content
+    return '\n'.join(ppt_lines)
 
 def create_ebook_content(text, format_type, title):
     lines = [line.strip() for line in text.split('\n') if line.strip()]
     
-    ebook_content = f"""TITLE: {title}
-AUTHOR: PDF Converter
-DATE: {datetime.now().strftime("%Y-%m-%d")}
-
-CONTENT:
-{'=' * 50}
-
-"""
-    for i, line in enumerate(lines, 1):
-        ebook_content += f"{i}. {line}\n"
+    ebook_lines = []
+    ebook_lines.append("TITLE: " + title)
+    ebook_lines.append("AUTHOR: PDF Converter")
+    ebook_lines.append("DATE: " + datetime.now().strftime("%Y-%m-%d"))
+    ebook_lines.append("")
+    ebook_lines.append("CONTENT:")
+    ebook_lines.append("=" * 50)
+    ebook_lines.append("")
     
-    return ebook_content
+    for i, line in enumerate(lines, 1):
+        ebook_lines.append(str(i) + ". " + line)
+    
+    return '\n'.join(ebook_lines)
 
 # ==================== ENHANCED PDF CONVERTER ROUTE ====================
 
@@ -568,8 +577,8 @@ def convert_pdf():
         pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], pdf_filename)
         file.save(pdf_path)
         
-        print(f"🔄 Converting PDF to {format_type.upper()} (Quality: {quality}%)")
-        print(f"📁 Original file: {file.filename}")
+        print("🔄 Converting PDF to " + format_type.upper() + " (Quality: " + str(quality) + "%)")
+        print("📁 Original file: " + file.filename)
         
         try:
             pdf_document = fitz.open(pdf_path)
@@ -634,9 +643,9 @@ def convert_pdf():
                 if len(images) == 1:
                     img_io, mime_type, ext = images[0]
                     original_name = os.path.splitext(file.filename)[0]
-                    download_name = f"{original_name}.{ext}"
+                    download_name = original_name + "." + ext
                     
-                    converted_filename = f"{file_id}.{ext}"
+                    converted_filename = file_id + "." + ext
                     converted_path = os.path.join(app.config['CONVERTED_FOLDER'], converted_filename)
                     with open(converted_path, 'wb') as f:
                         f.write(img_io.getvalue())
@@ -653,10 +662,10 @@ def convert_pdf():
                     zip_io = io.BytesIO()
                     with zipfile.ZipFile(zip_io, 'w') as zip_file:
                         for i, (img_io, mime_type, ext) in enumerate(images):
-                            zip_file.writestr(f'page_{i+1}.{ext}', img_io.getvalue())
+                            zip_file.writestr('page_' + str(i+1) + '.' + ext, img_io.getvalue())
                     zip_io.seek(0)
                     
-                    zip_filename = f"{file_id}.zip"
+                    zip_filename = file_id + ".zip"
                     zip_path = os.path.join(app.config['CONVERTED_FOLDER'], zip_filename)
                     with open(zip_path, 'wb') as f:
                         f.write(zip_io.getvalue())
@@ -667,7 +676,7 @@ def convert_pdf():
                     return send_file(
                         zip_io,
                         as_attachment=True,
-                        download_name=f'{original_name}_pages.zip',
+                        download_name=original_name + '_pages.zip',
                         mimetype='application/zip'
                     )
             
@@ -687,21 +696,21 @@ def convert_pdf():
                 if format_lower == 'txt':
                     output_io.write(text_content.encode('utf-8'))
                     mime_type = 'text/plain'
-                    download_name = f"{original_name}.txt"
+                    download_name = original_name + ".txt"
                     ext = 'txt'
                     
                 elif format_lower == 'csv':
                     csv_content = convert_text_to_csv(text_content)
                     output_io.write(csv_content.encode('utf-8'))
                     mime_type = 'text/csv'
-                    download_name = f"{original_name}.csv"
+                    download_name = original_name + ".csv"
                     ext = 'csv'
                     
                 elif format_lower == 'json':
                     json_content = convert_text_to_json(text_content)
                     output_io.write(json_content.encode('utf-8'))
                     mime_type = 'application/json'
-                    download_name = f"{original_name}.json"
+                    download_name = original_name + ".json"
                     ext = 'json'
                     
                 elif format_lower in ['xml', 'html']:
@@ -709,13 +718,13 @@ def convert_pdf():
                         xml_content = convert_text_to_xml(text_content, original_name)
                         output_io.write(xml_content.encode('utf-8'))
                         mime_type = 'application/xml'
-                        download_name = f"{original_name}.xml"
+                        download_name = original_name + ".xml"
                         ext = 'xml'
                     else:
                         html_content = convert_text_to_html(text_content, original_name)
                         output_io.write(html_content.encode('utf-8'))
                         mime_type = 'text/html'
-                        download_name = f"{original_name}.html"
+                        download_name = original_name + ".html"
                         ext = 'html'
                         
                 elif format_lower in ['doc', 'docx', 'odt', 'rtf']:
@@ -731,7 +740,7 @@ def convert_pdf():
                     else:
                         mime_type = 'application/rtf'
                     
-                    download_name = f"{original_name}.{format_lower}"
+                    download_name = original_name + "." + format_lower
                     ext = format_lower
                     
                 elif format_lower in ['xls', 'xlsx']:
@@ -743,7 +752,7 @@ def convert_pdf():
                     else:
                         mime_type = 'application/vnd.ms-excel'
                     
-                    download_name = f"{original_name}.{format_lower}"
+                    download_name = original_name + "." + format_lower
                     ext = format_lower
                     
                 elif format_lower in ['ppt', 'pptx']:
@@ -755,7 +764,7 @@ def convert_pdf():
                     else:
                         mime_type = 'application/vnd.ms-powerpoint'
                     
-                    download_name = f"{original_name}.{format_lower}"
+                    download_name = original_name + "." + format_lower
                     ext = format_lower
                     
                 elif format_lower in ['epub', 'mobi']:
@@ -767,18 +776,18 @@ def convert_pdf():
                     else:
                         mime_type = 'application/x-mobipocket-ebook'
                     
-                    download_name = f"{original_name}.{format_lower}"
+                    download_name = original_name + "." + format_lower
                     ext = format_lower
                     
                 else:
                     output_io.write(text_content.encode('utf-8'))
                     mime_type = 'text/plain'
-                    download_name = f"{original_name}.{format_type}"
+                    download_name = original_name + "." + format_type
                     ext = format_type
                 
                 output_io.seek(0)
                 
-                converted_filename = f"{file_id}.{ext}"
+                converted_filename = file_id + "." + ext
                 converted_path = os.path.join(app.config['CONVERTED_FOLDER'], converted_filename)
                 with open(converted_path, 'wb') as f:
                     f.write(output_io.getvalue())
@@ -793,11 +802,11 @@ def convert_pdf():
                 )
                 
         except Exception as e:
-            print(f"❌ PDF conversion error: {str(e)}")
-            return jsonify({'success': False, 'error': f'PDF conversion failed: {str(e)}'})
+            print("❌ PDF conversion error: " + str(e))
+            return jsonify({'success': False, 'error': 'PDF conversion failed: ' + str(e)})
         
     except Exception as e:
-        return jsonify({'success': False, 'error': f'Upload failed: {str(e)}'})
+        return jsonify({'success': False, 'error': 'Upload failed: ' + str(e)})
 
 # ==================== COMMON ENDPOINTS ====================
 
@@ -895,9 +904,9 @@ def not_found(error):
 
 if __name__ == '__main__':
     print("🚀 Starting E-Card Cutter...")
-    print(f"📁 Upload folder: {UPLOAD_FOLDER}")
-    print(f"📁 Cropped folder: {CROPPED_FOLDER}")
-    print(f"📁 Converted folder: {CONVERTED_FOLDER}")
+    print("📁 Upload folder: " + UPLOAD_FOLDER)
+    print("📁 Cropped folder: " + CROPPED_FOLDER)
+    print("📁 Converted folder: " + CONVERTED_FOLDER)
     print("\n🛠️ Available Tools:")
     print("   • E-Card Cutter - /")
     print("   • Aadhaar Card Crop - /aadhaar-crop")
@@ -914,7 +923,7 @@ if __name__ == '__main__':
     print("   • FAQ - /faq")
     
     file_cleaner.start_auto_cleanup()
-    print(f"🕒 Auto-delete enabled: Files will be deleted after 5 minutes")
+    print("🕒 Auto-delete enabled: Files will be deleted after 5 minutes")
     
     print("\n🌐 Server running on: http://localhost:5000")
     
