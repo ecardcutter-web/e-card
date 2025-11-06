@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- SEO Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAN Card Crop Tool - Free Online PAN Card PDF to Image Converter</title>
+    <meta name="description" content="Free online PAN Card Crop Tool. Extract and crop perfect PAN card images from PDF documents in seconds. Convert NSDL, UTITSL PAN PDF to JPG/PNG images instantly.">
+    <meta name="keywords" content="pan card crop, pan card pdf to image, crop pan card, pan card converter, pan card extractor, pan card image, pan card jpg, pan card png, pan card online tool, free pan card crop, crop nsdl pan, utitsl pan crop">
+    <meta name="author" content="E-Card Cutter">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="PAN Card Crop Tool - Free Online PAN Card PDF to Image Converter">
+    <meta property="og:description" content="Extract and crop perfect PAN card images from PDF documents in seconds. Convert NSDL, UTITSL PAN PDF to JPG/PNG images instantly.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdomain.com/pan-crop">
+    <meta property="og:image" content="https://yourdomain.com/static/images/pan-card-crop-tool-preview.jpg">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PAN Card Crop Tool - Free Online PAN Card PDF to Image Converter">
+    <meta name="twitter:description" content="Extract and crop perfect PAN card images from PDF documents in seconds.">
+    <meta name="twitter:image" content="https://yourdomain.com/static/images/pan-card-crop-tool-preview.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://yourdomain.com/pan-crop">
+    
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "PAN Card Crop Tool",
+      "description": "Free online tool to crop and extract PAN card images from PDF documents",
+      "url": "https://yourdomain.com/pan-crop",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "E-Card Cutter"
+      },
+      "screenshot": "https://yourdomain.com/static/images/pan-card-crop-tool-preview.jpg"
+    }
+    </script>
+    
+    <link rel="icon" type="image/x-icon" href="/static/images/pan.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --light: #f8f9fa;
+            --dark: #2b2d42;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --pan-color: #0066cc;
+            --gradient: linear-gradient(135deg, #0066cc 0%, #3399ff 50%, #0066cc 100%);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-image {
+            width: 35px;
+            height: 35px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--pan-color), #3399ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--pan-color);
+            background: rgba(0, 102, 204, 0.1);
+        }
+
+        /* NEW: Dropdown Menu Styles */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 220px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 15px;
+            padding: 10px 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border-left-color: var(--primary);
+            padding-left: 25px;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e9ecef;
+            margin: 8px 0;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 120px auto 0;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .left-sidebar, .right-sidebar {
+            width: 160px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-ad {
+            position: sticky;
+            top: 140px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+            text-align: center;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-ad .ad-label {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #f0f0f0;
+            color: #666;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+
+        .content-area {
+            flex: 1;
+            max-width: 1000px;
+        }
+
+        .ad-slot {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .ad-label {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #f0f0f0;
+            color: #666;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+
+        .ad-slot.responsive-ad {
+            min-height: 90px;
+            margin: 0 0 30px 0;
+        }
+
+        .ad-slot.before-convert {
+            min-height: 90px;
+            margin: 25px 0;
+        }
+
+        .tool-header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--pan-color), #3399ff);
+            padding: 50px 20px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 102, 204, 0.2);
+            margin-top: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            line-height: 1.2;
+        }
+
+        .tool-subtitle {
+            font-size: 1.2rem;
+            color: white;
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(0, 102, 204, 0.9);
+            padding: 15px 30px;
+            border-radius: 25px;
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
+            position: relative;
+            line-height: 1.5;
+            font-weight: 500;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .tool-subtitle::before, .tool-subtitle::after {
+            content: "•••";
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+
+        .tool-subtitle::before {
+            left: 15px;
+        }
+
+        .tool-subtitle::after {
+            right: 15px;
+        }
+
+        .upload-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 102, 204, 0.1);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--pan-color), #3399ff);
+        }
+
+        .upload-area {
+            border: 3px dashed #e0e0e0;
+            border-radius: 15px;
+            padding: 60px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: var(--pan-color);
+            background: #f0f8ff;
+            transform: translateY(-2px);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--pan-color);
+            background: #e6f7ff;
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            color: var(--pan-color);
+            margin-bottom: 20px;
+        }
+
+        .upload-area h3 {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .upload-area p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .browse-btn {
+            background: linear-gradient(135deg, var(--pan-color), #3399ff);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .browse-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 102, 204, 0.3);
+        }
+
+        .process-btn {
+            background: var(--dark);
+            margin-top: 20px;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+        }
+
+        .process-btn:hover {
+            background: #1a1d2e;
+        }
+
+        .file-name {
+            color: var(--success);
+            font-weight: 600;
+            margin: 15px 0;
+            padding: 10px 15px;
+            background: rgba(76, 201, 240, 0.1);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .password-section {
+            margin: 20px 0;
+            display: none;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid var(--pan-color);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--pan-color);
+            margin-bottom: 15px;
+        }
+
+        .guide-section {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+        }
+
+        .guide-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .guide-header h2 {
+            font-size: 2.2rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .guide-steps {
+            display: grid;
+            gap: 25px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .guide-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid var(--pan-color);
+        }
+
+        .step-number {
+            background: var(--pan-color);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .preview-section {
+            display: none;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .preview-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border: 2px solid var(--success);
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .preview-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #f0f8ff, #e6f7ff);
+            border: 2px dashed var(--primary);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: bold;
+            margin: 0 auto;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .preview-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+        }
+
+        .loading-spinner {
+            display: none;
+            margin: 20px auto;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 102, 204, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--pan-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            color: var(--warning);
+            background: rgba(247, 37, 133, 0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .success-message {
+            color: var(--success);
+            background: rgba(76, 201, 240, 0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .auto-delete-notice {
+            background: rgba(76, 201, 240, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--success);
+            display: none;
+        }
+
+        /* SEO Content Section */
+        .seo-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            margin-top: 40px;
+            line-height: 1.8;
+        }
+
+        .seo-content h2 {
+            color: var(--pan-color);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .seo-content h3 {
+            color: var(--dark);
+            margin: 25px 0 15px;
+            font-size: 1.4rem;
+        }
+
+        .seo-content p {
+            margin-bottom: 15px;
+        }
+
+        .seo-content ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .seo-content li {
+            margin-bottom: 10px;
+        }
+
+        .official-links {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .official-links h3 {
+            color: #2e7d32;
+            margin-top: 0;
+        }
+
+        .official-link {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 10px 10px 0 0;
+            transition: all 0.3s ease;
+        }
+
+        .official-link:hover {
+            background: #388e3c;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .left-sidebar, .right-sidebar {
+                display: none;
+            }
+            
+            .main-container {
+                max-width: 1200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .tool-title {
+                font-size: 2.2rem;
+            }
+            
+            .tool-subtitle {
+                font-size: 1.1rem;
+                padding: 12px 20px;
+            }
+            
+            .upload-card {
+                padding: 25px;
+            }
+            
+            .upload-area {
+                padding: 40px 20px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .guide-step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .ad-slot.responsive-ad,
+            .ad-slot.before-convert {
+                min-height: 50px;
+                padding: 10px;
+            }
+
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                padding: 15px;
+            }
+           
+            nav.active {
+                display: block;
+            }
+           
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .dropdown-menu {
+                position: static;
+                box-shadow: none;
+                background: #f8f9fa;
+                margin-top: 10px;
+            }
+           
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tool-title {
+                font-size: 2rem;
+            }
+            
+            .tool-subtitle {
+                font-size: 1rem;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Breadcrumb Navigation -->
+    <div itemscope itemtype="https://schema.org/BreadcrumbList" style="display: none;">
+        <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a itemprop="item" href="https://yourdomain.com/">
+                <span itemprop="name">Home</span>
+            </a>
+            <meta itemprop="position" content="1" />
+        </span>
+        <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a itemprop="item" href="https://yourdomain.com/tools">
+                <span itemprop="name">Tools</span>
+            </a>
+            <meta itemprop="position" content="2" />
+        </span>
+        <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a itemprop="item" href="https://yourdomain.com/pan-crop">
+                <span itemprop="name">PAN Card Crop Tool</span>
+            </a>
+            <meta itemprop="position" content="3" />
+        </span>
+    </div>
+
+    <!-- UPDATED HEADER WITH DROPDOWN MENU -->
+    <header>
+        <a href="/" class="logo">
+            <img src="/static/images/logo.png" alt="E-Card Cutter - PAN Card Crop Tool" class="logo-image">
+            <h1>PAN Card <span>Crop</span></h1>
+        </a>
+        <div class="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li class="dropdown">
+                    <a href="#tools" class="dropdown-toggle">
+                        Tools <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="/aadhaar-crop" class="dropdown-item">Aadhaar Crop</a>
+                        <a href="/janaadhaar-crop" class="dropdown-item">Janaadhaar Crop</a>
+                        <a href="/pan-crop" class="dropdown-item">PAN Crop</a>
+                        <a href="/voterid-crop" class="dropdown-item">Voter ID Crop</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/pdf-converter" class="dropdown-item">PDF Converter</a>
+                        <a href="/image-converter" class="dropdown-item">Image Converter</a>
+                    </div>
+                </li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/privacy">Privacy</a></li>
+                <li><a href="/terms">Terms</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <!-- Left Sidebar Ad -->
+        <div class="left-sidebar">
+            <div class="sidebar-ad">
+                <div class="ad-label">Advertisement</div>
+                <!-- Google AdSense Code -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                    data-ad-slot="XXXXXXXXXX"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="tool-header">
+                <h1 class="tool-title">PAN Card Crop Tool</h1>
+                <p class="tool-subtitle">Crop perfect PAN card images from PDF documents in seconds</p>
+            </div>
+
+            <!-- Top Ad Slot -->
+            <div class="ad-slot responsive-ad">
+                <div class="ad-label">Advertisement</div>
+                <!-- Google AdSense Code -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                    data-ad-slot="XXXXXXXXXX"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+            <div class="upload-card">
+                <div class="upload-area" id="uploadArea">
+                    <!-- PAN Card image -->
+                    <img src="/static/images/pan.png" alt="PAN Card" 
+                         style="width: 80px; height: 80px; object-fit: contain; margin-bottom: 20px; border-radius: 10px;">
+                    
+                    <h3>Drop Your PAN Card PDF Here</h3>
+                    <p>Supported: NSDL, UTITSL PAN PDF files • Max 10MB</p>
+                    
+                    <div class="file-name" id="fileName"></div>
+                    
+                    <div class="password-section" id="passwordSection">
+                        <input type="password" class="password-input" id="pdfPassword" placeholder="Enter PDF password if protected">
+                    </div>
+                    
+                    <button class="browse-btn" id="browseBtn">
+                        <i class="fas fa-folder-open"></i> Select PDF File
+                    </button>
+                    <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+                </div>
+
+                <!-- Before Convert Ad Slot -->
+                <div class="ad-slot before-convert">
+                    <div class="ad-label">Advertisement</div>
+                    <!-- Google AdSense Code -->
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                    <ins class="adsbygoogle"
+                        style="display:block"
+                        data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                        data-ad-slot="XXXXXXXXXX"
+                        data-ad-format="auto"
+                        data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+
+                <div class="error-message" id="errorMessage"></div>
+                <div class="success-message" id="successMessage"></div>
+                <div class="auto-delete-notice" id="autoDeleteNotice">
+                    <i class="fas fa-clock"></i> Files are automatically deleted after 5 minutes for your privacy
+                </div>
+
+                <div style="text-align: center; margin-top: 25px;">
+                    <button class="browse-btn process-btn" id="processBtn">
+                        <i class="fas fa-crop-alt"></i> Crop PAN Card
+                    </button>
+                    <div class="loading-spinner" id="loadingSpinner"></div>
+                </div>
+
+                <div class="preview-section" id="previewSection">
+                    <div class="preview-container">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                            <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.8rem;"></i>
+                            <h3 style="color: var(--success);">PAN Card Successfully Cropped!</h3>
+                        </div>
+                       
+                        <div style="margin: 25px 0; text-align: center;">
+                            <img id="croppedCardImage" class="preview-image" alt="Cropped PAN Card">
+                            <div class="preview-placeholder" id="previewPlaceholder">
+                                <i class="fas fa-id-card" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                                <div>Cropped PAN Card Preview</div>
+                                <small style="font-weight: normal;">Loading preview...</small>
+                            </div>
+                        </div>
+                       
+                        <div class="action-buttons">
+                            <button class="action-btn download-btn" id="previewDownloadBtn">
+                                <i class="fas fa-download"></i>
+                                Download PAN Card
+                            </button>
+                            <button class="action-btn preview-btn" id="previewPrintBtn">
+                                <i class="fas fa-print"></i>
+                                Print Card
+                            </button>
+                            <button class="action-btn" style="background: var(--dark); color: white;" id="newCropBtn">
+                                <i class="fas fa-plus"></i>
+                                Crop Another
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features in two columns -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Lightning Fast</h3>
+                    <p>Process your PAN card PDF in seconds with optimized algorithms</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>100% Secure</h3>
+                    <p>Files auto-delete in 5 minutes. No server storage</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Perfect Crop</h3>
+                    <p>Automatic detection with precise PAN card dimensions</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Works perfectly on all devices and screen sizes</p>
+                </div>
+            </div>
+
+            <section class="guide-section">
+                <div class="guide-header">
+                    <h2>How to Crop PAN Card from PDF</h2>
+                    <p>Simple step-by-step guide to extract your PAN card</p>
+                </div>
+
+                <div class="guide-steps">
+                    <div class="guide-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Get PAN Card PDF</h3>
+                            <p>Download your PAN card PDF from NSDL, UTITSL or Income Tax portal</p>
+                        </div>
+                    </div>
+                    <div class="guide-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Upload PDF File</h3>
+                            <p>Click above to select your PAN card PDF file from your device</p>
+                        </div>
+                    </div>
+                    <div class="guide-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Automatic Processing</h3>
+                            <p>Our tool automatically detects and crops the PAN card perfectly</p>
+                        </div>
+                    </div>
+                    <div class="guide-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Download & Use</h3>
+                            <p>Get your cropped PAN card image in high quality 300 DPI</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section for SEO -->
+            <section class="guide-section" style="margin-top: 40px;">
+                <div class="guide-header">
+                    <h2>PAN Card Crop Tool - Frequently Asked Questions</h2>
+                </div>
+                <div class="guide-steps">
+                    <div class="guide-step">
+                        <div class="step-content">
+                            <h3>What is a PAN Card Crop Tool?</h3>
+                            <p>The PAN Card Crop Tool is a free online utility that extracts and crops the PAN card image from PDF documents downloaded from NSDL or UTITSL portals. It converts your PAN card PDF to a clean JPG or PNG image file suitable for various applications.</p>
+                        </div>
+                    </div>
+                    <div class="guide-step">
+                        <div class="step-content">
+                            <h3>Is this PAN card cropping tool free to use?</h3>
+                            <p>Yes, our PAN Card Crop Tool is completely free to use. There are no hidden charges or subscription fees. You can crop unlimited PAN cards without any cost.</p>
+                        </div>
+                    </div>
+                    <div class="guide-step">
+                        <div class="step-content">
+                            <h3>How secure is my PAN card data?</h3>
+                            <p>Your privacy is our top priority. All uploaded files are automatically deleted from our servers within 5 minutes of processing. We don't store any personal information or PAN card details.</p>
+                        </div>
+                    </div>
+                    <div class="guide-step">
+                        <div class="step-content">
+                            <h3>What file formats are supported?</h3>
+                            <p>Our tool supports PDF files from NSDL and UTITSL. The output is available in high-quality JPG and PNG formats suitable for official use.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEO Content Section -->
+            <div class="seo-content">
+                <h2>PAN Card Crop Tool - Free Online PAN Card PDF to Image Converter</h2>
+                
+                <p>Looking for an easy way to <strong>crop PAN card</strong> from your NSDL or UTITSL PDF? Our free online <strong>PAN card crop tool</strong> makes it simple to extract the perfect PAN card image from your PDF document. Whether you need to <strong>crop PAN card online</strong> for official documentation, application forms, or digital verification, our tool provides a secure and efficient solution.</p>
+                
+                <div class="official-links">
+                    <h3>Official Income Tax Department Resources</h3>
+                    <p>Before using our crop tool, make sure you have your official PAN card PDF downloaded from the official portals:</p>
+                    <a href="https://www.incometax.gov.in/iec/foportal/" class="official-link" target="_blank">Income Tax e-Filing Portal</a>
+                    <a href="https://www.tin-nsdl.com/" class="official-link" target="_blank">NSDL Portal</a>
+                    <a href="https://www.utitsl.co.in/utitsl/" class="official-link" target="_blank">UTITSL Portal</a>
+                    <p style="margin-top: 10px; font-size: 0.9rem;"><strong>Note:</strong> Always download your PAN documents only from official Income Tax Department websites to ensure security and authenticity.</p>
+                </div>
+                
+                <h3>How to Crop PAN Card PDF</h3>
+                <p>Many users search for "<strong>how to crop PAN card pdf</strong>" because they need a clean, properly sized PAN card image for various purposes. Our <strong>PAN card cropping software</strong> automates this process with these simple steps:</p>
+                
+                <ul>
+                    <li>First, download your PAN card PDF from the official NSDL or UTITSL portals (links provided above)</li>
+                    <li>Upload your PAN card PDF file to our tool</li>
+                    <li>Our system automatically detects and crops the PAN card section</li>
+                    <li>Preview the cropped PAN card image</li>
+                    <li>Download the perfectly cropped PAN card in high resolution</li>
+                </ul>
+                
+                <h3>Why Use Our PAN Card Crop Tool?</h3>
+                <p>Our <strong>crop PAN card</strong> tool stands out from other solutions because:</p>
+                
+                <ul>
+                    <li><strong>100% Free</strong> - No hidden costs or subscriptions</li>
+                    <li><strong>Automatic Detection</strong> - No manual cropping required</li>
+                    <li><strong>Privacy Focused</strong> - Files auto-delete after 5 minutes</li>
+                    <li><strong>High Quality</strong> - Output in 300 DPI resolution</li>
+                    <li><strong>Mobile Friendly</strong> - Works on all devices</li>
+                </ul>
+                
+                <h3>Common Uses for Cropped PAN Card</h3>
+                <p>When you <strong>crop PAN card from PDF</strong>, the resulting image can be used for:</p>
+                
+                <ul>
+                    <li>Online application forms requiring PAN upload</li>
+                    <li>Digital verification processes</li>
+                    <li>Creating digital identity wallets</li>
+                    <li>Official documentation where PAN proof is needed</li>
+                    <li>Banking and financial institution applications</li>
+                    <li>Educational institution admissions</li>
+                    <li>Government scheme applications</li>
+                </ul>
+                
+                <h3>Secure PAN Card Cropping</h3>
+                <p>We understand the importance of PAN security. Our <strong>PAN card crop tool</strong> processes files entirely in your browser when possible, and any server processing automatically deletes files after 5 minutes. We never store your PAN information or personal data.</p>
+                
+                <p>Whether you need to <strong>crop PAN online</strong> for a single use or multiple cards, our tool provides the fastest, most secure way to get perfectly cropped PAN card images from your NSDL or UTITSL PDF files.</p>
+                
+                <div class="official-links">
+                    <h3>Important PAN Card Security Tips</h3>
+                    <p>When dealing with your PAN card, always follow these security practices:</p>
+                    <ul>
+                        <li>Only download PAN documents from official Income Tax Department websites</li>
+                        <li>Never share your PAN number or PDF with unknown persons</li>
+                        <li>Use password protection for your PAN PDF</li>
+                        <li>Regularly check your PAN status and update details when needed</li>
+                        <li>Report any discrepancies in your PAN information immediately</li>
+                    </ul>
+                    <a href="https://www.incometax.gov.in/iec/foportal/help/pan" class="official-link" target="_blank">Income Tax PAN Help</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar Ad -->
+        <div class="right-sidebar">
+            <div class="sidebar-ad">
+                <div class="ad-label">Advertisement</div>
+                <!-- Google AdSense Code -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                    data-ad-slot="XXXXXXXXXX"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 E-Card Cutter. All rights reserved.</p>
+        <p style="margin-top: 10px; opacity: 0.8;">Your privacy is our priority - Files auto-delete in 5 minutes</p>
+        <p style="margin-top: 10px; opacity: 0.7; font-size: 0.9rem;">This tool is not affiliated with the Income Tax Department. Always download PAN documents from official sources only.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('fileInput');
+            const browseBtn = document.getElementById('browseBtn');
+            const uploadArea = document.getElementById('uploadArea');
+            const fileName = document.getElementById('fileName');
+            const passwordSection = document.getElementById('passwordSection');
+            const processBtn = document.getElementById('processBtn');
+            const previewSection = document.getElementById('previewSection');
+            const croppedCardImage = document.getElementById('croppedCardImage');
+            const previewPlaceholder = document.getElementById('previewPlaceholder');
+            const previewDownloadBtn = document.getElementById('previewDownloadBtn');
+            const previewPrintBtn = document.getElementById('previewPrintBtn');
+            const newCropBtn = document.getElementById('newCropBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            const autoDeleteNotice = document.getElementById('autoDeleteNotice');
+
+            let selectedFile = null;
+            let currentCroppedImageUrl = null;
+            let deleteTimer = null;
+
+            // Auto-select PAN card type
+            const selectedCardType = 'pan';
+
+            // NEW: Mobile Menu Toggle
+            document.querySelector('.mobile-menu').addEventListener('click', function() {
+                document.querySelector('nav').classList.toggle('active');
+            });
+
+            // NEW: Close mobile menu when clicking on a link
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', () => {
+                    document.querySelector('nav').classList.remove('active');
+                });
+            });
+
+            // NEW: Close dropdown when clicking outside (for desktop)
+            document.addEventListener('click', function(event) {
+                const dropdowns = document.querySelectorAll('.dropdown');
+                dropdowns.forEach(dropdown => {
+                    if (!dropdown.contains(event.target)) {
+                        const menu = dropdown.querySelector('.dropdown-menu');
+                        menu.style.opacity = '0';
+                        menu.style.visibility = 'hidden';
+                        menu.style.transform = 'translateY(-10px)';
+                    }
+                });
+            });
+
+            // Auto-delete timer function
+            function startAutoDeleteTimer() {
+                // Clear any existing timer
+                if (deleteTimer) {
+                    clearTimeout(deleteTimer);
+                }
+                
+                // Show auto-delete notice
+                autoDeleteNotice.style.display = 'block';
+                
+                // Set timer for 5 minutes (300000 milliseconds)
+                deleteTimer = setTimeout(function() {
+                    // Clean up URLs and reset interface
+                    if (currentCroppedImageUrl) {
+                        URL.revokeObjectURL(currentCroppedImageUrl);
+                        currentCroppedImageUrl = null;
+                    }
+                    
+                    // Hide preview section
+                    previewSection.style.display = 'none';
+                    processBtn.style.display = 'block';
+                    
+                    // Show message
+                    showSuccess('File has been automatically deleted for your privacy.');
+                    autoDeleteNotice.style.display = 'none';
+                    
+                }, 300000); // 5 minutes
+            }
+
+            // Hide all messages
+            function hideMessages() {
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+                autoDeleteNotice.style.display = 'none';
+            }
+
+            // Show error message
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+                autoDeleteNotice.style.display = 'none';
+            }
+
+            // Show success message
+            function showSuccess(message) {
+                successMessage.textContent = message;
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+            }
+
+            browseBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                fileInput.click();
+            });
+
+            uploadArea.addEventListener('click', function(e) {
+                if (e.target !== browseBtn && e.target.type !== 'password') {
+                    fileInput.click();
+                }
+            });
+
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    selectedFile = this.files[0];
+                    
+                    if (selectedFile.type !== 'application/pdf') {
+                        showError('Please select a PDF file only.');
+                        this.value = '';
+                        selectedFile = null;
+                        resetUploadArea();
+                        return;
+                    }
+                    
+                    if (selectedFile.size > 10 * 1024 * 1024) {
+                        showError('File size must be less than 10MB.');
+                        this.value = '';
+                        selectedFile = null;
+                        resetUploadArea();
+                        return;
+                    }
+                    
+                    // Check if PDF is protected (simulated)
+                    checkPDFProtection(selectedFile);
+                    
+                    fileName.textContent = `Selected: ${selectedFile.name}`;
+                    fileName.style.display = 'block';
+                    uploadArea.classList.add('dragover');
+                    hideMessages();
+                }
+            });
+
+            processBtn.addEventListener('click', async function() {
+                if (!selectedFile) {
+                    showError('Please select a PAN card PDF file first.');
+                    return;
+                }
+
+                const password = document.getElementById('pdfPassword').value;
+
+                processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing PAN Card...';
+                processBtn.disabled = true;
+                loadingSpinner.style.display = 'block';
+                hideMessages();
+
+                try {
+                    const formData = new FormData();
+                    formData.append('file', selectedFile);
+                    formData.append('card_type', selectedCardType);
+                    formData.append('password', password);
+
+                    const response = await fetch('/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        previewSection.style.display = 'block';
+                        processBtn.style.display = 'none';
+
+                        const fileId = data.file_id;
+                        currentCroppedImageUrl = `/preview/${fileId}_cropped.png`;
+
+                        loadCroppedCardImage(currentCroppedImageUrl);
+
+                        // Start auto-delete timer
+                        startAutoDeleteTimer();
+
+                        showSuccess('PAN card cropped successfully! File will auto-delete in 5 minutes.');
+
+                        previewDownloadBtn.onclick = function() {
+                            window.location.href = `/download/${fileId}_cropped.png`;
+                        };
+
+                        previewPrintBtn.onclick = function() {
+                            printCroppedCard();
+                        };
+
+                        newCropBtn.onclick = function() {
+                            // Clean up URL objects
+                            if (currentCroppedImageUrl) {
+                                URL.revokeObjectURL(currentCroppedImageUrl);
+                            }
+                            // Clear auto-delete timer
+                            if (deleteTimer) {
+                                clearTimeout(deleteTimer);
+                            }
+                            resetUploadArea();
+                            previewSection.style.display = 'none';
+                            processBtn.style.display = 'block';
+                            processBtn.disabled = false;
+                            processBtn.innerHTML = '<i class="fas fa-crop-alt"></i> Crop PAN Card';
+                        };
+
+                    } else {
+                        throw new Error(data.error || 'Unknown error occurred');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showError('Error processing file: ' + error.message);
+                } finally {
+                    processBtn.disabled = false;
+                    processBtn.innerHTML = '<i class="fas fa-crop-alt"></i> Crop PAN Card';
+                    loadingSpinner.style.display = 'none';
+                }
+            });
+
+            function loadCroppedCardImage(imageUrl) {
+                const img = new Image();
+                img.onload = function() {
+                    previewPlaceholder.style.display = 'none';
+                    croppedCardImage.src = imageUrl;
+                    croppedCardImage.style.display = 'block';
+                };
+                img.onerror = function() {
+                    previewPlaceholder.innerHTML = `
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>Preview Not Available</div>
+                        <small style="font-weight: normal;">PAN card was cropped successfully</small>
+                    `;
+                };
+                img.src = imageUrl;
+            }
+
+            function printCroppedCard() {
+                if (currentCroppedImageUrl) {
+                    const printWindow = window.open('', '_blank');
+                    printWindow.document.write(`
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <title>Print PAN Card</title>
+                            <style>
+                                body { margin: 0; padding: 20px; text-align: center; background: white; }
+                                img { max-width: 100%; max-height: 90vh; border: 1px solid #ccc; }
+                            </style>
+                        </head>
+                        <body>
+                            <img src="${currentCroppedImageUrl}" alt="Cropped PAN Card">
+                            <script>
+                                window.onload = function() {
+                                    window.print();
+                                    setTimeout(function() {
+                                        window.close();
+                                    }, 1000);
+                                }
+                            <\/script>
+                        </body>
+                        </html>
+                    `);
+                    printWindow.document.close();
+                }
+            }
+
+            function checkPDFProtection(file) {
+                passwordSection.style.display = 'block';
+                uploadArea.classList.add('dragover');
+            }
+
+            function resetUploadArea() {
+                fileName.style.display = 'none';
+                passwordSection.style.display = 'none';
+                uploadArea.classList.remove('dragover');
+                document.getElementById('pdfPassword').value = '';
+                selectedFile = null;
+                fileInput.value = '';
+                processBtn.style.display = 'block';
+
+                previewPlaceholder.style.display = 'flex';
+                previewPlaceholder.innerHTML = `
+                    <i class="fas fa-id-card" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <div>Cropped PAN Card Preview</div>
+                    <small style="font-weight: normal;">Loading preview...</small>
+                `;
+                croppedCardImage.style.display = 'none';
+                croppedCardImage.src = '';
+                currentCroppedImageUrl = null;
+                hideMessages();
+            }
+        });
+    </script>
+</body>
+</html>

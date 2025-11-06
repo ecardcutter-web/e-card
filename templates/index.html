@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free ID Card Cropping Tools - Crop Aadhaar, PAN, Voter ID Online | E-Card Cutter</title>
+    <meta name="description" content="Free online tools to crop Aadhaar card, PAN card, Voter ID, and Janaadhaar from PDFs. Extract perfect ID card images with secure cropping. 100% free, no registration required.">
+    <meta name="keywords" content="crop aadhaar card online, crop pan card, crop voter id, janaadhaar crop, pdf to image converter, id card cropping tool, free document crop, extract id card from pdf">
+    <meta name="author" content="E-Card Cutter">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Free ID Card Cropping Tools - Crop Aadhaar, PAN, Voter ID Online">
+    <meta property="og:description" content="Crop Aadhaar, PAN, Voter ID cards from PDFs. Free online tools with perfect cropping accuracy.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ecardcutter.in">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://ecardcutter.in">
+    
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "E-Card Cutter - ID Card Cropping Tools",
+      "description": "Free online tools to crop Aadhaar card, PAN card, Voter ID, and Janaadhaar from PDF documents",
+      "url": "https://ecardcutter.in",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "E-Card Cutter"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1250"
+      }
+    }
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+       
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gradient: linear-gradient(135deg, #4361ee 0%, #3a0ca3 50%, #7209b7 100%);
+            --wordpress-blue: #21759b;
+            --wordpress-light-blue: #3498db;
+        }
+       
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header - UPDATED with Blog Link */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 12px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+       
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+       
+        .logo-image {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+       
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--dark);
+        }
+       
+        .logo-text span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 15px;
+            align-items: center;
+        }
+       
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+       
+        nav ul li a:hover {
+            color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* NEW: Blog Link Style with WordPress Colors */
+        .blog-link {
+            background: linear-gradient(135deg, var(--wordpress-blue), var(--wordpress-light-blue));
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(33, 117, 155, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .blog-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(33, 117, 155, 0.4);
+            background: linear-gradient(135deg, #1a5f7a, #2980b9);
+        }
+
+        /* Dropdown Menu Styles */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 220px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 15px;
+            padding: 10px 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 12px 20px;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border-left-color: var(--primary);
+            padding-left: 25px;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e9ecef;
+            margin: 8px 0;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 80px auto 0;
+            padding: 0 20px;
+        }
+
+        /* Quick Tools Section - NOW AT TOP */
+        .quick-tools {
+            margin: 40px 0 80px;
+        }
+       
+        .section-title {
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 15px;
+            color: var(--dark);
+            font-weight: 800;
+        }
+       
+        .section-title-blue {
+            background: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            display: inline-block;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-align: center;
+            width: 100%;
+        }
+       
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Banner ad styles - Auto size responsive */
+        .banner-ad {
+            width: 100%;
+            height: auto;
+            margin: 30px auto;
+            background: #f0f0f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-weight: 600;
+            text-align: center;
+            padding: 15px;
+            box-sizing: border-box;
+            position: relative;
+            min-height: 90px;
+        }
+        
+        .banner-ad::before {
+            content: "Advertisement";
+            font-size: 0.8rem;
+            color: #999;
+            position: absolute;
+            top: 5px;
+            left: 10px;
+        }
+
+        /* Responsive Auto-Size Ad Slot */
+        .responsive-ad-slot {
+            width: 100%;
+            margin: 40px 0;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            border: 1px dashed #dee2e6;
+            position: relative;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .responsive-ad-slot::before {
+            content: "Advertisement";
+            font-size: 0.75rem;
+            color: #6c757d;
+            position: absolute;
+            top: 8px;
+            left: 15px;
+            font-weight: 600;
+        }
+        
+        .responsive-ad-slot .ad-content {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #495057;
+            font-weight: 500;
+        }
+        
+        .responsive-ad-slot .ad-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        /* Tools Grid - Three Columns */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+       
+        .tool-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+       
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient);
+        }
+       
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+        }
+       
+        /* Tool Icon Container with Advanced Effects */
+        .tool-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            width: 80px;
+            height: 80px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .tool-icon-image {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Advanced Glow Effects with Light Wave Animation */
+        .tool-card[data-card-type="aadhaar"] .tool-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(255, 87, 34, 0.1) 0%,
+                rgba(255, 87, 34, 0.3) 50%,
+                rgba(255, 87, 34, 0.1) 100%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .tool-card[data-card-type="pan"] .tool-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(0, 102, 255, 0.1) 0%,
+                rgba(0, 102, 255, 0.3) 50%,
+                rgba(0, 102, 255, 0.1) 100%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .tool-card[data-card-type="voterid"] .tool-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(155, 39, 176, 0.1) 0%,
+                rgba(155, 39, 176, 0.3) 50%,
+                rgba(155, 39, 176, 0.1) 100%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .tool-card[data-card-type="janaadhaar"] .tool-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(76, 175, 80, 0.1) 0%,
+                rgba(76, 175, 80, 0.3) 50%,
+                rgba(76, 175, 80, 0.1) 100%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .tool-card[data-card-type="pdf-converter"] .tool-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(231, 76, 60, 0.1) 0%,
+                rgba(231, 76, 60, 0.3) 50%,
+                rgba(231, 76, 60, 0.1) 100%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .tool-card[data-card-type="image-converter"] .tool-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(93, 216, 165, 0.1) 0%,
+                rgba(93, 216, 165, 0.3) 50%,
+                rgba(93, 216, 165, 0.1) 100%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        /* Light Wave Animation */
+        @keyframes lightWave {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateX(200%) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        .tool-card .tool-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent 0%,
+                rgba(255, 255, 255, 0.8) 50%,
+                transparent 100%);
+            transform: translateX(-100%) rotate(45deg);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        /* Hover Effects with Advanced Glow and Light Wave */
+        .tool-card[data-card-type="aadhaar"]:hover .tool-icon-image {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 20px rgba(255, 87, 34, 0.8));
+        }
+
+        .tool-card[data-card-type="pan"]:hover .tool-icon-image {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 20px rgba(0, 102, 255, 0.8));
+        }
+
+        .tool-card[data-card-type="voterid"]:hover .tool-icon-image {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 20px rgba(155, 39, 176, 0.8));
+        }
+
+        .tool-card[data-card-type="janaadhaar"]:hover .tool-icon-image {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 20px rgba(76, 175, 80, 0.8));
+        }
+
+        .tool-card[data-card-type="pdf-converter"]:hover .tool-icon-image {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 20px rgba(231, 76, 60, 0.8));
+        }
+
+        .tool-card[data-card-type="image-converter"]:hover .tool-icon-image {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 20px rgba(93, 216, 165, 0.8));
+        }
+
+        /* Activate Background Glow on Hover */
+        .tool-card:hover .tool-icon::before {
+            opacity: 1;
+        }
+
+        /* Activate Light Wave Animation on Hover */
+        .tool-card:hover .tool-icon::after {
+            animation: lightWave 1s ease-out;
+        }
+
+        /* Card Background Glow Effects */
+        .tool-card[data-card-type="aadhaar"]:hover {
+            border-color: rgba(255, 87, 34, 0.3);
+            background: linear-gradient(135deg, #fff 0%, rgba(255, 87, 34, 0.05) 100%);
+            box-shadow: 0 8px 25px rgba(255, 87, 34, 0.15);
+        }
+
+        .tool-card[data-card-type="pan"]:hover {
+            border-color: rgba(0, 102, 255, 0.3);
+            background: linear-gradient(135deg, #fff 0%, rgba(0, 102, 255, 0.05) 100%);
+            box-shadow: 0 8px 25px rgba(0, 102, 255, 0.15);
+        }
+
+        .tool-card[data-card-type="voterid"]:hover {
+            border-color: rgba(155, 39, 176, 0.3);
+            background: linear-gradient(135deg, #fff 0%, rgba(155, 39, 176, 0.05) 100%);
+            box-shadow: 0 8px 25px rgba(155, 39, 176, 0.15);
+        }
+
+        .tool-card[data-card-type="janaadhaar"]:hover {
+            border-color: rgba(76, 175, 80, 0.3);
+            background: linear-gradient(135deg, #fff 0%, rgba(76, 175, 80, 0.05) 100%);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.15);
+        }
+
+        .tool-card[data-card-type="pdf-converter"]:hover {
+            border-color: rgba(231, 76, 60, 0.3);
+            background: linear-gradient(135deg, #fff 0%, rgba(231, 76, 60, 0.05) 100%);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.15);
+        }
+
+        .tool-card[data-card-type="image-converter"]:hover {
+            border-color: rgba(93, 216, 165, 0.3);
+            background: linear-gradient(135deg, #fff 0%, rgba(93, 216, 165, 0.05) 100%);
+            box-shadow: 0 8px 25px rgba(93, 216, 165, 0.15);
+        }
+
+        .tool-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+       
+        .tool-card p {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            transition: color 0.3s ease;
+        }
+
+        /* Text Color Change on Hover */
+        .tool-card[data-card-type="aadhaar"]:hover h3 {
+            color: #ff5722;
+        }
+
+        .tool-card[data-card-type="pan"]:hover h3 {
+            color: #0066ff;
+        }
+
+        .tool-card[data-card-type="voterid"]:hover h3 {
+            color: #9c27b0;
+        }
+
+        .tool-card[data-card-type="janaadhaar"]:hover h3 {
+            color: #4caf50;
+        }
+
+        .tool-card[data-card-type="pdf-converter"]:hover h3 {
+            color: #e74c3c;
+        }
+
+        .tool-card[data-card-type="image-converter"]:hover h3 {
+            color: #5dd8a5;
+        }
+       
+        .tool-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 1.05rem;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+       
+        .tool-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        .tool-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .tool-badge.popular {
+            background: var(--warning);
+        }
+
+        .tool-badge.new {
+            background: var(--success);
+        }
+
+        /* Converter Info Section */
+        .converter-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin: 60px 0;
+        }
+
+        .converter-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border-left: 5px solid var(--primary);
+        }
+
+        .converter-card.pdf {
+            border-left-color: #e74c3c;
+        }
+
+        .converter-card.image {
+            border-left-color: #5dd8a5;
+        }
+
+        .converter-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .converter-card p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .feature-list {
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .feature-list li {
+            margin-bottom: 10px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-list li i {
+            color: var(--success);
+        }
+
+        /* User Guide Section */
+        .user-guide {
+            padding: 80px 40px;
+            background: white;
+            border-radius: 30px;
+            margin: 80px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+       
+        .guide-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+       
+        .guide-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+       
+        .guide-step {
+            text-align: center;
+            padding: 30px 20px;
+        }
+       
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+       
+        .guide-step h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            font-weight: 700;
+        }
+       
+        .guide-step p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+            margin: 100px 0;
+        }
+       
+        .feature {
+            text-align: center;
+            padding: 45px 25px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+       
+        .feature:hover {
+            transform: translateY(-8px);
+        }
+       
+        .feature-icon {
+            font-size: 3.2rem;
+            margin-bottom: 25px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+       
+        .feature h3 {
+            margin-bottom: 18px;
+            font-size: 1.5rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+       
+        .feature p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            margin: 80px 0;
+            text-align: center;
+        }
+       
+        .stat-item {
+            padding: 40px 25px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+       
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            line-height: 1;
+        }
+       
+        .stat-label {
+            color: #666;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* FAQ Section - SEO OPTIMIZED */
+        .faq-section {
+            background: white;
+            padding: 80px 40px;
+            border-radius: 30px;
+            margin: 80px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+       
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+       
+        .faq-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+       
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+       
+        .faq-item {
+            background: #f8f9fa;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #e9ecef;
+        }
+       
+        .faq-question {
+            padding: 20px 25px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+       
+        .faq-question::after {
+            content: '+';
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+       
+        .faq-item.active .faq-question::after {
+            content: '-';
+        }
+       
+        .faq-answer {
+            padding: 0 25px;
+            background: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+       
+        .faq-item.active .faq-answer {
+            padding: 20px 25px;
+            max-height: 500px;
+        }
+       
+        .faq-answer p {
+            margin: 0;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Privacy Message Section */
+        .privacy-message {
+            background: #ff3b30;
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 80px 0;
+            box-shadow: 0 10px 30px rgba(255, 59, 48, 0.3);
+        }
+       
+        .privacy-message h2 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+       
+        .privacy-message p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: #ecf0f1;
+            padding: 4rem 1rem 2rem;
+            margin-top: 100px;
+        }
+       
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+       
+        .footer-section h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.8rem;
+            font-weight: 700;
+        }
+       
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+       
+        .footer-links {
+            list-style: none;
+        }
+       
+        .footer-links li {
+            margin-bottom: 1rem;
+        }
+       
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.05rem;
+        }
+       
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 8px;
+        }
+       
+        .copyright {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            color: #95a5a6;
+            font-size: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .converter-info {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+           
+            .main-container {
+                margin-top: 80px;
+            }
+           
+            header {
+                padding: 10px 5%;
+            }
+           
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                padding: 15px;
+            }
+           
+            nav.active {
+                display: block;
+            }
+           
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .dropdown-menu {
+                position: static;
+                box-shadow: none;
+                background: #f8f9fa;
+                margin-top: 10px;
+            }
+           
+            .mobile-menu {
+                display: block;
+            }
+           
+            .section-title {
+                font-size: 2.2rem;
+            }
+           
+            .user-guide {
+                padding: 60px 25px;
+            }
+           
+            .guide-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .section-title {
+                font-size: 1.8rem;
+            }
+           
+            .tool-card {
+                padding: 25px 20px;
+            }
+
+            .converter-card {
+                padding: 25px 20px;
+            }
+           
+            .privacy-message {
+                padding: 30px 25px;
+            }
+           
+            .privacy-message h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header - UPDATED with Blog Link -->
+    <header>
+        <a href="/" class="logo">
+            <img src="/static/images/logo.png" alt="E-Card Cutter Logo - Free ID Card Cropping Tools" class="logo-image">
+            <div class="logo-text">E-<span>Card</span> Cutter</div>
+        </a>
+        <div class="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li class="dropdown">
+                    <a href="#tools" class="dropdown-toggle">
+                        Tools <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="/aadhaar-crop" class="dropdown-item">Aadhaar Crop</a>
+                        <a href="/janaadhaar-crop" class="dropdown-item">Janaadhaar Crop</a>
+                        <a href="/pan-crop" class="dropdown-item">PAN Crop</a>
+                        <a href="/voterid-crop" class="dropdown-item">Voter ID Crop</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="/pdf-converter" class="dropdown-item">PDF Converter</a>
+                        <a href="/image-converter" class="dropdown-item">Image Converter</a>
+                    </div>
+                </li>
+                <!-- NEW: Blog Link with WordPress Colors -->
+                <li><a href="https://ecardcutter.in/" class="blog-link" target="_blank">Blog</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/faq">FAQ</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/privacy">Privacy</a></li>
+                <li><a href="/terms">Terms</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+
+        <!-- Quick Tools Section - NOW AT TOP -->
+        <section class="quick-tools" id="tools">
+            <h2 class="section-title-blue">ID Card Cropping Tools</h2>
+            <p class="section-subtitle">Select the tool & Crop your Id Card</p>
+            
+            <!-- Banner Ad Slot -->
+            <div class="banner-ad">
+                Responsive Banner Ad Slot
+            </div>
+           
+            <!-- UPDATED: Three Column Layout for Tools -->
+            <div class="tools-grid">
+                <!-- Aadhaar Crop -->
+                <div class="tool-card" data-card-type="aadhaar">
+                    <div class="tool-badge popular">MOST POPULAR</div>
+                    <div class="tool-icon">
+                        <img src="/static/images/aadhaar.png" alt="Crop Aadhaar Card Online - Free Aadhaar Card Crop Tool" class="tool-icon-image">
+                    </div>
+                    <h3>Aadhaar Crop</h3>
+                    <p>Extract Aadhaar cards from PDF documents with precision cropping for perfect results every time</p>
+                    <button class="tool-btn" onclick="window.location.href='/aadhaar-crop'">Crop Aadhaar Card</button>
+                </div>
+
+                <!-- Image Converter -->
+                <div class="tool-card" data-card-type="image-converter">
+                    <div class="tool-badge new">NEW</div>
+                    <div class="tool-icon">
+                        <img src="/static/images/image-converter.png" alt="Free Image Converter - Convert JPG, PNG, GIF, WEBP" class="tool-icon-image">
+                        
+                    </div>
+                    <h3>Image Converter</h3>
+                    <p>Convert images between JPG, PNG, GIF, BMP, TIFF, WEBP, SVG, ICO, PSD, EPS, ODD, and PDF formats</p>
+                    <button class="tool-btn" onclick="window.location.href='/image-converter'">Convert Images</button>
+                </div>
+
+                <!-- PDF Converter -->
+                <div class="tool-card" data-card-type="pdf-converter">
+                    <div class="tool-badge new">NEW</div>
+                    <div class="tool-icon">
+                        <img src="/static/images/pdf-converter.png" alt="PDF Converter Tool - Convert PDF to Images and Documents" class="tool-icon-image">
+                        
+                    </div>
+                    <h3>PDF Converter</h3>
+                    <p>Convert PDF to Images, Documents, Spreadsheets, Presentations, and multiple other formats</p>
+                    <button class="tool-btn" onclick="window.location.href='/pdf-converter'">Convert PDF</button>
+                </div>
+
+                <!-- Janaadhaar Crop -->
+                <div class="tool-card" data-card-type="janaadhaar">
+                    <div class="tool-icon">
+                        <img src="/static/images/janaadhaar.png" alt="Crop Janaadhaar Card - Free Janaadhaar Crop Tool" class="tool-icon-image">
+                    </div>
+                    <h3>Janaadhaar Crop</h3>
+                    <p>Crop Janaadhaar cards from single or multi-card PDFs with our specialized detection algorithm</p>
+                    <button class="tool-btn" onclick="window.location.href='/janaadhaar-crop'">Crop Janaadhaar Card</button>
+                </div>
+
+                <!-- Pan Crop -->
+                <div class="tool-card" data-card-type="pan">
+                    <div class="tool-icon">
+                        <img src="/static/images/pan.png" alt="Crop PAN Card Online - Free PAN Card Crop Tool" class="tool-icon-image">
+                    </div>
+                    <h3>Pan Crop</h3>
+                    <p>Extract PAN cards from NSDL, UTITSL, and Income Tax PDFs with accurate dimensions</p>
+                    <button class="tool-btn" onclick="window.location.href='/pan-crop'">Crop PAN Card</button>
+                </div>
+
+                <!-- Voter ID Crop -->
+                <div class="tool-card" data-card-type="voterid">
+                    <div class="tool-badge">NEW</div>
+                    <div class="tool-icon">
+                        <img src="/static/images/voterid.png" alt="Crop Voter ID Card - Free Voter ID Crop Tool" class="tool-icon-image">
+                    </div>
+                    <h3>Voter ID Crop</h3>
+                    <p>Crop Voter ID cards from e-EPIC and CSC Portal PDFs with high-quality output</p>
+                    <button class="tool-btn" onclick="window.location.href='/voterid-crop'">Crop Voter ID Card</button>
+                </div>
+            </div>
+            
+            <!-- NEW: Responsive Auto-Size Ad Slot -->
+            <div class="responsive-ad-slot">
+                <div class="ad-content">
+                    <!-- Ad content will automatically size here -->
+                    <p>Responsive Auto-Size Ad Slot</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW: Converter Info Section -->
+        <section class="converter-info">
+            <div class="converter-card pdf">
+                <h3>PDF Converter Tool</h3>
+                <p>Convert your PDF files to multiple formats with our advanced conversion tool</p>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> Convert to JPG, PNG, WEBP, TIFF</li>
+                    <li><i class="fas fa-check"></i> Extract text to DOC, DOCX, TXT</li>
+                    <li><i class="fas fa-check"></i> Create spreadsheets (XLS, XLSX, CSV)</li>
+                    <li><i class="fas fa-check"></i> Generate presentations (PPT, PPTX)</li>
+                    <li><i class="fas fa-check"></i> Export to JSON, XML, HTML formats</li>
+                </ul>
+                <button class="tool-btn" onclick="window.location.href='/pdf-converter'">Try PDF Converter</button>
+            </div>
+
+            <div class="converter-card image">
+                <h3>Image Converter Tool</h3>
+                <p>Convert between all major image formats with quality control and optimization</p>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> Support for 12+ image formats</li>
+                    <li><i class="fas fa-check"></i> Quality adjustment slider</li>
+                    <li><i class="fas fa-check"></i> Batch conversion support</li>
+                    <li><i class="fas fa-check"></i> Auto-optimization for web</li>
+                    <li><i class="fas fa-check"></i> Preserve transparency</li>
+                </ul>
+                <button class="tool-btn" onclick="window.location.href='/image-converter'">Try Image Converter</button>
+            </div>
+        </section>
+
+        <!-- Banner Ad Between Sections -->
+        <div class="banner-ad">
+            Responsive Banner Ad Slot
+        </div>
+
+        <!-- User Guide Section -->
+        <section class="user-guide">
+            <div class="guide-header">
+                <h2 class="section-title">How to Use Our Tools</h2>
+                <p class="section-subtitle">Simple steps to get your perfectly cropped ID card</p>
+            </div>
+            
+            <div class="guide-steps">
+                <div class="guide-step">
+                    <div class="step-number">1</div>
+                    <h3>Select Your Tool</h3>
+                    <p>Choose the appropriate cropping tool based on your ID card type (Aadhaar, Janaadhaar, PAN, or Voter ID)</p>
+                </div>
+                
+                <div class="guide-step">
+                    <div class="step-number">2</div>
+                    <h3>Upload Your PDF</h3>
+                    <p>Upload the PDF document containing your ID card. We support PDF files up to 10MB in size</p>
+                </div>
+                
+                <div class="guide-step">
+                    <div class="step-number">3</div>
+                    <h3>Enter Password (If Required)</h3>
+                    <p>If your PDF is password protected, enter the password to unlock it for processing</p>
+                </div>
+                
+                <div class="guide-step">
+                    <div class="step-number">4</div>
+                    <h3>Download & Print</h3>
+                    <p>Get your perfectly cropped ID card image ready for printing or digital use</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <h3>100% Secure Processing</h3>
+                <p>Your files are processed in your browser and never uploaded to any server. Maximum privacy protection.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Lightning Fast</h3>
+                <p>Get results in seconds with our optimized processing algorithm. No waiting, no delays.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">💯</div>
+                <h3>Completely Free</h3>
+                <p>No hidden costs, no subscriptions, no watermarks. Our tools are 100% free forever.</p>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats">
+            <div class="stat-item">
+                <div class="stat-number">50K+</div>
+                <div class="stat-label">Cards Processed</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-number">99.8%</div>
+                <div class="stat-label">Accuracy Rate</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-number">5min</div>
+                <div class="stat-label">Auto-Delete Files</div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Browser Processing</div>
+            </div>
+        </section>
+
+        <!-- FAQ Section - SEO OPTIMIZED -->
+        <section class="faq-section">
+            <div class="faq-container">
+                <div class="faq-header">
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                    <p class="section-subtitle">Quick answers to common questions about E-Card Cutter</p>
+                </div>
+                
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <h3 class="faq-question">Is E-Card Cutter completely free to use?</h3>
+                        <div class="faq-answer">
+                            <p>Yes, 100% free forever - no hidden charges, no registration required, and unlimited usage for all users.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h3 class="faq-question">How to crop Aadhaar card from PDF online?</h3>
+                        <div class="faq-answer">
+                            <p>Upload PDF, select Aadhaar card type, and download perfectly cropped Aadhaar card image in seconds.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h3 class="faq-question">Can I crop PAN card from PDF documents?</h3>
+                        <div class="faq-answer">
+                            <p>Yes, our smart PAN card detector automatically crops PAN cards from any PDF with precise dimensions.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h3 class="faq-question">Is my data secure with this card cutter tool?</h3>
+                        <div class="faq-answer">
+                            <p>Absolutely secure - all files auto-delete in 5 minutes, no server storage, and 100% private processing.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Privacy Message Section -->
+        <section class="privacy-message">
+            <h2>Your Privacy is Our Priority</h2>
+            <p>All uploaded files are automatically deleted after 5 minutes. No server storage. 100% browser processing.</p>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#tools">Tools</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Our Tools</h3>
+                <ul class="footer-links">
+                    <li><a href="/aadhaar-crop">Aadhaar Crop</a></li>
+                    <li><a href="/janaadhaar-crop">Janaadhaar Crop</a></li>
+                    <li><a href="/pan-crop">Pan Crop</a></li>
+                    <li><a href="/voterid-crop">Voter ID Crop</a></li>
+                    <li><a href="/pdf-converter">PDF Converter</a></li>
+                    <li><a href="/image-converter">Image Converter</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul class="footer-links">
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms of Service</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Trust & Security</h3>
+                <ul class="footer-links">
+                    <li><a href="#">100% Browser Processing</a></li>
+                    <li><a href="#">5-Minute Auto-Delete</a></li>
+                    <li><a href="#">No Server Storage</a></li>
+                    <li><a href="#">Privacy First</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            © 2025 E-Card Cutter. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            document.querySelector('nav').classList.toggle('active');
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                // Close all FAQ items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                    const answer = item.querySelector('.faq-answer');
+                    answer.style.maxHeight = '0';
+                    answer.style.padding = '0 25px';
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                    const answer = faqItem.querySelector('.faq-answer');
+                    
+                    // Dynamic height for proper content display
+                    answer.style.maxHeight = answer.scrollHeight + 50 + 'px';
+                    answer.style.padding = '20px 25px';
+                }
+            });
+        });
+
+        // Tool Button Actions
+        document.querySelectorAll('.tool-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Button actions remain the same
+            });
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('nav').classList.remove('active');
+            });
+        });
+
+        // Smooth scroll for Tools navigation link
+        document.querySelector('a[href="#tools"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('#tools').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdowns = document.querySelectorAll('.dropdown');
+            dropdowns.forEach(dropdown => {
+                if (!dropdown.contains(event.target)) {
+                    const menu = dropdown.querySelector('.dropdown-menu');
+                    menu.style.opacity = '0';
+                    menu.style.visibility = 'hidden';
+                    menu.style.transform = 'translateY(-10px)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

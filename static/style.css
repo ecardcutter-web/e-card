@@ -1,0 +1,585 @@
+/* ==================== HEADER & LOGO ==================== */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-image {
+    width: 32px !important;
+    height: 32px !important;
+    object-fit: contain !important;
+    border-radius: 6px;
+    max-width: 32px !important;
+    max-height: 32px !important;
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2b2d42;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #2b2d42;
+    font-weight: 600;
+    padding: 8px 15px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #4361ee;
+    background: rgba(67, 97, 238, 0.1);
+}
+
+/* ==================== TOOL CARDS SECTION ==================== */
+.quick-tools {
+    margin: 80px 0;
+}
+
+.section-title {
+    font-size: 2.8rem;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #2b2d42;
+    font-weight: 800;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 1.3rem;
+    margin-bottom: 60px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.tool-card {
+    background: white;
+    border-radius: 20px;
+    padding: 35px 30px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 50%, #7209b7 100%);
+}
+
+.tool-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    border-color: #4361ee;
+}
+
+/* Tool Icon Container with Advanced Effects */
+.tool-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    width: 80px;
+    height: 80px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tool-icon-image {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    z-index: 2;
+}
+
+/* PDF Converter Specific Styles */
+.tool-card[data-card-type="pdf-converter"] .tool-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        rgba(255, 61, 61, 0.1) 0%,
+        rgba(255, 61, 61, 0.3) 50%,
+        rgba(255, 61, 61, 0.1) 100%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.tool-card[data-card-type="pdf-converter"] .tool-icon::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        transparent 100%);
+    transform: translateX(-100%) rotate(45deg);
+    opacity: 0;
+    z-index: 1;
+}
+
+.tool-card[data-card-type="pdf-converter"]:hover .tool-icon-image {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 20px rgba(255, 61, 61, 0.8));
+}
+
+.tool-card[data-card-type="pdf-converter"]:hover {
+    border-color: rgba(255, 61, 61, 0.3);
+    background: linear-gradient(135deg, #fff 0%, rgba(255, 61, 61, 0.05) 100%);
+    box-shadow: 0 8px 25px rgba(255, 61, 61, 0.15);
+}
+
+.tool-card[data-card-type="pdf-converter"]:hover h3 {
+    color: #ff3d3d;
+}
+
+/* Image Converter Specific Styles */
+.tool-card[data-card-type="image-converter"] .tool-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        rgba(67, 97, 238, 0.1) 0%,
+        rgba(67, 97, 238, 0.3) 50%,
+        rgba(67, 97, 238, 0.1) 100%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.tool-card[data-card-type="image-converter"] .tool-icon::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        transparent 100%);
+    transform: translateX(-100%) rotate(45deg);
+    opacity: 0;
+    z-index: 1;
+}
+
+.tool-card[data-card-type="image-converter"]:hover .tool-icon-image {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 20px rgba(67, 97, 238, 0.8));
+}
+
+.tool-card[data-card-type="image-converter"]:hover {
+    border-color: rgba(67, 97, 238, 0.3);
+    background: linear-gradient(135deg, #fff 0%, rgba(67, 97, 238, 0.05) 100%);
+    box-shadow: 0 8px 25px rgba(67, 97, 238, 0.15);
+}
+
+.tool-card[data-card-type="image-converter"]:hover h3 {
+    color: #4361ee;
+}
+
+/* Existing Card Types (Keep these as they are) */
+.tool-card[data-card-type="aadhaar"] .tool-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        rgba(255, 87, 34, 0.1) 0%,
+        rgba(255, 87, 34, 0.3) 50%,
+        rgba(255, 87, 34, 0.1) 100%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.tool-card[data-card-type="pan"] .tool-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        rgba(0, 102, 255, 0.1) 0%,
+        rgba(0, 102, 255, 0.3) 50%,
+        rgba(0, 102, 255, 0.1) 100%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.tool-card[data-card-type="voterid"] .tool-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        rgba(155, 39, 176, 0.1) 0%,
+        rgba(155, 39, 176, 0.3) 50%,
+        rgba(155, 39, 176, 0.1) 100%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.tool-card[data-card-type="janaadhaar"] .tool-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        rgba(76, 175, 80, 0.1) 0%,
+        rgba(76, 175, 80, 0.3) 50%,
+        rgba(76, 175, 80, 0.1) 100%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+/* Light Wave Animation */
+@keyframes lightWave {
+    0% {
+        transform: translateX(-100%) rotate(45deg);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateX(200%) rotate(45deg);
+        opacity: 0;
+    }
+}
+
+/* Existing Card Type Animations (Keep these) */
+.tool-card[data-card-type="aadhaar"] .tool-icon::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        transparent 100%);
+    transform: translateX(-100%) rotate(45deg);
+    opacity: 0;
+    z-index: 1;
+}
+
+.tool-card[data-card-type="pan"] .tool-icon::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        transparent 100%);
+    transform: translateX(-100%) rotate(45deg);
+    opacity: 0;
+    z-index: 1;
+}
+
+.tool-card[data-card-type="voterid"] .tool-icon::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        transparent 100%);
+    transform: translateX(-100%) rotate(45deg);
+    opacity: 0;
+    z-index: 1;
+}
+
+.tool-card[data-card-type="janaadhaar"] .tool-icon::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        transparent 100%);
+    transform: translateX(-100%) rotate(45deg);
+    opacity: 0;
+    z-index: 1;
+}
+
+/* Hover Effects with Advanced Glow and Light Wave */
+.tool-card[data-card-type="aadhaar"]:hover .tool-icon-image {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 20px rgba(255, 87, 34, 0.8));
+}
+
+.tool-card[data-card-type="pan"]:hover .tool-icon-image {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 20px rgba(0, 102, 255, 0.8));
+}
+
+.tool-card[data-card-type="voterid"]:hover .tool-icon-image {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 20px rgba(155, 39, 176, 0.8));
+}
+
+.tool-card[data-card-type="janaadhaar"]:hover .tool-icon-image {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 20px rgba(76, 175, 80, 0.8));
+}
+
+/* Activate Background Glow on Hover */
+.tool-card:hover .tool-icon::before {
+    opacity: 1;
+}
+
+/* Activate Light Wave Animation on Hover */
+.tool-card:hover .tool-icon::after {
+    animation: lightWave 1s ease-out;
+}
+
+/* Card Background Glow Effects */
+.tool-card[data-card-type="aadhaar"]:hover {
+    border-color: rgba(255, 87, 34, 0.3);
+    background: linear-gradient(135deg, #fff 0%, rgba(255, 87, 34, 0.05) 100%);
+    box-shadow: 0 8px 25px rgba(255, 87, 34, 0.15);
+}
+
+.tool-card[data-card-type="pan"]:hover {
+    border-color: rgba(0, 102, 255, 0.3);
+    background: linear-gradient(135deg, #fff 0%, rgba(0, 102, 255, 0.05) 100%);
+    box-shadow: 0 8px 25px rgba(0, 102, 255, 0.15);
+}
+
+.tool-card[data-card-type="voterid"]:hover {
+    border-color: rgba(155, 39, 176, 0.3);
+    background: linear-gradient(135deg, #fff 0%, rgba(155, 39, 176, 0.05) 100%);
+    box-shadow: 0 8px 25px rgba(155, 39, 176, 0.15);
+}
+
+.tool-card[data-card-type="janaadhaar"]:hover {
+    border-color: rgba(76, 175, 80, 0.3);
+    background: linear-gradient(135deg, #fff 0%, rgba(76, 175, 80, 0.05) 100%);
+    box-shadow: 0 8px 25px rgba(76, 175, 80, 0.15);
+}
+
+/* Tool Card Content */
+.tool-card h3 {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+    color: #2b2d42;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.tool-card p {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    transition: color 0.3s ease;
+}
+
+/* Text Color Change on Hover */
+.tool-card[data-card-type="aadhaar"]:hover h3 {
+    color: #ff5722;
+}
+
+.tool-card[data-card-type="pan"]:hover h3 {
+    color: #0066ff;
+}
+
+.tool-card[data-card-type="voterid"]:hover h3 {
+    color: #9c27b0;
+}
+
+.tool-card[data-card-type="janaadhaar"]:hover h3 {
+    color: #4caf50;
+}
+
+/* Tool Button */
+.tool-btn {
+    background: #4361ee;
+    color: white;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    font-size: 1.05rem;
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+}
+
+.tool-btn:hover {
+    background: #3a0ca3;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+}
+
+/* Tool Badges */
+.tool-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #4cc9f0;
+    color: white;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+.badge-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.tool-badge.popular {
+    background: var(--warning);
+}
+.tool-badge.popular {
+    background: #f72585;
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 768px) {
+    .tools-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .tool-card {
+        padding: 25px 20px;
+    }
+    
+    .tool-icon {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .tool-icon-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tool-card {
+        padding: 20px 15px;
+    }
+    
+    .tool-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .tool-icon-image {
+        width: 50px;
+        height: 50px;
+    }
+
+    .tool-card h3 {
+        font-size: 1.4rem;
+    }
+    
+    .tool-card p {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+}
+
+/* Performance Optimization */
+@media (prefers-reduced-motion: reduce) {
+    .tool-card,
+    .tool-icon-image,
+    .tool-btn {
+        transition: none;
+    }
+    
+    .tool-card:hover .tool-icon::after {
+        animation: none;
+    }
+}

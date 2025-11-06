@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+Allow: /aadhaar-crop
+Allow: /janaadhaar-crop
+Allow: /pan-crop
+Allow: /voterid-crop
+Allow: /pdf-converter
+Allow: /image-converter
+Allow: /about
+Allow: /faq
+Allow: /contact
+Allow: /privacy
+Allow: /terms
+
+Disallow: /admin/
+Disallow: /private/
+Disallow: /tmp/
+
+# Sitemap location
+Sitemap: https://ecardcutter.in/sitemap.xml
+
+# Crawl delay (1 second between requests)
+Crawl-delay: 1

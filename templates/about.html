@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About E-Card Cutter - Your All-in-One Document & Image Solution</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --light: #f8f9fa;
+            --dark: #2b2d42;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --gradient: linear-gradient(135deg, #4361ee 0%, #3a0ca3 50%, #7209b7 100%);
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-image {
+            width: 35px;
+            height: 35px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1100px;
+            margin: 100px auto 0;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .content {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1f2937;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #6b7280;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            color: #3b82f6;
+        }
+
+        .section p {
+            margin-bottom: 1.2rem;
+            color: #4b5563;
+            font-size: 1.1rem;
+        }
+
+        /* NEW: Tools Grid Section */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .tool-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            border-left: 4px solid #3b82f6;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #3b82f6;
+        }
+
+        .tool-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            color: #1f2937;
+        }
+
+        .tool-card p {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-features {
+            list-style: none;
+            text-align: left;
+            margin-top: 1rem;
+        }
+
+        .tool-features li {
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tool-features li i {
+            color: #10b981;
+            font-size: 0.8rem;
+        }
+
+        .card-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .card-type {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 1.5rem;
+            border-left: 4px solid #3b82f6;
+            transition: transform 0.3s ease;
+        }
+
+        .card-type:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-type h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .card-type p {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.2rem;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            color: #3b82f6;
+            flex-shrink: 0;
+        }
+
+        .feature-content h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .feature-content p {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f8fafc;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .step h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: #1f2937;
+        }
+
+        .step p {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        /* Privacy Commitment Section */
+        .privacy-commitment {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            margin: 2.5rem 0;
+            text-align: center;
+        }
+
+        .privacy-commitment h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .privacy-commitment p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
+        }
+
+        .privacy-guarantee {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .guarantee-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .guarantee-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .guarantee-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .guarantee-item p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            opacity: 0.9;
+        }
+
+        /* Security Features */
+        .security-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .security-feature {
+            background: #f0f9ff;
+            border: 2px solid #e0f2fe;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .security-feature i {
+            font-size: 2rem;
+            color: #0369a1;
+            margin-bottom: 1rem;
+        }
+
+        .security-feature h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            color: #0c4a6e;
+        }
+
+        .security-feature p {
+            color: #475569;
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 3rem 1rem 1.5rem;
+            margin-top: auto;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background-color: #3498db;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #3498db;
+        }
+        
+        .trust-features {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .trust-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .trust-feature-icon {
+            color: #2ecc71;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .footer-privacy {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .footer-privacy-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        .footer-privacy-content i {
+            color: #4cc9f0;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #34495e;
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 15px;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .container {
+                margin: 140px auto 0;
+                padding: 1rem;
+            }
+            
+            .content {
+                padding: 2rem;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .privacy-commitment {
+                padding: 2rem 1.5rem;
+            }
+            
+            .privacy-commitment h2 {
+                font-size: 1.6rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .footer-section h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .trust-features {
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .privacy-guarantee {
+                grid-template-columns: 1fr;
+            }
+            
+            .security-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-types {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <img src="/static/images/logo.png" alt="E-Card Cutter Logo" class="logo-image">
+            <h1>E-Card Cutter</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/privacy">Privacy</a></li>
+                <li><a href="/terms">Terms</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="content">
+            <!-- Header -->
+            <div class="header">
+                <h1>About E-Card Cutter</h1>
+                <p>Your complete solution for document processing, ID card cropping, PDF conversion, and image format conversion - all in one secure platform.</p>
+            </div>
+
+            <!-- What is E-Card Cutter Section -->
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-info-circle"></i>
+                    What is E-Card Cutter?
+                </h2>
+                <p>
+                    E-Card Cutter by ecardcutter.in is a comprehensive suite of free online tools that help you process documents and images quickly and securely. From cropping ID cards from PDFs to converting between different file formats, we provide powerful solutions that run entirely in your browser.
+                </p>
+                <p>
+                    Our platform has evolved from a simple ID card cropping tool to a complete document processing solution, offering multiple specialized tools to meet all your digital document needs.
+                </p>
+            </div>
+
+            <!-- Our Tools Section - NEW -->
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-tools"></i>
+                    Our Complete Tool Suite
+                </h2>
+                <p>We offer a range of specialized tools designed to make your digital life easier:</p>
+                
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <h3>ID Card Cropping</h3>
+                        <p>Automatically extract and crop ID cards from PDF files with perfect dimensions</p>
+                        <ul class="tool-features">
+                            <li><i class="fas fa-check"></i> Aadhaar, PAN, Voter ID support</li>
+                            <li><i class="fas fa-check"></i> Perfect PVC card size</li>
+                            <li><i class="fas fa-check"></i> Automatic edge detection</li>
+                            <li><i class="fas fa-check"></i> Print-ready output</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h3>PDF Converter</h3>
+                        <p>Convert PDF files to various formats and vice versa with high quality</p>
+                        <ul class="tool-features">
+                            <li><i class="fas fa-check"></i> PDF to Word, Excel, PowerPoint</li>
+                            <li><i class="fas fa-check"></i> PDF to JPG, PNG images</li>
+                            <li><i class="fas fa-check"></i> Multiple format support</li>
+                            <li><i class="fas fa-check"></i> Preserve formatting</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-image"></i>
+                        </div>
+                        <h3>Image Converter</h3>
+                        <p>Convert between 12+ image formats with quality control options</p>
+                        <ul class="tool-features">
+                            <li><i class="fas fa-check"></i> JPG, PNG, GIF, WEBP, SVG</li>
+                            <li><i class="fas fa-check"></i> BMP, TIFF, ICO, PSD, EPS</li>
+                            <li><i class="fas fa-check"></i> Quality adjustment slider</li>
+                            <li><i class="fas fa-check"></i> Batch conversion support</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Commitment Section -->
+            <div class="privacy-commitment">
+                <h2>🔒 Our Privacy Commitment</h2>
+                <p>We believe your personal documents deserve maximum protection. That's why we've built privacy into everything we do.</p>
+                
+                <div class="privacy-guarantee">
+                    <div class="guarantee-item">
+                        <div class="guarantee-icon">⏰</div>
+                        <h3>5-Minute Auto-Delete</h3>
+                        <p>All uploaded files and processed images are automatically deleted within 5 minutes</p>
+                    </div>
+                    <div class="guarantee-item">
+                        <div class="guarantee-icon">🔒</div>
+                        <h3>Browser-Only Processing</h3>
+                        <p>Your files are processed entirely in your browser - they never touch our servers</p>
+                    </div>
+                    <div class="guarantee-item">
+                        <div class="guarantee-icon">🚫</div>
+                        <h3>No Data Storage</h3>
+                        <p>We don't store, share, or access your personal documents in any way</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Supported Card Types -->
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-id-card"></i>
+                    Supported ID Card Types
+                </h2>
+                <div class="card-types">
+                    <div class="card-type">
+                        <h3>Aadhaar Cards</h3>
+                        <p>e-Aadhaar PDFs from UIDAI</p>
+                    </div>
+                    <div class="card-type">
+                        <h3>PAN Cards</h3>
+                        <p>NSDL, UTIITSL, or Income Tax-generated PDFs</p>
+                    </div>
+                    <div class="card-type">
+                        <h3>Voter ID</h3>
+                        <p>e-EPIC PDFs from Election Commission</p>
+                    </div>
+                    <div class="card-type">
+                        <h3>JAN Aadhaar</h3>
+                        <p>Rajasthan government ID cards</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Features -->
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i>
+                    Platform Features
+                </h2>
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">🔒</div>
+                        <div class="feature-content">
+                            <h3>100% Secure Processing</h3>
+                            <p>All tools process files locally in your browser for maximum security.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">⚡</div>
+                        <div class="feature-content">
+                            <h3>Lightning Fast</h3>
+                            <p>Process documents and images in seconds with optimized algorithms.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">💯</div>
+                        <div class="feature-content">
+                            <h3>Always Free</h3>
+                            <p>No registration, subscriptions, or hidden charges for any tool.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📱</div>
+                        <div class="feature-content">
+                            <h3>Mobile Friendly</h3>
+                            <p>All tools work perfectly on phones, tablets, and desktop computers.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-content">
+                            <h3>Professional Quality</h3>
+                            <p>High-quality output with precise formatting and dimensions.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🛡️</div>
+                        <div class="feature-content">
+                            <h3>Auto-Cleanup</h3>
+                            <p>Files automatically deleted within 5 minutes for complete privacy.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Features -->
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-shield-alt"></i>
+                    Security & Privacy Features
+                </h2>
+                <div class="security-features">
+                    <div class="security-feature">
+                        <i class="fas fa-clock"></i>
+                        <h3>Automatic File Deletion</h3>
+                        <p>All uploaded files and processed outputs are automatically deleted within 5 minutes</p>
+                    </div>
+                    <div class="security-feature">
+                        <i class="fas fa-browser"></i>
+                        <h3>Browser-Only Processing</h3>
+                        <p>Your files never leave your device - all processing happens locally in your browser</p>
+                    </div>
+                    <div class="security-feature">
+                        <i class="fas fa-database"></i>
+                        <h3>No Server Storage</h3>
+                        <p>We don't store any of your files on our servers - complete data protection</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How It Works -->
+            <div class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-cogs"></i>
+                    How Our Tools Work
+                </h2>
+                <p>Simple, secure process across all our tools:</p>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Choose Tool</h3>
+                        <p>Select the appropriate tool for your needs</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Upload File</h3>
+                        <p>Upload your file (drag & drop supported)</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Configure Settings</h3>
+                        <p>Adjust format, quality, or other options</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Process</h3>
+                        <p>Let our tool do the work securely</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <h3>Download</h3>
+                        <p>Get your processed file instantly</p>
+                    </div>
+                </div>
+                
+                <p style="margin-top: 1.5rem;">
+                    Our advanced processing engines ensure high-quality results while maintaining the highest security standards — so your documents are always safe and your results are professional.
+                </p>
+            </div>
+
+            <!-- Footer Note -->
+            <div class="section" style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
+                <p>
+                    E-Card Cutter is developed and maintained by ECardCutter.in. We believe in building simple, secure, and free tools that make everyday digital tasks easier for everyone. Our platform continues to grow with new tools and features to serve your document processing needs.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Our Tools</h3>
+                <ul class="footer-links">
+                    <li><a href="/aadhaar-crop">Aadhaar Crop</a></li>
+                    <li><a href="/pan-crop">PAN Crop</a></li>
+                    <li><a href="/image-converter">Image Converter</a></li>
+                    <li><a href="/pdf-converter">PDF Converter</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul class="footer-links">
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms of Service</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Trust & Security</h3>
+                <div class="trust-features">
+                    <div class="trust-feature">
+                        <span class="trust-feature-icon">✓</span>
+                        <span>100% Browser Processing</span>
+                    </div>
+                    <div class="trust-feature">
+                        <span class="trust-feature-icon">✓</span>
+                        <span>Lightning Fast Results</span>
+                    </div>
+                    <div class="trust-feature">
+                        <span class="trust-feature-icon">✓</span>
+                        <span>100% Free Forever</span>
+                    </div>
+                    <div class="trust-feature">
+                        <span class="trust-feature-icon">✓</span>
+                        <span>5-Minute Auto-Delete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Privacy Message -->
+        <div class="footer-privacy">
+            <div class="footer-privacy-content">
+                <i class="fas fa-shield-alt"></i>
+                <span>All files automatically deleted within 5 minutes for your privacy</span>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            © 2025 E-Card Cutter. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>
