@@ -5,7 +5,7 @@ import uuid
 import io
 
 def process_pdf(pdf_path, output_dir, card_type='aadhaar', pdf_password=None):
-    """Extract Aadhaar / Jan Aadhaar card region with 300 DPI clarity"""
+    """Extract Aadhaar / Jan Aadhaar / Ayushman card region with 300 DPI clarity"""
     
     # ✅ Hardcode DPI to 300 - Always premium quality
     dpi = 300
@@ -74,6 +74,11 @@ def process_pdf(pdf_path, output_dir, card_type='aadhaar', pdf_password=None):
             top = int(h * 0.25)
             card_width = int(w * 0.80)
             card_height = int(card_width / 1.42)
+        elif card_type == "ayushman":
+            left = int(w * 0.04)
+            top = int(h * 0.22)
+            card_width = int(w * 0.84)
+            card_height = int(card_width / 2.55)
         else:
             left = int(w * 0.10)
             top = int(h * 0.20)

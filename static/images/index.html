@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>इंस्टाग्राम पोस्ट विश्लेषक</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* इंटर फ़ॉन्ट लागू करें */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117; /* डार्क बैकग्राउंड */
+        }
+        /* ग्रेडिएंट बटन स्टाइल */
+        .gradient-button {
+            background-image: linear-gradient(to right, #833AB4 0%, #FD1D1D 51%, #FCB045 100%);
+            text-align: center;
+            transition: 0.5s;
+            background-size: 200% auto;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .gradient-button:hover {
+            background-position: right center; /* ग्रेडिएंट को दाईं ओर ले जाएँ */
+        }
+        /* इनपुट पर फोकस स्टाइल */
+        textarea:focus {
+            border-color: #FD1D1D;
+            box-shadow: 0 0 0 3px rgba(253, 29, 29, 0.5);
+            outline: none;
+        }
+        /* लोडिंग स्पिनर */
+        .spinner {
+            border-top-color: #FD1D1D;
+            -webkit-animation: spinner 1.5s linear infinite;
+            animation: spinner 1.5s linear infinite;
+        }
+        @-webkit-keyframes spinner {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-2xl bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-700">
+        <h1 class="text-4xl font-extrabold text-white mb-2 text-center">
+            <span class="gradient-text">इंस्टाग्राम पोस्ट विश्लेषक</span>
+        </h1>
+        <p class="text-gray-400 text-center mb-8">URL पेस्ट करें और सामग्री का विश्लेषण प्राप्त करें।</p>
+        
+        <!-- URL इनपुट सेक्शन -->
+        <div class="mb-6">
+            <label for="postUrl" class="block text-sm font-medium text-gray-300 mb-2">इंस्टाग्राम पोस्ट URL:</label>
+            <textarea
+                id="postUrl"
+                rows="3"
+                class="w-full p-4 bg-gray-700 text-white rounded-lg border border-gray-600 focus:ring-4 focus:ring-red-500 focus:border-red-500 transition duration-150"
+                placeholder="उदा. https://www.instagram.com/p/xxxxxxxxxx/"
+            ></textarea>
+        </div>
+
+        <!-- बटन -->
+        <button
+            id="analyzeButton"
+            class="gradient-button w-full text-white font-semibold py-3 px-6 rounded-full text-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 transition duration-300 flex items-center justify-center"
+            onclick="handleAnalysis()"
+        >
+            <span id="buttonText">पोस्ट का विश्लेषण करें</span>
+            <div id="loadingSpinner" class="spinner h-5 w-5 border-4 border-gray-500 rounded-full ml-3 hidden"></div>
+        </button>
+
+        <!-- परिणाम और त्रुटि संदेश क्षेत्र -->
+        <div id="messageBox" class="mt-8 p-4 rounded-lg hidden">
+            <!-- संदेश यहाँ प्रदर्शित होगा -->
+        </div>
+
+        <!-- API विश्लेषण परिणाम क्षेत्र -->
+        <div id="resultContainer" class="mt-8 hidden">
+            <h2 class="text-2xl font-bold text-white mb-4 border-b border-gray-700 pb-2">विश्लेषण परिणाम</h2>
+            <div id="analysisResult" class="p-4 bg-gray-700 rounded-lg text-gray-300 whitespace-pre-wrap leading-relaxed">
+                <!-- API से प्राप्त सारांश यहाँ आएगा -->
+            </div>
+            
+            <h3 class="text-xl font-semibold text-white mt-6 mb-3">ग्राउंडिंग स्रोत (Grounding Sources)</h3>
+            <ul id="sourcesList" class="list-disc list-inside text-sm text-gray-400">
+                <!-- स्रोत यहाँ सूचीबद्ध होंगे -->
+            </ul>
+        </div>
+        
+    </div>
+
+    <script type="module">
+        // फ़ायरबेस और API कॉन्फ़िगरेशन
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // __app_id, __firebase_config, और __initial_auth_token ग्लोबल वैरिएबल कैनवास द्वारा प्रदान किए जाते हैं।
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        // फ़ायरबेस और ऑथेंटिकेशन सेटअप
+        let app, db, auth;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+
+            if (initialAuthToken) {
+                signInWithCustomToken(auth, initialAuthToken).then(() => {
+                    console.log("Firebase: Custom token sign-in successful.");
+                }).catch(error => {
+                    console.error("Firebase: Custom token sign-in failed:", error);
+                });
+            } else {
+                signInAnonymously(auth).then(() => {
+                    console.log("Firebase: Anonymous sign-in successful.");
+                }).catch(error => {
+                    console.error("Firebase: Anonymous sign-in failed:", error);
+                });
+            }
+        } catch (error) {
+            console.error("Firebase Initialization Error:", error);
+        }
+
+        const API_KEY = ""; // API कुंजी यहाँ खाली छोड़ दें; यह रनटाइम में प्रदान की जाएगी
+        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
+
+        // DOM तत्व
+        const urlInput = document.getElementById('postUrl');
+        const analyzeButton = document.getElementById('analyzeButton');
+        const buttonText = document.getElementById('buttonText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const messageBox = document.getElementById('messageBox');
+        const resultContainer = document.getElementById('resultContainer');
+        const analysisResult = document.getElementById('analysisResult');
+        const sourcesList = document.getElementById('sourcesList');
+
+        /**
+         * एक API कॉल करता है, जिसमें एक्स्पोनेंशियल बैकऑफ़ के साथ रिट्री लॉजिक शामिल है।
+         * @param {Object} payload - API के लिए पेलोड।
+         * @returns {Promise<Object>} API प्रतिक्रिया JSON.
+         */
+        async function fetchWithRetry(url, options, maxRetries = 5) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                        if (response.status === 429 && i < maxRetries - 1) {
+                            // रेट लिमिट के लिए एक्स्पोनेंशियल बैकऑफ़
+                            const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                            console.warn(`API Rate limit hit. Retrying in ${delay / 1000}s...`);
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            continue;
+                        }
+                        throw new Error(`HTTP त्रुटि! स्थिति: ${response.status}`);
+                    }
+                    return response.json();
+                } catch (error) {
+                    if (i === maxRetries - 1) throw error;
+                    // अन्य नेटवर्क/fetch त्रुटियों के लिए बैकऑफ़
+                    const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                    console.error(`Fetch error: ${error.message}. Retrying in ${delay / 1000}s...`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+
+        /**
+         * एपीआई का उपयोग करके पोस्ट यूआरएल का विश्लेषण करने को संभालता है।
+         */
+        window.handleAnalysis = async function() {
+            const url = urlInput.value.trim();
+            messageBox.classList.add('hidden');
+            resultContainer.classList.add('hidden');
+            
+            if (!url) {
+                showMessage('कृपया एक Instagram पोस्ट URL पेस्ट करें।', 'bg-yellow-900 text-yellow-300');
+                return;
+            }
+            
+            // बटन और लोडिंग स्टेट सेट करें
+            analyzeButton.disabled = true;
+            buttonText.textContent = 'विश्लेषण हो रहा है...';
+            loadingSpinner.classList.remove('hidden');
+
+            try {
+                // सिस्टम निर्देश: मॉडल को एक विश्लेषक के रूप में कार्य करने के लिए कहें।
+                const systemPrompt = "एक स्मार्ट कंटेंट एनालिसिस टूल के रूप में कार्य करें। प्रदान किए गए URL या सामग्री के आधार पर, एक संक्षिप्त सारांश दें और 3 मुख्य विषयों को सूचीबद्ध करें। कृपया अपनी प्रतिक्रिया को हिंदी में प्रदान करें (Devanagari script का उपयोग न करें, हिंदी (Latin) का उपयोग करें)।";
+                
+                // उपयोगकर्ता प्रश्न: नकली API कॉल में URL को शामिल करें
+                const userQuery = `कृपया इस Instagram पोस्ट लिंक का विश्लेषण करें और सामग्री का सारांश प्रदान करें: ${url}`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: userQuery }] }],
+                    tools: [{ "google_search": {} }], // Google Search Grounding सक्षम करें
+                    systemInstruction: {
+                        parts: [{ text: systemPrompt }]
+                    },
+                };
+
+                const options = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                };
+
+                const result = await fetchWithRetry(GEMINI_API_URL, options);
+                
+                const candidate = result.candidates?.[0];
+                let generatedText = "विश्लेषण परिणाम प्राप्त नहीं हुआ।";
+                let sources = [];
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    generatedText = candidate.content.parts[0].text;
+
+                    // ग्राउंडिंग स्रोतों को निकालें
+                    const groundingMetadata = candidate.groundingMetadata;
+                    if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                        sources = groundingMetadata.groundingAttributions
+                            .map(attribution => ({
+                                uri: attribution.web?.uri,
+                                title: attribution.web?.title,
+                            }))
+                            .filter(source => source.uri && source.title); // सुनिश्चित करें कि स्रोत मान्य हैं
+                    }
+                } else {
+                     console.error("API प्रतिक्रिया में अपेक्षित सामग्री संरचना नहीं मिली:", result);
+                }
+
+                displayResult(generatedText, sources);
+
+            } catch (error) {
+                console.error('API या नेटवर्क त्रुटि:', error);
+                showMessage(`विश्लेषण विफल रहा: ${error.message}. कृपया पुनः प्रयास करें।`, 'bg-red-900 text-red-300');
+            } finally {
+                // स्टेट को रीसेट करें
+                analyzeButton.disabled = false;
+                buttonText.textContent = 'पोस्ट का विश्लेषण करें';
+                loadingSpinner.classList.add('hidden');
+            }
+        };
+
+        /**
+         * UI में एक अस्थायी संदेश प्रदर्शित करता है।
+         * @param {string} message - प्रदर्शित किया जाने वाला संदेश।
+         * @param {string} classes - संदेश बॉक्स के लिए Tailwind CSS कक्षाएं।
+         */
+        function showMessage(message, classes) {
+            messageBox.textContent = message;
+            messageBox.className = `mt-8 p-4 rounded-lg ${classes}`;
+            messageBox.classList.remove('hidden');
+        }
+
+        /**
+         * UI में विश्लेषण परिणाम प्रदर्शित करता है।
+         * @param {string} text - जेनरेट किया गया सारांश टेक्स्ट।
+         * @param {Array<Object>} sources - ग्राउंडिंग स्रोतों की एक सरणी।
+         */
+        function displayResult(text, sources) {
+            analysisResult.textContent = text;
+            sourcesList.innerHTML = '';
+            
+            if (sources.length > 0) {
+                sources.forEach(source => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'mt-1';
+                    listItem.innerHTML = `<a href="${source.uri}" target="_blank" class="text-blue-400 hover:text-blue-300 transition duration-150 break-words">${source.title}</a>`;
+                    sourcesList.appendChild(listItem);
+                });
+            } else {
+                 sourcesList.innerHTML = '<li class="text-gray-500">कोई सार्वजनिक ग्राउंडिंग स्रोत नहीं मिला।</li>';
+            }
+            
+            resultContainer.classList.remove('hidden');
+        }
+
+        // ग्रेडिएंट टेक्स्ट के लिए सीएसएस को इनलाइन स्टाइलिंग से जोड़ा गया
+        const style = document.createElement('style');
+        style.textContent = `
+            .gradient-text {
+                background: linear-gradient(45deg, #f09433, #e80164, #7d26cd);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        `;
+        document.head.append(style);
+
+    </script>
+</body>
+</html>
