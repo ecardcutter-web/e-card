@@ -146,6 +146,26 @@ def process_pdf_front_back(pdf_path, output_dir, card_type='aadhaar', pdf_passwo
             back_width = card_width - int(w * 0.01)
             back_height = card_height - int(h * 0.01)
             
+        elif card_type == "labour":
+            # ✅ NEW: Labour Card - Same pattern as Aadhaar
+            card_width = int(w * 0.42)
+            card_height = int(card_width / 1.59)
+            
+            total_cards_width = (card_width * 2) + (w * 0.008)
+            start_x = (w - total_cards_width) / 2
+            
+            front_left = int(start_x + w * 0.005)
+            front_top = int(h * 0.729)
+            front_width = card_width - int(w * 0.01)
+            front_height = card_height - int(h * 0.01)
+            
+            back_left = int(start_x + card_width + (w * 0.013))
+            back_top = int(h * 0.729)
+            back_width = card_width - int(w * 0.01)
+            back_height = card_height - int(h * 0.01)
+            
+            print("🎴 Labour Card pattern applied - same as Aadhaar")
+            
         else:
             # Default - Same pattern as Aadhaar for any other card
             card_width = int(w * 0.42)

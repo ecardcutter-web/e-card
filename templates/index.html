@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free ID Card Cropping Tools - Crop Aadhaar, PAN, Voter ID Online | E-Card Cutter</title>
-    <meta name="description" content="Free online tools to crop Aadhaar card, PAN card, Voter ID, Ayushman Card and Janaadhaar from PDFs. Extract perfect ID card images with secure cropping. 100% free, no registration required.">
-    <meta name="keywords" content="crop aadhaar card online, crop pan card, crop voter id, janaadhaar crop, ayushman card crop, pdf to image converter, id card cropping tool, free document crop, extract id card from pdf">
+    <meta name="description" content="Free online tools to crop Aadhaar card, PAN card, Voter ID, Ayushman Card, Labour Card and Janaadhaar from PDFs. Extract perfect ID card images with secure cropping. 100% free, no registration required.">
+    <meta name="keywords" content="crop aadhaar card online, crop pan card, crop voter id, janaadhaar crop, ayushman card crop, labour card crop, pdf to image converter, id card cropping tool, free document crop, extract id card from pdf">
     <meta name="author" content="E-Card Cutter">
    
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Free ID Card Cropping Tools - Crop Aadhaar, PAN, Voter ID Online">
-    <meta property="og:description" content="Crop Aadhaar, PAN, Voter ID, Ayushman cards from PDFs. Free online tools with perfect cropping accuracy.">
+    <meta property="og:description" content="Crop Aadhaar, PAN, Voter ID, Ayushman cards, Labour cards from PDFs. Free online tools with perfect cropping accuracy.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://ecardcutter.in">
    
@@ -23,7 +23,7 @@
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "E-Card Cutter - ID Card Cropping Tools",
-      "description": "Free online tools to crop Aadhaar card, PAN card, Voter ID, Ayushman Card and Janaadhaar from PDF documents",
+      "description": "Free online tools to crop Aadhaar card, PAN card, Voter ID, Ayushman Card, Labour Card and Janaadhaar from PDF documents",
       "url": "https://ecardcutter.in",
       "applicationCategory": "UtilityApplication",
       "operatingSystem": "Any",
@@ -65,6 +65,7 @@
             --wordpress-blue: #21759b;
             --wordpress-light-blue: #3498db;
             --ayushman-color: #1a237e;
+            --labour-color: #3A425C;
         }
        
         body {
@@ -502,6 +503,24 @@
         }
 
 
+        .tool-card[data-card-type="labour"] .tool-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg,
+                rgba(58, 66, 92, 0.1) 0%,
+                rgba(58, 66, 92, 0.3) 50%,
+                rgba(58, 66, 92, 0.1) 100%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+
         .tool-card[data-card-type="image-converter"] .tool-icon::before {
             content: '';
             position: absolute;
@@ -584,6 +603,12 @@
         }
 
 
+        .tool-card[data-card-type="labour"]:hover .tool-icon-image {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 20px rgba(58, 66, 92, 0.8));
+        }
+
+
         .tool-card[data-card-type="image-converter"]:hover .tool-icon-image {
             transform: scale(1.15);
             filter: drop-shadow(0 0 20px rgba(93, 216, 165, 0.8));
@@ -638,6 +663,13 @@
         }
 
 
+        .tool-card[data-card-type="labour"]:hover {
+            border-color: rgba(58, 66, 92, 0.3);
+            background: linear-gradient(135deg, #fff 0%, rgba(58, 66, 92, 0.05) 100%);
+            box-shadow: 0 8px 25px rgba(58, 66, 92, 0.15);
+        }
+
+
         .tool-card[data-card-type="image-converter"]:hover {
             border-color: rgba(93, 216, 165, 0.3);
             background: linear-gradient(135deg, #fff 0%, rgba(93, 216, 165, 0.05) 100%);
@@ -685,6 +717,11 @@
 
         .tool-card[data-card-type="ayushman"]:hover h3 {
             color: #1a237e;
+        }
+
+
+        .tool-card[data-card-type="labour"]:hover h3 {
+            color: #3A425C;
         }
 
 
@@ -757,6 +794,11 @@
 
         .converter-card.ayushman {
             border-left-color: var(--ayushman-color);
+        }
+
+
+        .converter-card.labour {
+            border-left-color: var(--labour-color);
         }
 
 
@@ -1218,6 +1260,7 @@
                         <a href="/janaadhaar-crop" class="dropdown-item">Janaadhaar Crop</a>
                         <a href="/pan-crop" class="dropdown-item">PAN Crop</a>
                         <a href="/voterid-crop" class="dropdown-item">Voter ID Crop</a>
+                        <a href="/labour-card" class="dropdown-item">Labour Card Crop</a>
                         <div class="dropdown-divider"></div>
                         <a href="/ayushman-card" class="dropdown-item">Ayushman Card</a>
                         <a href="/image-converter" class="dropdown-item">Image Converter</a>
@@ -1272,6 +1315,18 @@
                     <h3>Ayushman Card</h3>
                     <p>Crop Ayushman Bharat cards from PDFs with perfect dimensions for healthcare documentation</p>
                     <button class="tool-btn" onclick="window.location.href='/ayushman-card'">Crop Ayushman Card</button>
+                </div>
+
+
+                <!-- Labour Card Crop -->
+                <div class="tool-card" data-card-type="labour">
+                    <div class="tool-badge new">NEW</div>
+                    <div class="tool-icon">
+                        <img src="/static/images/labourcard.png" alt="Crop Labour Card Online - Free Labour Card Crop Tool" class="tool-icon-image">
+                    </div>
+                    <h3>Labour Card Crop</h3>
+                    <p>Extract Labour cards from PDF documents with perfect dimensions for employment documentation</p>
+                    <button class="tool-btn" onclick="window.location.href='/labour-card'">Crop Labour Card</button>
                 </div>
 
 
@@ -1347,17 +1402,17 @@
             </div>
 
 
-            <div class="converter-card image">
-                <h3>Image Converter Tool</h3>
-                <p>Convert between all major image formats with quality control and optimization</p>
+            <div class="converter-card labour">
+                <h3>Labour Card Crop Tool</h3>
+                <p>Extract perfect Labour cards from PDF documents with our specialized cropping algorithm</p>
                 <ul class="feature-list">
-                    <li><i class="fas fa-check"></i> Support for 12+ image formats</li>
-                    <li><i class="fas fa-check"></i> Quality adjustment slider</li>
-                    <li><i class="fas fa-check"></i> Batch conversion support</li>
-                    <li><i class="fas fa-check"></i> Auto-optimization for web</li>
-                    <li><i class="fas fa-check"></i> Preserve transparency</li>
+                    <li><i class="fas fa-check"></i> Perfect Labour card dimensions</li>
+                    <li><i class="fas fa-check"></i> 300 DPI high quality output</li>
+                    <li><i class="fas fa-check"></i> Automatic card detection</li>
+                    <li><i class="fas fa-check"></i> Password protected PDF support</li>
+                    <li><i class="fas fa-check"></i> Mobile-friendly interface</li>
                 </ul>
-                <button class="tool-btn" onclick="window.location.href='/image-converter'">Try Image Converter</button>
+                <button class="tool-btn" onclick="window.location.href='/labour-card'">Try Labour Crop</button>
             </div>
         </section>
 
@@ -1379,7 +1434,7 @@
                 <div class="guide-step">
                     <div class="step-number">1</div>
                     <h3>Select Your Tool</h3>
-                    <p>Choose the appropriate cropping tool based on your ID card type (Aadhaar, Janaadhaar, PAN, Voter ID, or Ayushman Card)</p>
+                    <p>Choose the appropriate cropping tool based on your ID card type (Aadhaar, Janaadhaar, PAN, Voter ID, Ayushman Card, or Labour Card)</p>
                 </div>
                
                 <div class="guide-step">
@@ -1473,9 +1528,9 @@
                     </div>
                    
                     <div class="faq-item">
-                        <h3 class="faq-question">Can I crop Ayushman card from PDF documents?</h3>
+                        <h3 class="faq-question">Can I crop Labour card from PDF documents?</h3>
                         <div class="faq-answer">
-                            <p>Yes, our Ayushman card tool automatically crops Ayushman Bharat cards from any PDF with precise dimensions.</p>
+                            <p>Yes, our Labour card tool automatically crops Labour cards from any PDF with precise dimensions.</p>
                         </div>
                     </div>
                    
@@ -1518,6 +1573,7 @@
                     <li><a href="/janaadhaar-crop">Janaadhaar Crop</a></li>
                     <li><a href="/pan-crop">Pan Crop</a></li>
                     <li><a href="/voterid-crop">Voter ID Crop</a></li>
+                    <li><a href="/labour-card">Labour Card Crop</a></li>
                     <li><a href="/ayushman-card">Ayushman Card</a></li>
                     <li><a href="/image-converter">Image Converter</a></li>
                 </ul>
@@ -1622,4 +1678,3 @@
     </script>
 </body>
 </html>
-

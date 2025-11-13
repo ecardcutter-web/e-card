@@ -14,7 +14,7 @@ from reportlab.lib.pagesizes import A4, mm
 from reportlab.lib.utils import ImageReader
 import tempfile
 
-# ✅ Static folder support
+# Static folder support
 app = Flask(__name__, static_folder='static')
 app.secret_key = 'your-secret-key-123'
 
@@ -61,13 +61,13 @@ class FileCleaner:
                             if file_age > (self.retention_minutes * 60):
                                 os.remove(file_path)
                                 deleted_count += 1
-                                print(f"🗑️ Deleted old file: {filename}")
+                                print(f"Deleted old file: {filename}")
             
-            print(f"🔍 Auto-cleanup: Deleted {deleted_count} old files")
+            print(f"Auto-cleanup: Deleted {deleted_count} old files")
             return deleted_count
             
         except Exception as e:
-            print(f"❌ Cleanup error: {e}")
+            print(f"Cleanup error: {e}")
             return 0
     
     def start_auto_cleanup(self):
@@ -79,9 +79,9 @@ class FileCleaner:
         import threading
         cleanup_thread = threading.Thread(target=cleanup_loop, daemon=True)
         cleanup_thread.start()
-        print("🕒 Auto-cleanup started")
+        print("Auto-cleanup started")
 
-# ✅ Initialize File Cleaner
+# Initialize File Cleaner
 file_cleaner = FileCleaner(
     upload_folder=UPLOAD_FOLDER,
     cropped_folder=CROPPED_FOLDER,
@@ -96,14 +96,14 @@ def process_pdf_front_back(pdf_path, output_dir, card_type='aadhaar', pdf_passwo
     
     dpi = 300
     
-    print(f"🔧 Processing PDF for Front & Back: {pdf_path}")
-    print(f"🎴 Card type: {card_type}")
+    print(f"Processing PDF for Front & Back: {pdf_path}")
+    print(f"Card type: {card_type}")
     
     try:
-        # PDF open करें
+        # PDF open karein
         doc = fitz.open(pdf_path)
         
-        # Password check अगर PDF protected है
+        # Password check agar PDF protected hai
         if doc.needs_pass:
             if pdf_password:
                 if not doc.authenticate(pdf_password):
@@ -113,7 +113,7 @@ def process_pdf_front_back(pdf_path, output_dir, card_type='aadhaar', pdf_passwo
                 doc.close()
                 return {'success': False, 'error': "PDF is password protected but no password provided."}
 
-        # First page load करें
+        # First page load karein
         page = doc.load_page(0)
         
         # High quality
@@ -121,11 +121,11 @@ def process_pdf_front_back(pdf_path, output_dir, card_type='aadhaar', pdf_passwo
         pix = page.get_pixmap(matrix=matrix)
         w, h = pix.width, pix.height
         
-        print(f"📐 PDF dimensions: {w} x {h}")
+        print(f"PDF dimensions: {w} x {h}")
 
-        # ✅ PERFECT TIGHT CROP COORDINATES FOR ALL CARDS - Aadhaar pattern
+        # PERFECT TIGHT CROP COORDINATES FOR ALL CARDS - Aadhaar pattern
         if card_type == "aadhaar":
-            # Aadhaar card actual dimensions (excluding black border) - EXACT SAME AS BEFORE
+            # Aadhaar card actual dimensions (excluding black border)
             card_width = int(w * 0.42)
             card_height = int(card_width / 1.60)
             
@@ -216,6 +216,24 @@ def process_pdf_front_back(pdf_path, output_dir, card_type='aadhaar', pdf_passwo
             back_width = card_width - int(w * 0.07)
             back_height = card_height - int(h * 0.18)
             
+        elif card_type == "labour":
+            # Labour Card - Same pattern as Aadhaar
+            card_width = int(w * 0.41)
+            card_height = int(card_width / 1.05)
+            
+            total_cards_width = (card_width * 2) + (w * 0.020)
+            start_x = (w - total_cards_width) / 2
+            
+            front_left = int(start_x + w * 0.007)
+            front_top = int(h * 0.07)
+            front_width = card_width - int(w * 0.01)
+            front_height = card_height - int(h * 0.02)
+            
+            back_left = int(start_x + card_width + (w * 0.023))
+            back_top = int(h * 0.10)
+            back_width = card_width - int(w * 0.02)
+            back_height = card_height - int(h * 0.04)
+            
         else:
             # Default - Same pattern as Aadhaar for any other card
             card_width = int(w * 0.42)
@@ -234,10 +252,10 @@ def process_pdf_front_back(pdf_path, output_dir, card_type='aadhaar', pdf_passwo
             back_width = card_width - int(w * 0.01)
             back_height = card_height - int(h * 0.01)
 
-        print(f"📍 FRONT Coordinates: left={front_left}, top={front_top}, width={front_width}, height={front_height}")
-        print(f"📍 BACK Coordinates: left={back_left}, top={back_top}, width={back_width}, height={back_height}")
-        print(f"📏 Card Size: {card_width} x {card_height} pixels")
-        print(f"🎯 Tight Crop: Only card content (excluding black border)")
+        print(f"FRONT Coordinates: left={front_left}, top={front_top}, width={front_width}, height={front_height}")
+        print(f"BACK Coordinates: left={back_left}, top={back_top}, width={back_width}, height={back_height}")
+        print(f"Card Size: {card_width} x {card_height} pixels")
+        print(f"Tight Crop: Only card content (excluding black border)")
 
         # Process images
         img_data = pix.tobytes("ppm")
@@ -266,9 +284,9 @@ def process_pdf_front_back(pdf_path, output_dir, card_type='aadhaar', pdf_passwo
         front_final.save(front_path, dpi=(dpi, dpi), format='PNG', optimize=True)
         back_final.save(back_path, dpi=(dpi, dpi), format='PNG', optimize=True)
         
-        print(f"✅ Front saved: {front_filename} ({front_final.size[0]}x{front_final.size[1]})")
-        print(f"✅ Back saved: {back_filename} ({back_final.size[0]}x{back_final.size[1]})")
-        print(f"🎯 Crop Result: Black border excluded, only card content captured")
+        print(f"Front saved: {front_filename} ({front_final.size[0]}x{front_final.size[1]})")
+        print(f"Back saved: {back_filename} ({back_final.size[0]}x{back_final.size[1]})")
+        print(f"Crop Result: Black border excluded, only card content captured")
         
         doc.close()
         
@@ -281,9 +299,9 @@ def process_pdf_front_back(pdf_path, output_dir, card_type='aadhaar', pdf_passwo
         }
         
     except Exception as e:
-        print(f"❌ Error in process_pdf_front_back: {str(e)}")
+        print(f"Error in process_pdf_front_back: {str(e)}")
         import traceback
-        print(f"🔍 Traceback: {traceback.format_exc()}")
+        print(f"Traceback: {traceback.format_exc()}")
         return {'success': False, 'error': str(e)}
 
 # ==================== ROUTES ====================
@@ -311,6 +329,10 @@ def janaadhaar_crop():
 @app.route('/ayushman-card')
 def ayushman_card():
     return render_template('ayushman_crop.html')
+
+@app.route('/labour-card')
+def labour_card():
+    return render_template('labour_crop.html')
 
 @app.route('/image-converter')
 def image_converter():
@@ -362,7 +384,7 @@ def upload_card_both():
         pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], pdf_filename)
         file.save(pdf_path)
         
-        print(f"🔄 Auto cropping {card_type.upper()} Front & Back")
+        print(f"Auto cropping {card_type.upper()} Front & Back")
         
         # Use the auto front-back cropper for ALL card types
         result = process_pdf_front_back(
@@ -380,14 +402,15 @@ def upload_card_both():
                 'pan': 'PAN', 
                 'voter': 'Voter ID',
                 'jan-aadhaar': 'Jan-Aadhaar',
-                'ayushman': 'Ayushman Card'
+                'ayushman': 'Ayushman Card',
+                'labour': 'Labour Card'
             }
             
             card_name = card_names.get(card_type, 'Card')
             
             return jsonify({
                 'success': True,
-                'message': f'{card_name} Card Front & Back cropped successfully!',
+                'message': f'{card_name} Front & Back cropped successfully!',
                 'file_id': result['file_id'],
                 'front_file': result['front_file'],
                 'back_file': result['back_file'],
@@ -397,7 +420,7 @@ def upload_card_both():
             return jsonify({'success': False, 'error': result['error']})
         
     except Exception as e:
-        print(f"❌ Auto crop error: {str(e)}")
+        print(f"Auto crop error: {str(e)}")
         return jsonify({'success': False, 'error': f'Processing failed: {str(e)}'})
 
 # ==================== BACKWARD COMPATIBILITY ROUTES ====================
@@ -417,7 +440,6 @@ def upload_pan_both():
     """Backward compatibility for PAN"""
     return upload_card_both()
 
-# ✅ YEH NAYA ROUTE ADD KIYA HAI - VOTER ID KE LIYE
 @app.route('/upload-voterid-both', methods=['POST'])
 def upload_voterid_both():
     """Voter ID ke liye specific route"""
@@ -439,7 +461,7 @@ def upload_voterid_both():
         pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], pdf_filename)
         file.save(pdf_path)
         
-        print(f"🔄 Auto cropping VOTER ID Front & Back")
+        print(f"Auto cropping VOTER ID Front & Back")
         
         # Use the auto front-back cropper for Voter ID
         result = process_pdf_front_back(
@@ -464,13 +486,62 @@ def upload_voterid_both():
             return jsonify({'success': False, 'error': result['error']})
         
     except Exception as e:
-        print(f"❌ Voter ID crop error: {str(e)}")
+        print(f"Voter ID crop error: {str(e)}")
         return jsonify({'success': False, 'error': f'Processing failed: {str(e)}'})
 
 @app.route('/upload-ayushman-both', methods=['POST'])
 def upload_ayushman_both():
     """Backward compatibility for Ayushman Card"""
     return upload_card_both()
+
+@app.route('/upload-labour-both', methods=['POST'])
+def upload_labour_both():
+    """Labour Card ke liye specific route"""
+    try:
+        if 'file' not in request.files:
+            return jsonify({'success': False, 'error': 'No file selected'})
+        
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'success': False, 'error': 'No file selected'})
+        
+        if not file.filename.lower().endswith('.pdf'):
+            return jsonify({'success': False, 'error': 'Please upload a PDF file'})
+        
+        password = request.form.get('password', '')
+        
+        file_id = secrets.token_hex(8)
+        pdf_filename = f"{file_id}.pdf"
+        pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], pdf_filename)
+        file.save(pdf_path)
+        
+        print(f"Auto cropping LABOUR CARD Front & Back")
+        
+        # Use the auto front-back cropper for Labour Card
+        result = process_pdf_front_back(
+            pdf_path=pdf_path,
+            output_dir=app.config['CROPPED_FOLDER'],
+            card_type='labour',
+            pdf_password=password
+        )
+        
+        if result['success']:
+            cropped_files_info.extend([result['front_file'], result['back_file']])
+            
+            return jsonify({
+                'success': True,
+                'message': 'Labour Card Front & Back cropped successfully!',
+                'file_id': result['file_id'],
+                'front_file': result['front_file'],
+                'back_file': result['back_file'],
+                'card_type': 'labour'
+            })
+        else:
+            return jsonify({'success': False, 'error': result['error']})
+        
+    except Exception as e:
+        print(f"Labour Card crop error: {str(e)}")
+        return jsonify({'success': False, 'error': f'Processing failed: {str(e)}'})
 
 # ==================== PVC CARD CONVERSION FOR ALL CARDS ====================
 
@@ -492,15 +563,15 @@ def convert_to_pvc_card():
         if not os.path.exists(front_path) or not os.path.exists(back_path):
             return jsonify({'success': False, 'error': 'Files not found'})
         
-        # ✅ PVC card dimensions in pixels (300 DPI) - Exact 8.6cm x 5.4cm
+        # PVC card dimensions in pixels (300 DPI) - Exact 8.6cm x 5.4cm
         pvc_width_mm = 86  # 8.6 cm
         pvc_height_mm = 54  # 5.4 cm
         pvc_width = int(pvc_width_mm * 300 / 25.4)  # Convert mm to pixels at 300 DPI
         pvc_height = int(pvc_height_mm * 300 / 25.4)
         
-        print(f"📏 PVC Target Size: {pvc_width_mm}mm x {pvc_height_mm}mm")
-        print(f"🖼️ PVC Pixel Size: {pvc_width} x {pvc_height} pixels (300 DPI)")
-        print(f"🎴 Card Type: {card_type}")
+        print(f"PVC Target Size: {pvc_width_mm}mm x {pvc_height_mm}mm")
+        print(f"PVC Pixel Size: {pvc_width} x {pvc_height} pixels (300 DPI)")
+        print(f"Card Type: {card_type}")
         
         # Process front image - NO BORDER
         with Image.open(front_path) as front_img:
@@ -530,7 +601,8 @@ def convert_to_pvc_card():
             'pan': 'PAN',
             'voter': 'Voter ID', 
             'jan-aadhaar': 'Jan-Aadhaar',
-            'ayushman': 'Ayushman Card'
+            'ayushman': 'Ayushman Card',
+            'labour': 'Labour Card'
         }
         
         card_name = card_names.get(card_type, 'Card')
@@ -545,7 +617,7 @@ def convert_to_pvc_card():
         })
         
     except Exception as e:
-        print(f"❌ PVC conversion error: {str(e)}")
+        print(f"PVC conversion error: {str(e)}")
         return jsonify({'success': False, 'error': f'PVC conversion failed: {str(e)}'})
 
 # ==================== BACKWARD COMPATIBILITY PVC ROUTES ====================
@@ -555,7 +627,6 @@ def convert_to_pvc_aadhaar():
     """Backward compatibility for Aadhaar PVC"""
     return convert_to_pvc_card()
 
-# ✅ YEH NAYA ROUTE ADD KIYA HAI - VOTER ID PVC KE LIYE
 @app.route('/convert-to-pvc-voterid', methods=['POST'])
 def convert_to_pvc_voterid():
     """Voter ID ke liye PVC conversion"""
@@ -573,14 +644,14 @@ def convert_to_pvc_voterid():
         if not os.path.exists(front_path) or not os.path.exists(back_path):
             return jsonify({'success': False, 'error': 'Files not found'})
         
-        # ✅ PVC card dimensions in pixels (300 DPI) - Exact 8.6cm x 5.4cm
+        # PVC card dimensions in pixels (300 DPI) - Exact 8.6cm x 5.4cm
         pvc_width_mm = 86  # 8.6 cm
         pvc_height_mm = 54  # 5.4 cm
         pvc_width = int(pvc_width_mm * 300 / 25.4)  # Convert mm to pixels at 300 DPI
         pvc_height = int(pvc_height_mm * 300 / 25.4)
         
-        print(f"📏 Voter ID PVC Target Size: {pvc_width_mm}mm x {pvc_height_mm}mm")
-        print(f"🖼️ Voter ID PVC Pixel Size: {pvc_width} x {pvc_height} pixels (300 DPI)")
+        print(f"Voter ID PVC Target Size: {pvc_width_mm}mm x {pvc_height_mm}mm")
+        print(f"Voter ID PVC Pixel Size: {pvc_width} x {pvc_height} pixels (300 DPI)")
         
         # Process front image - NO BORDER
         with Image.open(front_path) as front_img:
@@ -615,7 +686,69 @@ def convert_to_pvc_voterid():
         })
         
     except Exception as e:
-        print(f"❌ Voter ID PVC conversion error: {str(e)}")
+        print(f"Voter ID PVC conversion error: {str(e)}")
+        return jsonify({'success': False, 'error': f'PVC conversion failed: {str(e)}'})
+
+@app.route('/convert-to-pvc-labour', methods=['POST'])
+def convert_to_pvc_labour():
+    """Labour Card ke liye PVC conversion"""
+    try:
+        data = request.json
+        front_file = data.get('front_file')
+        back_file = data.get('back_file')
+        
+        if not front_file or not back_file:
+            return jsonify({'success': False, 'error': 'Front and back files are required'})
+        
+        front_path = os.path.join(app.config['CROPPED_FOLDER'], front_file)
+        back_path = os.path.join(app.config['CROPPED_FOLDER'], back_file)
+        
+        if not os.path.exists(front_path) or not os.path.exists(back_path):
+            return jsonify({'success': False, 'error': 'Files not found'})
+        
+        # PVC card dimensions in pixels (300 DPI) - Exact 8.6cm x 5.4cm
+        pvc_width_mm = 86  # 8.6 cm
+        pvc_height_mm = 54  # 5.4 cm
+        pvc_width = int(pvc_width_mm * 300 / 25.4)  # Convert mm to pixels at 300 DPI
+        pvc_height = int(pvc_height_mm * 300 / 25.4)
+        
+        print(f"Labour Card PVC Target Size: {pvc_width_mm}mm x {pvc_height_mm}mm")
+        print(f"Labour Card PVC Pixel Size: {pvc_width} x {pvc_height} pixels (300 DPI)")
+        
+        # Process front image - NO BORDER
+        with Image.open(front_path) as front_img:
+            # Resize to exact PVC dimensions without border
+            pvc_front = front_img.resize((pvc_width, pvc_height), Image.Resampling.LANCZOS)
+        
+        # Process back image - NO BORDER  
+        with Image.open(back_path) as back_img:
+            # Resize to exact PVC dimensions without border
+            pvc_back = back_img.resize((pvc_width, pvc_height), Image.Resampling.LANCZOS)
+        
+        # Save PVC images without border
+        file_id = str(uuid.uuid4())[:8]
+        pvc_front_filename = f"{file_id}_pvc_front.png"
+        pvc_back_filename = f"{file_id}_pvc_back.png"
+        
+        pvc_front_path = os.path.join(app.config['CROPPED_FOLDER'], pvc_front_filename)
+        pvc_back_path = os.path.join(app.config['CROPPED_FOLDER'], pvc_back_filename)
+        
+        pvc_front.save(pvc_front_path, dpi=(300, 300), format='PNG', optimize=True)
+        pvc_back.save(pvc_back_path, dpi=(300, 300), format='PNG', optimize=True)
+        
+        cropped_files_info.extend([pvc_front_filename, pvc_back_filename])
+        
+        return jsonify({
+            'success': True,
+            'pvc_front_file': pvc_front_filename,
+            'pvc_back_file': pvc_back_filename,
+            'message': 'Labour Card converted to PVC size (8.6cm × 5.4cm) successfully!',
+            'pvc_size': f"{pvc_width_mm}mm x {pvc_height_mm}mm",
+            'card_type': 'labour'
+        })
+        
+    except Exception as e:
+        print(f"Labour Card PVC conversion error: {str(e)}")
         return jsonify({'success': False, 'error': f'PVC conversion failed: {str(e)}'})
 
 # ==================== BOTH SIDES DOWNLOAD (PNG/JPG) ====================
@@ -644,7 +777,8 @@ def download_both_sides():
             'pan': 'PAN Card',
             'voter': 'Voter ID Card',
             'jan-aadhaar': 'Jan-Aadhaar Card', 
-            'ayushman': 'Ayushman Card'
+            'ayushman': 'Ayushman Card',
+            'labour': 'Labour Card'
         }
         
         card_name = card_names.get(card_type, 'Card')
@@ -688,7 +822,7 @@ def download_both_sides():
                         draw.text((back_x, 0), back_text, fill='black', font=font)
                         
                     except Exception as e:
-                        print(f"⚠️ Label rendering error: {e}")
+                        print(f"Label rendering error: {e}")
             
             # Save combined image
             file_id = str(uuid.uuid4())[:8]
@@ -729,7 +863,7 @@ def download_both_sides():
             })
         
     except Exception as e:
-        print(f"❌ Combined image creation error: {str(e)}")
+        print(f"Combined image creation error: {str(e)}")
         return jsonify({'success': False, 'error': f'Download failed: {str(e)}'})
 
 # ==================== PRINTING FUNCTIONS ====================
@@ -757,7 +891,8 @@ def print_pvc_card():
             'pan': 'PAN Card',
             'voter': 'Voter ID Card',
             'jan-aadhaar': 'Jan-Aadhaar Card',
-            'ayushman': 'Ayushman Card'
+            'ayushman': 'Ayushman Card',
+            'labour': 'Labour Card'
         }
         
         card_name = card_names.get(card_type, 'Card')
@@ -789,7 +924,7 @@ def print_pvc_card():
         })
         
     except Exception as e:
-        print(f"❌ PDF creation error: {str(e)}")
+        print(f"PDF creation error: {str(e)}")
         return jsonify({'success': False, 'error': f'PDF creation failed: {str(e)}'})
 
 # ==================== BACKWARD COMPATIBILITY PRINT ROUTES ====================
@@ -799,7 +934,6 @@ def print_pvc_aadhaar():
     """Backward compatibility for Aadhaar printing"""
     return print_pvc_card()
 
-# ✅ YEH NAYA ROUTE ADD KIYA HAI - VOTER ID PRINTING KE LIYE
 @app.route('/print-pvc-voterid', methods=['POST'])
 def print_pvc_voterid():
     """Voter ID ke liye printing"""
@@ -845,7 +979,55 @@ def print_pvc_voterid():
         })
         
     except Exception as e:
-        print(f"❌ Voter ID PDF creation error: {str(e)}")
+        print(f"Voter ID PDF creation error: {str(e)}")
+        return jsonify({'success': False, 'error': f'PDF creation failed: {str(e)}'})
+
+@app.route('/print-pvc-labour', methods=['POST'])
+def print_pvc_labour():
+    """Labour Card ke liye printing"""
+    try:
+        data = request.json
+        print_type = data.get('type', 'both')  # front, back, both
+        pvc_front_file = data.get('pvc_front_file')
+        pvc_back_file = data.get('pvc_back_file')
+        
+        if not pvc_front_file or not pvc_back_file:
+            return jsonify({'success': False, 'error': 'PVC files are required'})
+        
+        pvc_front_path = os.path.join(app.config['CROPPED_FOLDER'], pvc_front_file)
+        pvc_back_path = os.path.join(app.config['CROPPED_FOLDER'], pvc_back_file)
+        
+        if not os.path.exists(pvc_front_path) or not os.path.exists(pvc_back_path):
+            return jsonify({'success': False, 'error': 'PVC files not found'})
+        
+        # Create PDF based on print type
+        file_id = str(uuid.uuid4())[:8]
+        
+        if print_type == 'front':
+            pdf_filename = f"{file_id}_print_front.pdf"
+            pdf_path = os.path.join(app.config['CROPPED_FOLDER'], pdf_filename)
+            create_print_pdf(pvc_front_path, "Labour Card - Front Side", pdf_path)
+            
+        elif print_type == 'back':
+            pdf_filename = f"{file_id}_print_back.pdf"
+            pdf_path = os.path.join(app.config['CROPPED_FOLDER'], pdf_filename)
+            create_print_pdf(pvc_back_path, "Labour Card - Back Side", pdf_path)
+            
+        else:  # both
+            pdf_filename = f"{file_id}_print_both.pdf"
+            pdf_path = os.path.join(app.config['CROPPED_FOLDER'], pdf_filename)
+            create_print_pdf_both(pvc_front_path, pvc_back_path, "Labour Card", pdf_path)
+        
+        cropped_files_info.append(pdf_filename)
+        
+        return jsonify({
+            'success': True,
+            'pdf_file': pdf_filename,
+            'message': f'PDF created successfully for {print_type} side(s)!'
+        })
+        
+    except Exception as e:
+        print(f"Labour Card PDF creation error: {str(e)}")
         return jsonify({'success': False, 'error': f'PDF creation failed: {str(e)}'})
 
 def create_print_pdf(image_path, title, output_path):
@@ -904,6 +1086,184 @@ def create_print_pdf_both(front_path, back_path, card_name, output_path):
     c.showPage()
     c.save()
 
+# ==================== IMAGE CONVERTER ROUTES ====================
+
+@app.route('/convert-image', methods=['POST'])
+def convert_image():
+    """Image format conversion endpoint - ALL FORMATS SUPPORTED"""
+    try:
+        if 'file' not in request.files:
+            return jsonify({'success': False, 'error': 'No file selected'})
+        
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'success': False, 'error': 'No file selected'})
+        
+        # Get conversion parameters
+        output_format = request.form.get('format', 'png').lower()
+        quality = int(request.form.get('quality', 95))
+        
+        # SUPPORTED FORMATS - All formats that PIL supports
+        supported_formats = {
+            'jpg': 'JPEG', 'jpeg': 'JPEG', 'png': 'PNG', 'gif': 'GIF', 
+            'bmp': 'BMP', 'tiff': 'TIFF', 'webp': 'WEBP', 'ico': 'ICO',
+            'pdf': 'PDF'
+        }
+        
+        # Validate format
+        if output_format not in supported_formats:
+            return jsonify({'success': False, 'error': f'Format {output_format.upper()} not supported. Use: {", ".join(supported_formats.keys())}'})
+        
+        # Generate unique filename
+        file_id = secrets.token_hex(8)
+        original_filename = file.filename
+        file_extension = original_filename.rsplit('.', 1)[-1].lower()
+        
+        # Save uploaded file temporarily
+        temp_filename = f"{file_id}_temp.{file_extension}"
+        temp_path = os.path.join(app.config['UPLOAD_FOLDER'], temp_filename)
+        file.save(temp_path)
+        
+        # Process image conversion
+        with Image.open(temp_path) as img:
+            # Convert to RGB if necessary (for JPG/PDF)
+            if output_format in ['jpg', 'jpeg', 'pdf'] and img.mode in ('RGBA', 'P'):
+                img = img.convert('RGB')
+            
+            output_filename = f"{file_id}_converted.{output_format}"
+            output_path = os.path.join(app.config['CONVERTED_FOLDER'], output_filename)
+            
+            # Save with format-specific options
+            save_options = {
+                'format': supported_formats[output_format],
+                'optimize': True
+            }
+            
+            # Add quality for lossy formats
+            if output_format in ['jpg', 'jpeg', 'webp']:
+                save_options['quality'] = quality
+            elif output_format == 'png':
+                save_options['compress_level'] = 9 - int((quality / 100) * 9)
+            
+            # Special handling for PDF
+            if output_format == 'pdf':
+                img.save(output_path, "PDF", resolution=100.0)
+            else:
+                img.save(output_path, **save_options)
+            
+            converted_files_info.append(output_filename)
+            
+            # Get file size for response
+            file_size = os.path.getsize(output_path)
+            
+            return jsonify({
+                'success': True,
+                'message': f'Image converted to {output_format.upper()} successfully!',
+                'converted_file': output_filename,
+                'format': output_format,
+                'file_id': file_id,
+                'file_size': file_size
+            })
+            
+    except Exception as e:
+        print(f"Image conversion error: {str(e)}")
+        return jsonify({'success': False, 'error': f'Conversion failed: {str(e)}'})
+
+@app.route('/bulk-convert', methods=['POST'])
+def bulk_convert():
+    """Bulk image conversion"""
+    try:
+        if 'files' not in request.files:
+            return jsonify({'success': False, 'error': 'No files selected'})
+        
+        files = request.files.getlist('files')
+        output_format = request.form.get('format', 'png').lower()
+        quality = int(request.form.get('quality', 95))
+        
+        if not files or files[0].filename == '':
+            return jsonify({'success': False, 'error': 'No files selected'})
+        
+        # SUPPORTED FORMATS
+        supported_formats = {
+            'jpg': 'JPEG', 'jpeg': 'JPEG', 'png': 'PNG', 'gif': 'GIF', 
+            'bmp': 'BMP', 'tiff': 'TIFF', 'webp': 'WEBP', 'ico': 'ICO',
+            'pdf': 'PDF'
+        }
+        
+        if output_format not in supported_formats:
+            return jsonify({'success': False, 'error': f'Format {output_format.upper()} not supported'})
+        
+        converted_files = []
+        
+        for file in files:
+            if file.filename:
+                file_id = secrets.token_hex(8)
+                original_filename = file.filename
+                file_extension = original_filename.rsplit('.', 1)[-1].lower()
+                
+                # Save temporary file
+                temp_filename = f"{file_id}_temp.{file_extension}"
+                temp_path = os.path.join(app.config['UPLOAD_FOLDER'], temp_filename)
+                file.save(temp_path)
+                
+                # Convert image
+                with Image.open(temp_path) as img:
+                    if output_format in ['jpg', 'jpeg', 'pdf'] and img.mode in ('RGBA', 'P'):
+                        img = img.convert('RGB')
+                    
+                    output_filename = f"{file_id}_{original_filename.rsplit('.', 1)[0]}.{output_format}"
+                    output_path = os.path.join(app.config['CONVERTED_FOLDER'], output_filename)
+                    
+                    # Save with format-specific options
+                    save_options = {
+                        'format': supported_formats[output_format],
+                        'optimize': True
+                    }
+                    
+                    if output_format in ['jpg', 'jpeg', 'webp']:
+                        save_options['quality'] = quality
+                    elif output_format == 'png':
+                        save_options['compress_level'] = 9 - int((quality / 100) * 9)
+                    
+                    if output_format == 'pdf':
+                        img.save(output_path, "PDF", resolution=100.0)
+                    else:
+                        img.save(output_path, **save_options)
+                    
+                    converted_files.append(output_filename)
+                    converted_files_info.append(output_filename)
+        
+        # Create ZIP if multiple files
+        if len(converted_files) > 1:
+            zip_filename = f"bulk_converted_{secrets.token_hex(8)}.zip"
+            zip_path = os.path.join(app.config['CONVERTED_FOLDER'], zip_filename)
+            
+            with zipfile.ZipFile(zip_path, 'w') as zipf:
+                for converted_file in converted_files:
+                    file_path = os.path.join(app.config['CONVERTED_FOLDER'], converted_file)
+                    zipf.write(file_path, converted_file)
+            
+            converted_files_info.append(zip_filename)
+            
+            return jsonify({
+                'success': True,
+                'message': f'{len(converted_files)} files converted to {output_format.upper()} and zipped!',
+                'zip_file': zip_filename,
+                'converted_count': len(converted_files),
+                'format': output_format
+            })
+        else:
+            return jsonify({
+                'success': True,
+                'message': f'Image converted to {output_format.upper()} successfully!',
+                'converted_file': converted_files[0],
+                'format': output_format
+            })
+            
+    except Exception as e:
+        print(f"Bulk conversion error: {str(e)}")
+        return jsonify({'success': False, 'error': f'Bulk conversion failed: {str(e)}'})
+
 # ==================== FILE DOWNLOAD & PREVIEW ====================
 
 @app.route('/download/<filename>')
@@ -920,17 +1280,17 @@ def download_file(filename):
         return jsonify({'success': False, 'error': 'File not found'}), 404
         
     except Exception as e:
-        print(f"❌ Download error: {str(e)}")
+        print(f"Download error: {str(e)}")
         return jsonify({'success': False, 'error': f'Download failed: {str(e)}'}), 500
 
 @app.route('/preview/<filename>')
 def serve_image(filename):
     try:
-        # Check in cropped folder first
-        file_path = os.path.join(app.config['CROPPED_FOLDER'], filename)
+        # Check in converted folder first for image converter files
+        file_path = os.path.join(app.config['CONVERTED_FOLDER'], filename)
         
         if not os.path.exists(file_path):
-            folders = [app.config['UPLOAD_FOLDER'], app.config['CONVERTED_FOLDER']]
+            folders = [app.config['UPLOAD_FOLDER'], app.config['CROPPED_FOLDER']]
             for folder in folders:
                 file_path = os.path.join(folder, filename)
                 if os.path.exists(file_path):
@@ -942,7 +1302,7 @@ def serve_image(filename):
             return jsonify({'success': False, 'error': 'Image not found'}), 404
             
     except Exception as e:
-        print(f"❌ Preview error: {str(e)}")
+        print(f"Preview error: {str(e)}")
         return jsonify({'success': False, 'error': f'Preview failed: {str(e)}'}), 500
 
 # ==================== OTHER ROUTES ====================
@@ -1005,23 +1365,24 @@ def health_check():
     })
 
 if __name__ == '__main__':
-    print("🚀 Starting Universal PVC Card Maker...")
-    print(f"📁 Upload folder: {UPLOAD_FOLDER}")
-    print(f"📁 Cropped folder: {CROPPED_FOLDER}")
-    print(f"📁 Converted folder: {CONVERTED_FOLDER}")
+    print("Starting Universal PVC Card Maker...")
+    print(f"Upload folder: {UPLOAD_FOLDER}")
+    print(f"Cropped folder: {CROPPED_FOLDER}")
+    print(f"Converted folder: {CONVERTED_FOLDER}")
     
-    print("\n🆕 Features:")
-    print("   • Auto Front & Back cropping for ALL cards (Aadhaar, PAN, Voter ID, Jan-Aadhaar, Ayushman)")
+    print("\nFeatures:")
+    print("   • Auto Front & Back cropping for ALL cards (Aadhaar, PAN, Voter ID, Jan-Aadhaar, Ayushman, Labour)")
     print("   • Consistent tight cropping pattern - no black borders")
     print("   • PVC Card conversion (8.6cm x 5.4cm) - NO BORDERS")
     print("   • Both sides download as combined PNG/JPG")
     print("   • Direct print functionality for all cards")
+    print("   • Image Converter (JPG, PNG, GIF, BMP, TIFF, WEBP, ICO, PDF) with bulk conversion")
     print("   • Auto file cleanup (5 minutes)")
     print("   • Backward compatibility with old routes")
     
     # Start auto cleanup
     file_cleaner.start_auto_cleanup()
-    print(f"🕒 Auto-delete enabled: Files will be deleted after 5 minutes")
+    print(f"Auto-delete enabled: Files will be deleted after 5 minutes")
     
-    print("\n🌐 Server running on: http://localhost:5000")
+    print("\nServer running on: http://localhost:5000")
     app.run(debug=True, port=5000, host='127.0.0.1')
