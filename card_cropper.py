@@ -4,17 +4,15 @@ from PIL import Image
 import uuid
 import io
 
-def process_pdf(pdf_path, output_dir, card_type='aadhaar', pdf_password=None):
-    """Extract Aadhaar / Jan Aadhaar / Ayushman card region with 300 DPI clarity"""
+def process_pdf_front_back(pdf_path, output_dir, card_type='aadhaar', pdf_password=None):
+    """Extract Card Front & Back sides automatically with 300 DPI clarity - TIGHT CROPPING"""
     
-    # ✅ Hardcode DPI to 300 - Always premium quality
     dpi = 300
     
-    print(f"🔧 Processing PDF: {pdf_path}")
+    print(f"🔧 Processing PDF for Front & Back: {pdf_path}")
     print(f"📁 Output directory: {output_dir}")
     print(f"🎴 Card type: {card_type}")
     print(f"📊 DPI: {dpi} (Premium Quality)")
-    print(f"🕒 File will auto-delete in 5 minutes (managed by file_cleaner)")
     
     # Output directory create करें अगर नहीं है
     if not os.path.exists(output_dir):
@@ -53,82 +51,206 @@ def process_pdf(pdf_path, output_dir, card_type='aadhaar', pdf_password=None):
         w, h = pix.width, pix.height
         print(f"📐 Original Image dimensions: {w} x {h}")
 
-        # ✅ Crop region calculation
+        # ✅ CONSISTENT TIGHT CROP COORDINATES FOR ALL CARDS
+        # Aadhaar card जैसा ही pattern सभी cards के लिए
+        
         if card_type == "aadhaar":
-            left = int(w * 0.06)
-            top = int(h * 0.71)
-            card_width = int(w * 0.88)
-            card_height = int(card_width / 2.9)
+            # Aadhaar - Tight cropping (no black border)
+            card_width = int(w * 0.42)
+            card_height = int(card_width / 1.59)
+            
+            total_cards_width = (card_width * 2) + (w * 0.008)
+            start_x = (w - total_cards_width) / 2
+            
+            # Front Side (Left card)
+            front_left = int(start_x + w * 0.005)
+            front_top = int(h * 0.729)
+            front_width = card_width - int(w * 0.01)
+            front_height = card_height - int(h * 0.01)
+            
+            # Back Side (Right card)
+            back_left = int(start_x + card_width + (w * 0.013))
+            back_top = int(h * 0.729)
+            back_width = card_width - int(w * 0.01)
+            back_height = card_height - int(h * 0.01)
+            
         elif card_type == "jan-aadhaar":
-            left = int(w * 0.04)
-            top = int(h * 0.54)
-            card_width = int(w * 0.92)
-            card_height = int(card_width / 3.35)
+            # Jan-Aadhaar - Same pattern as Aadhaar
+            card_width = int(w * 0.42)
+            card_height = int(card_width / 1.59)
+            
+            total_cards_width = (card_width * 2) + (w * 0.008)
+            start_x = (w - total_cards_width) / 2
+            
+            front_left = int(start_x + w * 0.005)
+            front_top = int(h * 0.729)
+            front_width = card_width - int(w * 0.01)
+            front_height = card_height - int(h * 0.01)
+            
+            back_left = int(start_x + card_width + (w * 0.013))
+            back_top = int(h * 0.729)
+            back_width = card_width - int(w * 0.01)
+            back_height = card_height - int(h * 0.01)
+            
         elif card_type == "pan":
-            left = int(w * 0.15)
-            top = int(h * 0.15)
-            card_width = int(w * 0.70)
-            card_height = int(card_width / 1.58)
+            # PAN Card - Same pattern as Aadhaar
+            card_width = int(w * 0.42)
+            card_height = int(card_width / 1.59)
+            
+            total_cards_width = (card_width * 2) + (w * 0.008)
+            start_x = (w - total_cards_width) / 2
+            
+            front_left = int(start_x + w * 0.005)
+            front_top = int(h * 0.729)
+            front_width = card_width - int(w * 0.01)
+            front_height = card_height - int(h * 0.01)
+            
+            back_left = int(start_x + card_width + (w * 0.013))
+            back_top = int(h * 0.729)
+            back_width = card_width - int(w * 0.01)
+            back_height = card_height - int(h * 0.01)
+            
         elif card_type == "voter":
-            left = int(w * 0.10)
-            top = int(h * 0.25)
-            card_width = int(w * 0.80)
-            card_height = int(card_width / 1.42)
+            # Voter ID - Same pattern as Aadhaar
+            card_width = int(w * 0.42)
+            card_height = int(card_width / 1.59)
+            
+            total_cards_width = (card_width * 2) + (w * 0.008)
+            start_x = (w - total_cards_width) / 2
+            
+            front_left = int(start_x + w * 0.005)
+            front_top = int(h * 0.729)
+            front_width = card_width - int(w * 0.01)
+            front_height = card_height - int(h * 0.01)
+            
+            back_left = int(start_x + card_width + (w * 0.013))
+            back_top = int(h * 0.729)
+            back_width = card_width - int(w * 0.01)
+            back_height = card_height - int(h * 0.01)
+            
         elif card_type == "ayushman":
-            left = int(w * 0.04)
-            top = int(h * 0.22)
-            card_width = int(w * 0.84)
-            card_height = int(card_width / 2.55)
+            # Ayushman Card - Same pattern as Aadhaar
+            card_width = int(w * 0.42)
+            card_height = int(card_width / 1.59)
+            
+            total_cards_width = (card_width * 2) + (w * 0.008)
+            start_x = (w - total_cards_width) / 2
+            
+            front_left = int(start_x + w * 0.005)
+            front_top = int(h * 0.729)
+            front_width = card_width - int(w * 0.01)
+            front_height = card_height - int(h * 0.01)
+            
+            back_left = int(start_x + card_width + (w * 0.013))
+            back_top = int(h * 0.729)
+            back_width = card_width - int(w * 0.01)
+            back_height = card_height - int(h * 0.01)
+            
         else:
-            left = int(w * 0.10)
-            top = int(h * 0.20)
-            card_width = int(w * 0.80)
-            card_height = int(card_width / 1.62)
+            # Default - Same pattern as Aadhaar for any other card
+            card_width = int(w * 0.42)
+            card_height = int(card_width / 1.59)
+            
+            total_cards_width = (card_width * 2) + (w * 0.008)
+            start_x = (w - total_cards_width) / 2
+            
+            front_left = int(start_x + w * 0.005)
+            front_top = int(h * 0.729)
+            front_width = card_width - int(w * 0.01)
+            front_height = card_height - int(h * 0.01)
+            
+            back_left = int(start_x + card_width + (w * 0.013))
+            back_top = int(h * 0.729)
+            back_width = card_width - int(w * 0.01)
+            back_height = card_height - int(h * 0.01)
 
-        print(f"✂️ Crop area: left={left}, top={top}, width={card_width}, height={card_height}")
+        print(f"📍 FRONT Coordinates: left={front_left}, top={front_top}, width={front_width}, height={front_height}")
+        print(f"📍 BACK Coordinates: left={back_left}, top={back_top}, width={back_width}, height={back_height}")
+        print(f"📏 Card Size: {card_width} x {card_height} pixels")
+        print(f"🎯 Tight Crop: Only card content (no extra background)")
 
-        # ✅ Safety limits
-        left = max(0, left)
-        top = max(0, top)
-        card_width = min(card_width, w - left)
-        card_height = min(card_height, h - top)
+        # ✅ Safety limits for Front
+        front_left = max(0, front_left)
+        front_top = max(0, front_top)
+        front_width = min(front_width, w - front_left)
+        front_height = min(front_height, h - front_top)
 
-        print(f"🔒 Safe Crop area: left={left}, top={top}, width={card_width}, height={card_height}")
+        # ✅ Safety limits for Back
+        back_left = max(0, back_left)
+        back_top = max(0, back_top)
+        back_width = min(back_width, w - back_left)
+        back_height = min(back_height, h - back_top)
 
-        # ✅ Convert to PIL Image and crop directly (no temp files)
+        print(f"🔒 Safe FRONT Crop: left={front_left}, top={front_top}, width={front_width}, height={front_height}")
+        print(f"🔒 Safe BACK Crop: left={back_left}, top={back_top}, width={back_width}, height={back_height}")
+
+        # ✅ Convert to PIL Image and crop both sides
         img_data = pix.tobytes("ppm")
         img = Image.open(io.BytesIO(img_data))
         print(f"🖼️ PIL Image size: {img.size}")
         
-        # ACTUAL CROP OPERATION
-        cropped = img.crop((left, top, left + card_width, top + card_height))
-        print(f"✂️ After crop size: {cropped.size}")
+        # ACTUAL CROP OPERATION FOR BOTH SIDES
+        front_cropped = img.crop((front_left, front_top, front_left + front_width, front_top + front_height))
+        back_cropped = img.crop((back_left, back_top, back_left + back_width, back_top + back_height))
+        
+        print(f"✂️ After FRONT crop size: {front_cropped.size}")
+        print(f"✂️ After BACK crop size: {back_cropped.size}")
 
-        # ✅ Final output path with unique name
+        # ✅ Add slight white padding for better appearance
+        padding = 2
+        front_final = Image.new('RGB', (front_cropped.width + padding*2, front_cropped.height + padding*2), 'white')
+        front_final.paste(front_cropped, (padding, padding))
+        
+        back_final = Image.new('RGB', (back_cropped.width + padding*2, back_cropped.height + padding*2), 'white')
+        back_final.paste(back_cropped, (padding, padding))
+
+        # ✅ Final output paths with unique name
         file_id = str(uuid.uuid4())[:8]
-        out_path = os.path.join(output_dir, f"{file_id}_cropped.png")
+        front_out_path = os.path.join(output_dir, f"{file_id}_front.png")
+        back_out_path = os.path.join(output_dir, f"{file_id}_back.png")
         
         # ✅ Always 300 DPI के साथ save करें
-        cropped.save(out_path, dpi=(dpi, dpi), format='PNG', optimize=True)
-        print(f"✅ Final image saved: {out_path}")
-        print(f"📏 Final dimensions: {cropped.size[0]} x {cropped.size[1]}")
+        front_final.save(front_out_path, dpi=(dpi, dpi), format='PNG', optimize=True)
+        back_final.save(back_out_path, dpi=(dpi, dpi), format='PNG', optimize=True)
+        
+        print(f"✅ FRONT image saved: {front_out_path}")
+        print(f"✅ BACK image saved: {back_out_path}")
+        print(f"📏 FRONT dimensions: {front_final.size[0]} x {front_final.size[1]}")
+        print(f"📏 BACK dimensions: {back_final.size[0]} x {back_final.size[1]}")
         print(f"🎯 Quality: 300 DPI (Premium)")
-        print(f"🕒 File will be auto-deleted in 5 minutes by file_cleaner")
+        print("🔄 Front & Back sides automatically extracted with TIGHT CROP!")
 
         doc.close()
         
         return {
             'success': True,
-            'output_file': out_path,
-            'card_count': 1,
-            'message': f'Card extracted successfully at 300 DPI Premium Quality - Auto-deletes in 5 minutes'
+            'front_file': f"{file_id}_front.png",
+            'back_file': f"{file_id}_back.png",
+            'file_id': file_id,
+            'message': 'Front & Back sides extracted successfully with tight cropping (no extra background)'
         }
         
     except Exception as e:
-        print(f"❌ Error in process_pdf: {str(e)}")
+        print(f"❌ Error in process_pdf_front_back: {str(e)}")
         import traceback
         print(f"🔍 Traceback: {traceback.format_exc()}")
         return {
             'success': False,
             'error': str(e)
         }
+
+# Legacy function for single card (backward compatibility)
+def process_pdf(pdf_path, output_dir, card_type='aadhaar', pdf_password=None):
+    """Legacy function - uses new front-back system but returns only front"""
+    result = process_pdf_front_back(pdf_path, output_dir, card_type, pdf_password)
+    
+    if result['success']:
+        # Return only front for backward compatibility
+        return {
+            'success': True,
+            'output_file': os.path.join(output_dir, result['front_file']),
+            'card_count': 1,
+            'message': result['message']
+        }
+    else:
+        return result

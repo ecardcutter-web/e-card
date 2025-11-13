@@ -6,3 +6,4 @@ pdf2image==1.16.3
 Werkzeug==2.3.7
 PyMuPDF==1.23.8
 gunicorn==21.2.0
+reportlab==4.0.4

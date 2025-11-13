@@ -525,10 +525,10 @@
             flex-shrink: 0;
         }
 
+        /* Preview Sections */
         .preview-section {
             display: none;
             margin-top: 30px;
-            text-align: center;
         }
 
         .preview-container {
@@ -539,16 +539,52 @@
             border: 2px solid var(--success);
         }
 
+        .preview-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .preview-title i {
+            color: var(--success);
+            font-size: 1.8rem;
+        }
+
+        .preview-title h3 {
+            color: var(--success);
+            font-size: 1.5rem;
+        }
+
+        .crops-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 25px 0;
+        }
+
+        .crop-side {
+            text-align: center;
+        }
+
+        .crop-side h4 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
         .preview-image {
             max-width: 100%;
-            max-height: 400px;
+            max-height: 300px;
             border-radius: 10px;
+            border: 2px solid #ddd;
             display: none;
         }
 
         .preview-placeholder {
             width: 100%;
-            height: 300px;
+            height: 250px;
             background: linear-gradient(45deg, #f0f8ff, #e6f7ff);
             border: 2px dashed var(--primary);
             border-radius: 10px;
@@ -558,9 +594,108 @@
             justify-content: center;
             color: var(--primary);
             font-weight: bold;
-            margin: 0 auto;
         }
 
+        /* PVC Preview Section */
+        .pvc-preview-section {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .pvc-preview-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border: 2px solid var(--pan-color);
+        }
+
+        .pvc-preview-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pvc-preview-title i {
+            color: var(--pan-color);
+            font-size: 1.8rem;
+        }
+
+        .pvc-preview-title h3 {
+            color: var(--pan-color);
+            font-size: 1.5rem;
+        }
+
+        .pvc-cards-preview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 25px 0;
+        }
+
+        .pvc-card {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+            border-radius: 15px;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .pvc-card.front {
+            border-color: var(--pan-color);
+        }
+
+        .pvc-card.back {
+            border-color: var(--primary);
+        }
+
+        .pvc-card h4 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .pvc-card.front h4 {
+            color: var(--pan-color);
+        }
+
+        .pvc-card.back h4 {
+            color: var(--primary);
+        }
+
+        .pvc-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .pvc-placeholder {
+            width: 100%;
+            height: 180px;
+            background: white;
+            border: 2px dashed;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .pvc-card.front .pvc-placeholder {
+            border-color: var(--pan-color);
+            color: var(--pan-color);
+        }
+
+        .pvc-card.back .pvc-placeholder {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Action Buttons */
         .action-buttons {
             display: flex;
             gap: 15px;
@@ -586,9 +721,72 @@
             color: white;
         }
 
-        .preview-btn {
+        .download-btn:hover {
+            background: #3ab8df;
+            transform: translateY(-2px);
+        }
+
+        .pvc-btn {
             background: var(--primary);
             color: white;
+        }
+
+        .pvc-btn:hover {
+            background: #3a0ca3;
+            transform: translateY(-2px);
+        }
+
+        .print-btn {
+            background: var(--pan-color);
+            color: white;
+        }
+
+        .print-btn:hover {
+            background: #0055aa;
+            transform: translateY(-2px);
+        }
+
+        .new-crop-btn {
+            background: var(--dark);
+            color: white;
+        }
+
+        /* Print Options */
+        .print-options {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .print-options h4 {
+            margin-bottom: 15px;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .print-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .print-option-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .print-option-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
         }
 
         footer {
@@ -750,6 +948,12 @@
             .action-buttons {
                 flex-direction: column;
                 align-items: center;
+            }
+            
+            .crops-preview,
+            .pvc-cards-preview {
+                grid-template-columns: 1fr;
+                gap: 20px;
             }
             
             .ad-slot.responsive-ad,
@@ -951,34 +1155,106 @@
                     <div class="loading-spinner" id="loadingSpinner"></div>
                 </div>
 
+                <!-- Cropped Preview Section -->
                 <div class="preview-section" id="previewSection">
                     <div class="preview-container">
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px;">
-                            <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.8rem;"></i>
-                            <h3 style="color: var(--success);">PAN Card Successfully Cropped!</h3>
+                        <div class="preview-title">
+                            <i class="fas fa-check-circle"></i>
+                            <h3>PAN Card Cropped Successfully!</h3>
                         </div>
                        
-                        <div style="margin: 25px 0; text-align: center;">
-                            <img id="croppedCardImage" class="preview-image" alt="Cropped PAN Card">
-                            <div class="preview-placeholder" id="previewPlaceholder">
-                                <i class="fas fa-id-card" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                                <div>Cropped PAN Card Preview</div>
-                                <small style="font-weight: normal;">Loading preview...</small>
+                        <div class="crops-preview">
+                            <div class="crop-side">
+                                <h4>Front Side</h4>
+                                <img id="frontPreview" class="preview-image" alt="PAN Front Side">
+                                <div class="preview-placeholder" id="frontPlaceholder">
+                                    <i class="fas fa-id-card" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                                    <div>Front Side Preview</div>
+                                </div>
+                            </div>
+                            
+                            <div class="crop-side">
+                                <h4>Back Side</h4>
+                                <img id="backPreview" class="preview-image" alt="PAN Back Side">
+                                <div class="preview-placeholder" id="backPlaceholder">
+                                    <i class="fas fa-id-card" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                                    <div>Back Side Preview</div>
+                                </div>
                             </div>
                         </div>
                        
                         <div class="action-buttons">
-                            <button class="action-btn download-btn" id="previewDownloadBtn">
+                            <button class="action-btn download-btn" id="downloadBothBtn">
                                 <i class="fas fa-download"></i>
-                                Download PAN Card
+                                Download Both Sides
                             </button>
-                            <button class="action-btn preview-btn" id="previewPrintBtn">
-                                <i class="fas fa-print"></i>
-                                Print Card
+                            <button class="action-btn pvc-btn" id="convertToPvcBtn">
+                                <i class="fas fa-id-card"></i>
+                                Convert to PVC Card
                             </button>
-                            <button class="action-btn" style="background: var(--dark); color: white;" id="newCropBtn">
+                            <button class="action-btn new-crop-btn" id="newCropBtn">
                                 <i class="fas fa-plus"></i>
-                                Crop Another
+                                Crop Another PAN
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PVC Preview Section -->
+                <div class="pvc-preview-section" id="pvcPreviewSection">
+                    <div class="pvc-preview-container">
+                        <div class="pvc-preview-title">
+                            <i class="fas fa-id-card"></i>
+                            <h3>PVC Card Ready! (8.6cm × 5.4cm)</h3>
+                        </div>
+                        
+                        <div class="pvc-cards-preview">
+                            <div class="pvc-card front">
+                                <h4>Front Side</h4>
+                                <img id="pvcFrontPreview" class="pvc-image" alt="PVC Front Side">
+                                <div class="pvc-placeholder" id="pvcFrontPlaceholder">
+                                    <i class="fas fa-id-card" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                                    <div>PVC Front</div>
+                                </div>
+                            </div>
+                            
+                            <div class="pvc-card back">
+                                <h4>Back Side</h4>
+                                <img id="pvcBackPreview" class="pvc-image" alt="PVC Back Side">
+                                <div class="pvc-placeholder" id="pvcBackPlaceholder">
+                                    <i class="fas fa-id-card" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                                    <div>PVC Back</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="print-options">
+                            <h4>Print Options:</h4>
+                            <div class="print-buttons">
+                                <button class="print-option-btn" id="printFrontBtn">
+                                    <i class="fas fa-print"></i> Print Front Only
+                                </button>
+                                <button class="print-option-btn" id="printBackBtn">
+                                    <i class="fas fa-print"></i> Print Back Only
+                                </button>
+                                <button class="print-option-btn" id="printBothBtn">
+                                    <i class="fas fa-print"></i> Print Both Sides
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="action-btn download-btn" id="downloadFrontBtn">
+                                <i class="fas fa-download"></i>
+                                Download Front
+                            </button>
+                            <button class="action-btn download-btn" id="downloadBackBtn">
+                                <i class="fas fa-download"></i>
+                                Download Back
+                            </button>
+                            <button class="action-btn new-crop-btn" id="backToCropBtn">
+                                <i class="fas fa-arrow-left"></i>
+                                Back to Crop
                             </button>
                         </div>
                     </div>
@@ -1034,14 +1310,14 @@
                         <div class="step-number">3</div>
                         <div class="step-content">
                             <h3>Automatic Processing</h3>
-                            <p>Our tool automatically detects and crops the PAN card perfectly</p>
+                            <p>Our tool automatically detects and crops both front and back sides</p>
                         </div>
                     </div>
                     <div class="guide-step">
                         <div class="step-number">4</div>
                         <div class="step-content">
                             <h3>Download & Use</h3>
-                            <p>Get your cropped PAN card image in high quality 300 DPI</p>
+                            <p>Get your cropped PAN card images in high quality 300 DPI</p>
                         </div>
                     </div>
                 </div>
@@ -1101,8 +1377,8 @@
                 <ul>
                     <li>First, download your PAN card PDF from the official NSDL or UTITSL portals (links provided above)</li>
                     <li>Upload your PAN card PDF file to our tool</li>
-                    <li>Our system automatically detects and crops the PAN card section</li>
-                    <li>Preview the cropped PAN card image</li>
+                    <li>Our system automatically detects and crops both front and back sides of the PAN card</li>
+                    <li>Preview the cropped PAN card images</li>
                     <li>Download the perfectly cropped PAN card in high resolution</li>
                 </ul>
                 
@@ -1115,6 +1391,7 @@
                     <li><strong>Privacy Focused</strong> - Files auto-delete after 5 minutes</li>
                     <li><strong>High Quality</strong> - Output in 300 DPI resolution</li>
                     <li><strong>Mobile Friendly</strong> - Works on all devices</li>
+                    <li><strong>Perfect Size</strong> - Get <strong>PAN card crop size online PDF</strong> with exact dimensions</li>
                 </ul>
                 
                 <h3>Common Uses for Cropped PAN Card</h3>
@@ -1177,6 +1454,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Elements
             const fileInput = document.getElementById('fileInput');
             const browseBtn = document.getElementById('browseBtn');
             const uploadArea = document.getElementById('uploadArea');
@@ -1184,22 +1462,41 @@
             const passwordSection = document.getElementById('passwordSection');
             const processBtn = document.getElementById('processBtn');
             const previewSection = document.getElementById('previewSection');
-            const croppedCardImage = document.getElementById('croppedCardImage');
-            const previewPlaceholder = document.getElementById('previewPlaceholder');
-            const previewDownloadBtn = document.getElementById('previewDownloadBtn');
-            const previewPrintBtn = document.getElementById('previewPrintBtn');
-            const newCropBtn = document.getElementById('newCropBtn');
+            const pvcPreviewSection = document.getElementById('pvcPreviewSection');
             const loadingSpinner = document.getElementById('loadingSpinner');
             const errorMessage = document.getElementById('errorMessage');
             const successMessage = document.getElementById('successMessage');
             const autoDeleteNotice = document.getElementById('autoDeleteNotice');
 
-            let selectedFile = null;
-            let currentCroppedImageUrl = null;
-            let deleteTimer = null;
+            // Preview elements
+            const frontPreview = document.getElementById('frontPreview');
+            const backPreview = document.getElementById('backPreview');
+            const frontPlaceholder = document.getElementById('frontPlaceholder');
+            const backPlaceholder = document.getElementById('backPlaceholder');
+            
+            const pvcFrontPreview = document.getElementById('pvcFrontPreview');
+            const pvcBackPreview = document.getElementById('pvcBackPreview');
+            const pvcFrontPlaceholder = document.getElementById('pvcFrontPlaceholder');
+            const pvcBackPlaceholder = document.getElementById('pvcBackPlaceholder');
 
-            // Auto-select PAN card type
-            const selectedCardType = 'pan';
+            // Buttons
+            const downloadBothBtn = document.getElementById('downloadBothBtn');
+            const convertToPvcBtn = document.getElementById('convertToPvcBtn');
+            const newCropBtn = document.getElementById('newCropBtn');
+            const downloadFrontBtn = document.getElementById('downloadFrontBtn');
+            const downloadBackBtn = document.getElementById('downloadBackBtn');
+            const backToCropBtn = document.getElementById('backToCropBtn');
+            const printFrontBtn = document.getElementById('printFrontBtn');
+            const printBackBtn = document.getElementById('printBackBtn');
+            const printBothBtn = document.getElementById('printBothBtn');
+
+            let selectedFile = null;
+            let currentFileId = null;
+            let currentFrontFile = null;
+            let currentBackFile = null;
+            let currentPvcFrontFile = null;
+            let currentPvcBackFile = null;
+            let deleteTimer = null;
 
             // NEW: Mobile Menu Toggle
             document.querySelector('.mobile-menu').addEventListener('click', function() {
@@ -1226,69 +1523,27 @@
                 });
             });
 
-            // Auto-delete timer function
-            function startAutoDeleteTimer() {
-                // Clear any existing timer
-                if (deleteTimer) {
-                    clearTimeout(deleteTimer);
-                }
-                
-                // Show auto-delete notice
-                autoDeleteNotice.style.display = 'block';
-                
-                // Set timer for 5 minutes (300000 milliseconds)
-                deleteTimer = setTimeout(function() {
-                    // Clean up URLs and reset interface
-                    if (currentCroppedImageUrl) {
-                        URL.revokeObjectURL(currentCroppedImageUrl);
-                        currentCroppedImageUrl = null;
-                    }
-                    
-                    // Hide preview section
-                    previewSection.style.display = 'none';
-                    processBtn.style.display = 'block';
-                    
-                    // Show message
-                    showSuccess('File has been automatically deleted for your privacy.');
-                    autoDeleteNotice.style.display = 'none';
-                    
-                }, 300000); // 5 minutes
-            }
-
-            // Hide all messages
-            function hideMessages() {
-                errorMessage.style.display = 'none';
-                successMessage.style.display = 'none';
-                autoDeleteNotice.style.display = 'none';
-            }
-
-            // Show error message
-            function showError(message) {
-                errorMessage.textContent = message;
-                errorMessage.style.display = 'block';
-                successMessage.style.display = 'none';
-                autoDeleteNotice.style.display = 'none';
-            }
-
-            // Show success message
-            function showSuccess(message) {
-                successMessage.textContent = message;
-                successMessage.style.display = 'block';
-                errorMessage.style.display = 'none';
-            }
-
-            browseBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                fileInput.click();
-            });
-
-            uploadArea.addEventListener('click', function(e) {
+            // Event Listeners
+            browseBtn.addEventListener('click', () => fileInput.click());
+            uploadArea.addEventListener('click', (e) => {
                 if (e.target !== browseBtn && e.target.type !== 'password') {
                     fileInput.click();
                 }
             });
 
-            fileInput.addEventListener('change', function() {
+            fileInput.addEventListener('change', handleFileSelect);
+            processBtn.addEventListener('click', processPAN);
+            downloadBothBtn.addEventListener('click', downloadBothSides);
+            convertToPvcBtn.addEventListener('click', convertToPvc);
+            newCropBtn.addEventListener('click', resetUploadArea);
+            backToCropBtn.addEventListener('click', backToCrop);
+            downloadFrontBtn.addEventListener('click', () => downloadFile(currentPvcFrontFile));
+            downloadBackBtn.addEventListener('click', () => downloadFile(currentPvcBackFile));
+            printFrontBtn.addEventListener('click', () => printCard('front'));
+            printBackBtn.addEventListener('click', () => printCard('back'));
+            printBothBtn.addEventListener('click', () => printCard('both'));
+
+            function handleFileSelect() {
                 if (this.files.length > 0) {
                     selectedFile = this.files[0];
                     
@@ -1296,7 +1551,6 @@
                         showError('Please select a PDF file only.');
                         this.value = '';
                         selectedFile = null;
-                        resetUploadArea();
                         return;
                     }
                     
@@ -1304,21 +1558,18 @@
                         showError('File size must be less than 10MB.');
                         this.value = '';
                         selectedFile = null;
-                        resetUploadArea();
                         return;
                     }
                     
-                    // Check if PDF is protected (simulated)
-                    checkPDFProtection(selectedFile);
-                    
+                    checkPDFProtection();
                     fileName.textContent = `Selected: ${selectedFile.name}`;
                     fileName.style.display = 'block';
                     uploadArea.classList.add('dragover');
                     hideMessages();
                 }
-            });
+            }
 
-            processBtn.addEventListener('click', async function() {
+            async function processPAN() {
                 if (!selectedFile) {
                     showError('Please select a PAN card PDF file first.');
                     return;
@@ -1326,7 +1577,7 @@
 
                 const password = document.getElementById('pdfPassword').value;
 
-                processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing PAN Card...';
+                processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cropping Front & Back...';
                 processBtn.disabled = true;
                 loadingSpinner.style.display = 'block';
                 hideMessages();
@@ -1334,10 +1585,11 @@
                 try {
                     const formData = new FormData();
                     formData.append('file', selectedFile);
-                    formData.append('card_type', selectedCardType);
                     formData.append('password', password);
+                    formData.append('card_type', 'pan'); // Add card type
 
-                    const response = await fetch('/upload', {
+                    // UPDATED: Use the new unified route
+                    const response = await fetch('/upload-card-both', {
                         method: 'POST',
                         body: formData
                     });
@@ -1348,39 +1600,16 @@
                         previewSection.style.display = 'block';
                         processBtn.style.display = 'none';
 
-                        const fileId = data.file_id;
-                        currentCroppedImageUrl = `/preview/${fileId}_cropped.png`;
+                        currentFileId = data.file_id;
+                        currentFrontFile = data.front_file;
+                        currentBackFile = data.back_file;
 
-                        loadCroppedCardImage(currentCroppedImageUrl);
+                        // Load preview images
+                        loadPreviewImage(`/preview/${data.front_file}`, frontPreview, frontPlaceholder);
+                        loadPreviewImage(`/preview/${data.back_file}`, backPreview, backPlaceholder);
 
-                        // Start auto-delete timer
                         startAutoDeleteTimer();
-
-                        showSuccess('PAN card cropped successfully! File will auto-delete in 5 minutes.');
-
-                        previewDownloadBtn.onclick = function() {
-                            window.location.href = `/download/${fileId}_cropped.png`;
-                        };
-
-                        previewPrintBtn.onclick = function() {
-                            printCroppedCard();
-                        };
-
-                        newCropBtn.onclick = function() {
-                            // Clean up URL objects
-                            if (currentCroppedImageUrl) {
-                                URL.revokeObjectURL(currentCroppedImageUrl);
-                            }
-                            // Clear auto-delete timer
-                            if (deleteTimer) {
-                                clearTimeout(deleteTimer);
-                            }
-                            resetUploadArea();
-                            previewSection.style.display = 'none';
-                            processBtn.style.display = 'block';
-                            processBtn.disabled = false;
-                            processBtn.innerHTML = '<i class="fas fa-crop-alt"></i> Crop PAN Card';
-                        };
+                        showSuccess('PAN card front & back cropped successfully!');
 
                     } else {
                         throw new Error(data.error || 'Unknown error occurred');
@@ -1393,58 +1622,324 @@
                     processBtn.innerHTML = '<i class="fas fa-crop-alt"></i> Crop PAN Card';
                     loadingSpinner.style.display = 'none';
                 }
-            });
+            }
 
-            function loadCroppedCardImage(imageUrl) {
+            async function downloadBothSides() {
+                if (!currentFrontFile || !currentBackFile) {
+                    showError('Please crop PAN card first.');
+                    return;
+                }
+
+                downloadBothBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Image...';
+                downloadBothBtn.disabled = true;
+
+                try {
+                    // Individual images download karen
+                    const [frontBlob, backBlob] = await Promise.all([
+                        fetch(`/preview/${currentFrontFile}`).then(r => r.blob()),
+                        fetch(`/preview/${currentBackFile}`).then(r => r.blob())
+                    ]);
+
+                    // Canvas use karke combined image banayen without labels
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Load images
+                    const frontImg = await createImageBitmap(frontBlob);
+                    const backImg = await createImageBitmap(backBlob);
+                    
+                    // Canvas size set karen (dono images ke liye space)
+                    canvas.width = frontImg.width + backImg.width + 20; // 20px gap
+                    canvas.height = Math.max(frontImg.height, backImg.height);
+                    
+                    // Background white karen
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Images draw karen (labels ke bina)
+                    ctx.drawImage(frontImg, 0, 0);
+                    ctx.drawImage(backImg, frontImg.width + 20, 0);
+                    
+                    // Download combined image
+                    canvas.toBlob(blob => {
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = 'pan_card_combined.jpg';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        showSuccess('Both sides downloaded without labels!');
+                    }, 'image/jpeg', 0.9);
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    showError('Download failed: ' + error.message);
+                } finally {
+                    downloadBothBtn.disabled = false;
+                    downloadBothBtn.innerHTML = '<i class="fas fa-download"></i> Download Both Sides';
+                }
+            }
+
+            async function convertToPvc() {
+                if (!currentFrontFile || !currentBackFile) {
+                    showError('Please crop PAN card first.');
+                    return;
+                }
+
+                convertToPvcBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Converting to PVC...';
+                convertToPvcBtn.disabled = true;
+                hideMessages();
+
+                try {
+                    // UPDATED: Use the new unified PVC route
+                    const response = await fetch('/convert-to-pvc-card', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            front_file: currentFrontFile,
+                            back_file: currentBackFile,
+                            card_type: 'pan'
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        pvcPreviewSection.style.display = 'block';
+                        previewSection.style.display = 'none';
+
+                        currentPvcFrontFile = data.pvc_front_file;
+                        currentPvcBackFile = data.pvc_back_file;
+
+                        // Load PVC preview images
+                        loadPreviewImage(`/preview/${data.pvc_front_file}`, pvcFrontPreview, pvcFrontPlaceholder);
+                        loadPreviewImage(`/preview/${data.pvc_back_file}`, pvcBackPreview, pvcBackPlaceholder);
+
+                        showSuccess('PAN card converted to PVC size (8.6cm × 5.4cm) successfully!');
+
+                    } else {
+                        throw new Error(data.error || 'Conversion failed');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showError('PVC conversion failed: ' + error.message);
+                } finally {
+                    convertToPvcBtn.disabled = false;
+                    convertToPvcBtn.innerHTML = '<i class="fas fa-id-card"></i> Convert to PVC Card';
+                }
+            }
+
+            async function printCard(printType) {
+                if (!currentPvcFrontFile || !currentPvcBackFile) {
+                    showError('PVC files are required for printing.');
+                    return;
+                }
+
+                const printBtn = document.getElementById(`print${printType.charAt(0).toUpperCase() + printType.slice(1)}Btn`);
+                const originalText = printBtn.innerHTML;
+                
+                printBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing Print...';
+                printBtn.disabled = true;
+
+                try {
+                    // UPDATED: Use the new unified print route
+                    const response = await fetch('/print-pvc-card', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            type: printType,
+                            pvc_front_file: currentPvcFrontFile,
+                            pvc_back_file: currentPvcBackFile,
+                            card_type: 'pan'
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Create print-friendly HTML page instead of downloading
+                        createPrintPage(printType);
+                        showSuccess(`Print page opened for ${printType} side(s)!`);
+                    } else {
+                        throw new Error(data.error || 'Print preparation failed');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showError('Print preparation failed: ' + error.message);
+                } finally {
+                    printBtn.disabled = false;
+                    printBtn.innerHTML = originalText;
+                }
+            }
+
+            function createPrintPage(printType) {
+                // Create a new window with print-friendly layout
+                const printWindow = window.open('', '_blank');
+                
+                let printContent = '';
+                
+                if (printType === 'both') {
+                    // Landscape layout for both sides with proper gap - NO LABELS
+                    printContent = `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <title>Print PAN Card - Both Sides</title>
+                            <style>
+                                body { 
+                                    margin: 0; 
+                                    padding: 40px; 
+                                    background: white; 
+                                    text-align: center;
+                                }
+                                .print-container {
+                                    display: flex;
+                                    justify-content: center;
+                                    gap: 40px; /* Official gap between cards */
+                                    align-items: center;
+                                    min-height: 100vh;
+                                }
+                                .card {
+                                    border-radius: 8px;
+                                    overflow: hidden;
+                                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                                }
+                                .card img {
+                                    max-width: 100%;
+                                    height: auto;
+                                    display: block;
+                                }
+                                @media print {
+                                    body { padding: 20px; }
+                                    .print-container { gap: 35px; }
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="print-container">
+                                <div class="card">
+                                    <img src="/preview/${currentPvcFrontFile}" alt="PAN Front Side">
+                                </div>
+                                <div class="card">
+                                    <img src="/preview/${currentPvcBackFile}" alt="PAN Back Side">
+                                </div>
+                            </div>
+                            <script>
+                                window.onload = function() {
+                                    window.print();
+                                    // Close window after print dialog closes
+                                    setTimeout(function() {
+                                        window.close();
+                                    }, 500);
+                                }
+                            <\/script>
+                        </body>
+                        </html>
+                    `;
+                } else {
+                    // Single side print - NO LABELS
+                    const side = printType === 'front' ? currentPvcFrontFile : currentPvcBackFile;
+                    
+                    printContent = `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <title>Print PAN Card - ${printType} Side</title>
+                            <style>
+                                body { 
+                                    margin: 0; 
+                                    padding: 60px; 
+                                    background: white; 
+                                    text-align: center;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    min-height: 100vh;
+                                }
+                                .card {
+                                    border-radius: 8px;
+                                    overflow: hidden;
+                                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                                    max-width: 90%;
+                                }
+                                .card img {
+                                    max-width: 100%;
+                                    height: auto;
+                                    display: block;
+                                }
+                                @media print {
+                                    body { padding: 40px; }
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="card">
+                                <img src="/preview/${side}" alt="PAN ${printType} Side">
+                            </div>
+                            <script>
+                                window.onload = function() {
+                                    window.print();
+                                    // Close window after print dialog closes
+                                    setTimeout(function() {
+                                        window.close();
+                                    }, 500);
+                                }
+                            <\/script>
+                        </body>
+                        </html>
+                    `;
+                }
+                
+                printWindow.document.write(printContent);
+                printWindow.document.close();
+            }
+
+            function downloadFile(filename) {
+                if (filename) {
+                    window.location.href = `/download/${filename}`;
+                }
+            }
+
+            function backToCrop() {
+                pvcPreviewSection.style.display = 'none';
+                previewSection.style.display = 'block';
+            }
+
+            function loadPreviewImage(imageUrl, imgElement, placeholderElement) {
                 const img = new Image();
                 img.onload = function() {
-                    previewPlaceholder.style.display = 'none';
-                    croppedCardImage.src = imageUrl;
-                    croppedCardImage.style.display = 'block';
+                    placeholderElement.style.display = 'none';
+                    imgElement.src = imageUrl;
+                    imgElement.style.display = 'block';
                 };
                 img.onerror = function() {
-                    previewPlaceholder.innerHTML = `
+                    placeholderElement.innerHTML = `
                         <i class="fas fa-exclamation-triangle"></i>
-                        <div>Preview Not Available</div>
-                        <small style="font-weight: normal;">PAN card was cropped successfully</small>
+                        <div>Preview Load Failed</div>
                     `;
                 };
                 img.src = imageUrl;
             }
 
-            function printCroppedCard() {
-                if (currentCroppedImageUrl) {
-                    const printWindow = window.open('', '_blank');
-                    printWindow.document.write(`
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                            <title>Print PAN Card</title>
-                            <style>
-                                body { margin: 0; padding: 20px; text-align: center; background: white; }
-                                img { max-width: 100%; max-height: 90vh; border: 1px solid #ccc; }
-                            </style>
-                        </head>
-                        <body>
-                            <img src="${currentCroppedImageUrl}" alt="Cropped PAN Card">
-                            <script>
-                                window.onload = function() {
-                                    window.print();
-                                    setTimeout(function() {
-                                        window.close();
-                                    }, 1000);
-                                }
-                            <\/script>
-                        </body>
-                        </html>
-                    `);
-                    printWindow.document.close();
-                }
-            }
-
-            function checkPDFProtection(file) {
+            function checkPDFProtection() {
                 passwordSection.style.display = 'block';
                 uploadArea.classList.add('dragover');
+            }
+
+            function startAutoDeleteTimer() {
+                if (deleteTimer) clearTimeout(deleteTimer);
+                autoDeleteNotice.style.display = 'block';
+                
+                deleteTimer = setTimeout(() => {
+                    resetUploadArea();
+                    showSuccess('Files have been automatically deleted for your privacy.');
+                    autoDeleteNotice.style.display = 'none';
+                }, 300000);
             }
 
             function resetUploadArea() {
@@ -1455,17 +1950,49 @@
                 selectedFile = null;
                 fileInput.value = '';
                 processBtn.style.display = 'block';
+                previewSection.style.display = 'none';
+                pvcPreviewSection.style.display = 'none';
 
-                previewPlaceholder.style.display = 'flex';
-                previewPlaceholder.innerHTML = `
-                    <i class="fas fa-id-card" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                    <div>Cropped PAN Card Preview</div>
-                    <small style="font-weight: normal;">Loading preview...</small>
-                `;
-                croppedCardImage.style.display = 'none';
-                croppedCardImage.src = '';
-                currentCroppedImageUrl = null;
+                // Reset all previews
+                [frontPreview, backPreview, pvcFrontPreview, pvcBackPreview].forEach(img => {
+                    img.style.display = 'none';
+                    img.src = '';
+                });
+                
+                [frontPlaceholder, backPlaceholder, pvcFrontPlaceholder, pvcBackPlaceholder].forEach(placeholder => {
+                    placeholder.style.display = 'flex';
+                    placeholder.innerHTML = `
+                        <i class="fas fa-id-card" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                        <div>Loading preview...</div>
+                    `;
+                });
+
+                // Reset variables
+                currentFileId = currentFrontFile = currentBackFile = currentPvcFrontFile = currentPvcBackFile = null;
+                
                 hideMessages();
+                if (deleteTimer) {
+                    clearTimeout(deleteTimer);
+                    deleteTimer = null;
+                }
+            }
+
+            function hideMessages() {
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+                autoDeleteNotice.style.display = 'none';
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+            }
+
+            function showSuccess(message) {
+                successMessage.textContent = message;
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
             }
         });
     </script>
