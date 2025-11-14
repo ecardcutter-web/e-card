@@ -686,6 +686,50 @@
             color: var(--primary);
         }
 
+        /* NEW: Border Options */
+        .border-options {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .border-options h4 {
+            margin-bottom: 15px;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .border-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .border-option-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .border-option-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .border-option-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
         /* Action Buttons */
         .action-buttons {
             display: flex;
@@ -1151,6 +1195,16 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- NEW: Border Options -->
+                        <div class="border-options" id="borderOptions">
+                            <h4>Add Border to Images:</h4>
+                            <div class="border-buttons">
+                                <button class="border-option-btn" id="noBorderBtn">No Border</button>
+                                <button class="border-option-btn" id="thinBorderBtn">Thin Border</button>
+                                <button class="border-option-btn" id="thickBorderBtn">Thick Border</button>
+                            </div>
+                        </div>
                        
                         <div class="action-buttons">
                             <button class="action-btn download-btn" id="downloadBothBtn">
@@ -1194,6 +1248,16 @@
                                     <i class="fas fa-id-card" style="font-size: 2rem; margin-bottom: 10px;"></i>
                                     <div>PVC Back</div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- NEW: Border Options for PVC -->
+                        <div class="border-options" id="pvcBorderOptions">
+                            <h4>Add Border to PVC Cards:</h4>
+                            <div class="border-buttons">
+                                <button class="border-option-btn" id="pvcNoBorderBtn">No Border</button>
+                                <button class="border-option-btn" id="pvcThinBorderBtn">Thin Border</button>
+                                <button class="border-option-btn" id="pvcThickBorderBtn">Thick Border</button>
                             </div>
                         </div>
 
@@ -1420,6 +1484,17 @@
             const pvcFrontPlaceholder = document.getElementById('pvcFrontPlaceholder');
             const pvcBackPlaceholder = document.getElementById('pvcBackPlaceholder');
 
+            // NEW: Border Options
+            const borderOptions = document.getElementById('borderOptions');
+            const noBorderBtn = document.getElementById('noBorderBtn');
+            const thinBorderBtn = document.getElementById('thinBorderBtn');
+            const thickBorderBtn = document.getElementById('thickBorderBtn');
+            
+            const pvcBorderOptions = document.getElementById('pvcBorderOptions');
+            const pvcNoBorderBtn = document.getElementById('pvcNoBorderBtn');
+            const pvcThinBorderBtn = document.getElementById('pvcThinBorderBtn');
+            const pvcThickBorderBtn = document.getElementById('pvcThickBorderBtn');
+
             // Buttons
             const downloadBothBtn = document.getElementById('downloadBothBtn');
             const convertToPvcBtn = document.getElementById('convertToPvcBtn');
@@ -1438,6 +1513,10 @@
             let currentPvcFrontFile = null;
             let currentPvcBackFile = null;
             let deleteTimer = null;
+            
+            // NEW: Border settings
+            let borderType = 'none'; // 'none', 'thin', 'thick'
+            let pvcBorderType = 'none'; // 'none', 'thin', 'thick'
 
             // NEW: Mobile Menu Toggle
             document.querySelector('.mobile-menu').addEventListener('click', function() {
@@ -1483,6 +1562,63 @@
             printFrontBtn.addEventListener('click', () => printCard('front'));
             printBackBtn.addEventListener('click', () => printCard('back'));
             printBothBtn.addEventListener('click', () => printCard('both'));
+
+            // NEW: Border option event listeners
+            noBorderBtn.addEventListener('click', () => setBorderType('none'));
+            thinBorderBtn.addEventListener('click', () => setBorderType('thin'));
+            thickBorderBtn.addEventListener('click', () => setBorderType('thick'));
+            
+            pvcNoBorderBtn.addEventListener('click', () => setPvcBorderType('none'));
+            pvcThinBorderBtn.addEventListener('click', () => setPvcBorderType('thin'));
+            pvcThickBorderBtn.addEventListener('click', () => setPvcBorderType('thick'));
+
+            function setBorderType(type) {
+                borderType = type;
+                
+                // Update active button state
+                [noBorderBtn, thinBorderBtn, thickBorderBtn].forEach(btn => btn.classList.remove('active'));
+                if (type === 'none') noBorderBtn.classList.add('active');
+                if (type === 'thin') thinBorderBtn.classList.add('active');
+                if (type === 'thick') thickBorderBtn.classList.add('active');
+                
+                // Update preview images with border
+                updatePreviewWithBorder();
+            }
+            
+            function setPvcBorderType(type) {
+                pvcBorderType = type;
+                
+                // Update active button state
+                [pvcNoBorderBtn, pvcThinBorderBtn, pvcThickBorderBtn].forEach(btn => btn.classList.remove('active'));
+                if (type === 'none') pvcNoBorderBtn.classList.add('active');
+                if (type === 'thin') pvcThinBorderBtn.classList.add('active');
+                if (type === 'thick') pvcThickBorderBtn.classList.add('active');
+                
+                // Update PVC preview images with border
+                updatePvcPreviewWithBorder();
+            }
+            
+            function updatePreviewWithBorder() {
+                if (!currentFrontFile || !currentBackFile) return;
+                
+                // Apply border to preview images
+                const borderWidth = borderType === 'thin' ? '2px' : borderType === 'thick' ? '4px' : '0';
+                const borderStyle = borderType !== 'none' ? 'solid #000' : 'none';
+                
+                frontPreview.style.border = `${borderWidth} ${borderStyle}`;
+                backPreview.style.border = `${borderWidth} ${borderStyle}`;
+            }
+            
+            function updatePvcPreviewWithBorder() {
+                if (!currentPvcFrontFile || !currentPvcBackFile) return;
+                
+                // Apply border to PVC preview images
+                const borderWidth = pvcBorderType === 'thin' ? '2px' : pvcBorderType === 'thick' ? '4px' : '0';
+                const borderStyle = pvcBorderType !== 'none' ? 'solid #000' : 'none';
+                
+                pvcFrontPreview.style.border = `${borderWidth} ${borderStyle}`;
+                pvcBackPreview.style.border = `${borderWidth} ${borderStyle}`;
+            }
 
             function handleFileSelect() {
                 if (this.files.length > 0) {
@@ -1540,6 +1676,7 @@
                     if (data.success) {
                         previewSection.style.display = 'block';
                         processBtn.style.display = 'none';
+                        borderOptions.style.display = 'block'; // NEW: Show border options
 
                         currentFileId = data.file_id;
                         currentFrontFile = data.front_file;
@@ -1589,17 +1726,42 @@
                     const frontImg = await createImageBitmap(frontBlob);
                     const backImg = await createImageBitmap(backBlob);
                     
-                    // Canvas size set karen (dono images ke liye space)
-                    canvas.width = frontImg.width + backImg.width + 40; // 40px gap
-                    canvas.height = Math.max(frontImg.height, backImg.height);
+                    // NEW: Calculate border width
+                    const borderWidth = borderType === 'thin' ? 2 : borderType === 'thick' ? 4 : 0;
+                    
+                    // Canvas size set karen (dono images ke liye space with borders)
+                    canvas.width = frontImg.width + backImg.width + 20 + (borderWidth * 4); // 20px gap + borders
+                    canvas.height = Math.max(frontImg.height, backImg.height) + (borderWidth * 2);
                     
                     // Background white karen
                     ctx.fillStyle = 'white';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                     
+                    // NEW: Draw borders if needed
+                    if (borderType !== 'none') {
+                        ctx.strokeStyle = '#000';
+                        ctx.lineWidth = borderWidth;
+                        
+                        // Front border
+                        ctx.strokeRect(
+                            borderWidth/2, 
+                            borderWidth/2, 
+                            frontImg.width + borderWidth, 
+                            frontImg.height + borderWidth
+                        );
+                        
+                        // Back border
+                        ctx.strokeRect(
+                            frontImg.width + 20 + borderWidth/2, 
+                            borderWidth/2, 
+                            backImg.width + borderWidth, 
+                            backImg.height + borderWidth
+                        );
+                    }
+                    
                     // Images draw karen (labels ke bina)
-                    ctx.drawImage(frontImg, 0, 0);
-                    ctx.drawImage(backImg, frontImg.width + 40, 0);
+                    ctx.drawImage(frontImg, borderWidth, borderWidth);
+                    ctx.drawImage(backImg, frontImg.width + 20 + borderWidth, borderWidth);
                     
                     // Download combined image
                     canvas.toBlob(blob => {
@@ -1610,7 +1772,7 @@
                         link.click();
                         document.body.removeChild(link);
                         
-                        showSuccess('Both sides downloaded without labels!');
+                        showSuccess('Both sides downloaded successfully!');
                     }, 'image/jpeg', 0.9);
                     
                 } catch (error) {
@@ -1651,6 +1813,7 @@
                     if (data.success) {
                         pvcPreviewSection.style.display = 'block';
                         previewSection.style.display = 'none';
+                        pvcBorderOptions.style.display = 'block'; // NEW: Show PVC border options
 
                         currentPvcFrontFile = data.pvc_front_file;
                         currentPvcBackFile = data.pvc_back_file;
@@ -1748,7 +1911,7 @@
                                 .card {
                                     border-radius: 8px;
                                     overflow: hidden;
-                                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                                    ${pvcBorderType !== 'none' ? `border: ${pvcBorderType === 'thin' ? '2px' : '4px'} solid #000;` : ''}
                                 }
                                 .card img {
                                     max-width: 100%;
@@ -1805,7 +1968,7 @@
                                 .card {
                                     border-radius: 8px;
                                     overflow: hidden;
-                                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                                    ${pvcBorderType !== 'none' ? `border: ${pvcBorderType === 'thin' ? '2px' : '4px'} solid #000;` : ''}
                                     max-width: 90%;
                                 }
                                 .card img {
@@ -1857,6 +2020,13 @@
                     placeholderElement.style.display = 'none';
                     imgElement.src = imageUrl;
                     imgElement.style.display = 'block';
+                    
+                    // Apply border if needed
+                    if (imgElement === frontPreview || imgElement === backPreview) {
+                        updatePreviewWithBorder();
+                    } else if (imgElement === pvcFrontPreview || imgElement === pvcBackPreview) {
+                        updatePvcPreviewWithBorder();
+                    }
                 };
                 img.onerror = function() {
                     placeholderElement.innerHTML = `
@@ -1893,11 +2063,14 @@
                 processBtn.style.display = 'block';
                 previewSection.style.display = 'none';
                 pvcPreviewSection.style.display = 'none';
+                borderOptions.style.display = 'none'; // NEW: Hide border options
+                pvcBorderOptions.style.display = 'none'; // NEW: Hide PVC border options
 
                 // Reset all previews
                 [frontPreview, backPreview, pvcFrontPreview, pvcBackPreview].forEach(img => {
                     img.style.display = 'none';
                     img.src = '';
+                    img.style.border = 'none'; // NEW: Reset borders
                 });
                 
                 [frontPlaceholder, backPlaceholder, pvcFrontPlaceholder, pvcBackPlaceholder].forEach(placeholder => {
@@ -1910,6 +2083,15 @@
 
                 // Reset variables
                 currentFileId = currentFrontFile = currentBackFile = currentPvcFrontFile = currentPvcBackFile = null;
+                
+                // NEW: Reset border settings
+                borderType = 'none';
+                pvcBorderType = 'none';
+                [noBorderBtn, thinBorderBtn, thickBorderBtn, pvcNoBorderBtn, pvcThinBorderBtn, pvcThickBorderBtn].forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                noBorderBtn.classList.add('active');
+                pvcNoBorderBtn.classList.add('active');
                 
                 hideMessages();
                 if (deleteTimer) {

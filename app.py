@@ -139,15 +139,15 @@ def process_pdf_front_back(pdf_path, output_dir, card_type='aadhaar', pdf_passwo
             front_height = card_height - int(h * 0.01)
             
             # Back Side (Right side - Address and QR Code)
-            back_left = int(start_x + card_width + (w * 0.016))
+            back_left = int(start_x + card_width + (w * 0.0162))
             back_top = int(h * 0.729)
             back_width = card_width - int(w * 0.01)
             back_height = card_height - int(h * 0.01)
 
         elif card_type == "jan-aadhaar":
             # Jan-Aadhaar - Same pattern as Aadhaar
-            card_width = int(w * 0.44)
-            card_height = int(card_width / 1.61)
+            card_width = int(w * 0.42)
+            card_height = int(card_width / 1.62)
             
             total_cards_width = (card_width * 2) + (w * 0.010)
             start_x = (w - total_cards_width) / 2
