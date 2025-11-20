@@ -1980,34 +1980,16 @@ def get_port():
     return int(os.environ.get('PORT', 10000))
 
 if __name__ == '__main__':
-    port = get_port()
+    PORT = int(os.environ.get("PORT", 10000))
+
     print("Starting Universal PVC Card Maker & AI Passport Photo Tool...")
     print(f"Upload folder: {UPLOAD_FOLDER}")
     print(f"Cropped folder: {CROPPED_FOLDER}")
     print(f"Converted folder: {CONVERTED_FOLDER}")
     print(f"Passport folder: {PASSPORT_FOLDER}")
-    
-    print("\nFeatures:")
-    print("   • IMPROVED Background Removal with better quality")
-    print("   • Auto Front & Back cropping for ALL cards (Aadhaar, PAN, Voter ID, Jan-Aadhaar, Ayushman, Labour)")
-    print("   • Consistent tight cropping pattern - no black borders")
-    print("   • PVC Card conversion (8.6cm x 5.4cm) - NO BORDERS")
-    print("   • Both sides download as combined PNG/JPG")
-    print("   • Direct print functionality for all cards")
-    print("   • ADVANCED AI Passport Photo Maker with background removal")
-    print("   • Multiple passport sizes with exact pixel dimensions")
-    print("   • Photo sheets with FIXED photo sizes")
-    print("   • Transparent background support")
-    print("   • Real-time background color change")
-    print("   • Image Converter (JPG, PNG, GIF, BMP, TIFF, WEBP, ICO, PDF) with bulk conversion")
-    print("   • Auto file cleanup (5 minutes)")
-    print("   • Backward compatibility with old routes")
 
-    # Start auto cleanup
     file_cleaner.start_auto_cleanup()
     print("Auto-cleanup thread started.")
+    print(f"App loaded. Serving on port {PORT}")
 
-    print(f"\nApp loaded. Serving on port {port}")
-    
-    # Bind to 0.0.0.0 to make it accessible externally
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(host='0.0.0.0', port=PORT)
