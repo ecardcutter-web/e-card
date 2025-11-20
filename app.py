@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, send_file, jsonify
 import os
+os.environ["U2NET_HOME"] = "/tmp"
+os.environ["ONNX_RUNTIME_FORCE_CPU"] = "1"
 import fitz
 import secrets
 from datetime import datetime, timedelta
