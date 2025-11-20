@@ -1971,31 +1971,43 @@ def health_check():
         'passport_folder': len(os.listdir(app.config['PASSPORT_FOLDER'])) if os.path.exists(app.config['PASSPORT_FOLDER']) else 0
     })
 
+# ==================== PORT BINDING FOR RENDER ====================
+
+import os
+
+def get_port():
+    """Get port from environment variable or use default"""
+    return int(os.environ.get('PORT', 10000))
+
 if __name__ == '__main__':
-    # Only run if not running with gunicorn
-    if os.environ.get('RENDER'):
-        print("🚀 Running on Render with Gunicorn...")
-    else:
-        port = get_port()
-        print("Starting Universal PVC Card Maker & AI Passport Photo Tool...")
-        print(f"Upload folder: {UPLOAD_FOLDER}")
-        print(f"Cropped folder: {CROPPED_FOLDER}")
-        print(f"Converted folder: {CONVERTED_FOLDER}")
-        print(f"Passport folder: {PASSPORT_FOLDER}")
-        
-        print("\nFeatures:")
-        print("   • IMPROVED Background Removal with better quality")
-        print("   • Auto Front & Back cropping for ALL cards")
-        print("   • PVC Card conversion (8.6cm x 5.4cm)")
-        print("   • ADVANCED AI Passport Photo Maker")
-        print("   • Image Converter with bulk conversion")
-        print("   • Auto file cleanup (5 minutes)")
+    port = get_port()
+    print("Starting Universal PVC Card Maker & AI Passport Photo Tool...")
+    print(f"Upload folder: {UPLOAD_FOLDER}")
+    print(f"Cropped folder: {CROPPED_FOLDER}")
+    print(f"Converted folder: {CONVERTED_FOLDER}")
+    print(f"Passport folder: {PASSPORT_FOLDER}")
+    
+    print("\nFeatures:")
+    print("   • IMPROVED Background Removal with better quality")
+    print("   • Auto Front & Back cropping for ALL cards (Aadhaar, PAN, Voter ID, Jan-Aadhaar, Ayushman, Labour)")
+    print("   • Consistent tight cropping pattern - no black borders")
+    print("   • PVC Card conversion (8.6cm x 5.4cm) - NO BORDERS")
+    print("   • Both sides download as combined PNG/JPG")
+    print("   • Direct print functionality for all cards")
+    print("   • ADVANCED AI Passport Photo Maker with background removal")
+    print("   • Multiple passport sizes with exact pixel dimensions")
+    print("   • Photo sheets with FIXED photo sizes")
+    print("   • Transparent background support")
+    print("   • Real-time background color change")
+    print("   • Image Converter (JPG, PNG, GIF, BMP, TIFF, WEBP, ICO, PDF) with bulk conversion")
+    print("   • Auto file cleanup (5 minutes)")
+    print("   • Backward compatibility with old routes")
 
-        # Start auto cleanup
-        file_cleaner.start_auto_cleanup()
-        print("Auto-cleanup thread started.")
+    # Start auto cleanup
+    file_cleaner.start_auto_cleanup()
+    print("Auto-cleanup thread started.")
 
-        print(f"\nApp loaded. Serving on port {port}")
-        
-        # Bind to 0.0.0.0 to make it accessible externally
-        app.run(host='0.0.0.0', port=port, debug=False)
+    print(f"\nApp loaded. Serving on port {port}")
+    
+    # Bind to 0.0.0.0 to make it accessible externally
+    app.run(host='0.0.0.0', port=port, debug=False)
