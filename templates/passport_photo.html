@@ -1,0 +1,1980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Passport Photo Maker - HD Quality | E-Card Cutter</title>
+    <meta name="description" content="HD Quality AI passport photo maker with automatic background removal, face detection, and professional editing tools. Create perfect passport photos online.">
+    <meta name="keywords" content="hd passport photo, high quality photo, ai photo tool, passport photo online, print passport photo">
+    <meta name="author" content="E-Card Cutter">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --gray: #6b7280;
+            --gray-light: #e5e7eb;
+            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%);
+            --glass: rgba(255, 255, 255, 0.25);
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 12px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .logo-text span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 15px;
+            align-items: center;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 80px auto 0;
+            padding: 20px;
+        }
+
+        /* Tool Header */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 50px 30px;
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient);
+            opacity: 0.9;
+            z-index: -1;
+        }
+
+        .tool-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .ai-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 30px;
+        }
+
+        /* Upload Section */
+        .upload-area {
+            border: 3px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 60px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .upload-area:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--accent);
+            background: rgba(6, 182, 212, 0.2);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .browse-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .browse-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-3px);
+        }
+
+        /* Editor Layout */
+        .editor-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* Preview Area */
+        .preview-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .preview-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .preview-frame {
+            width: 413px;
+            height: 531px;
+            margin: 0 auto;
+            border: 3px solid var(--primary);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .preview-frame.transparent-bg {
+            background: 
+                linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
+                linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
+                linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        #previewCanvas {
+            width: 100%;
+            height: 100%;
+            cursor: move;
+        }
+
+        .preview-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            border: 2px dashed var(--primary);
+        }
+
+        .zoom-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .zoom-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .zoom-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1);
+        }
+
+        .preview-instruction {
+            margin-top: 15px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Controls Panel */
+        .controls-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .control-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .control-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        /* Size Options */
+        .size-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .size-option {
+            padding: 12px;
+            border: 2px solid var(--gray-light);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-size: 0.85rem;
+        }
+
+        .size-option.active {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.2);
+        }
+
+        .size-option:hover {
+            border-color: var(--primary);
+        }
+
+        .size-dimensions {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 3px;
+        }
+
+        .size-name {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        /* Custom Size Input */
+        .custom-size-input {
+            margin-top: 15px;
+            padding: 15px;
+            border: 2px dashed var(--gray-light);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .custom-size-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .custom-size-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .custom-size-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .custom-size-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .custom-size-input-field {
+            padding: 8px 10px;
+            border: 1px solid var(--gray-light);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .custom-size-input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .custom-size-unit {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+        }
+
+        .unit-btn {
+            padding: 5px 10px;
+            border: 1px solid var(--gray-light);
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .unit-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .apply-custom-size {
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .apply-custom-size:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Background Options */
+        .bg-options {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .bg-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .bg-option.active {
+            border-color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .bg-option:hover {
+            transform: scale(1.05);
+        }
+
+        .transparent-bg {
+            background: 
+                linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
+                linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
+                linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+            background-size: 10px 10px;
+            background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+        }
+
+        .transparent-bg::after {
+            content: "T";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        /* Enhancement Options */
+        .enhancement-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .enhancement-option {
+            padding: 12px;
+            border: 2px solid var(--gray-light);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-size: 0.8rem;
+        }
+
+        .enhancement-option.active {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .enhancement-option:hover {
+            border-color: var(--primary);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .action-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+
+        .crop-btn {
+            background: var(--success);
+            color: white;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .crop-btn:hover {
+            background: #0da271;
+            transform: translateY(-2px);
+        }
+
+        .reset-btn {
+            background: var(--gray);
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        /* Output Section */
+        .output-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .sheet-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .sheet-option {
+            padding: 20px;
+            border: 2px solid var(--gray-light);
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .sheet-option.active {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.2);
+        }
+
+        .sheet-option:hover {
+            border-color: var(--primary);
+        }
+
+        .sheet-preview {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            border: 2px dashed var(--gray-light);
+            margin-bottom: 30px;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: 
+                linear-gradient(45deg, #f8f9fa 25%, transparent 25%), 
+                linear-gradient(-45deg, #f8f9fa 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #f8f9fa 75%), 
+                linear-gradient(-45deg, transparent 75%, #f8f9fa 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        #sheetCanvas {
+            max-width: 100%;
+            max-height: 450px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .download-section {
+            text-align: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .download-btn, .print-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 18px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .print-btn {
+            background: linear-gradient(135deg, #f59e0b, #f97316);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
+        }
+
+        .download-btn:hover, .print-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.6);
+        }
+
+        .print-btn:hover {
+            box-shadow: 0 15px 35px rgba(245, 158, 11, 0.6);
+        }
+
+        .quality-info {
+            margin-top: 15px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            grid-column: 1 / -1;
+        }
+
+        /* HD Quality Badge */
+        .hd-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+        }
+
+        .ai-processing {
+            text-align: center;
+        }
+
+        .pulse-loader {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #6366f1, #8b5cf6, #06b6d4, #6366f1);
+            margin: 0 auto 20px;
+            animation: rotate 2s linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pulse-loader::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .loading-subtext {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--success);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+            z-index: 2001;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Windows Activation Notice */
+        .windows-notice {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .editor-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .preview-frame {
+                width: 350px;
+                height: 450px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .tool-title {
+                font-size: 2.2rem;
+            }
+            
+            .sheet-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .size-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .enhancement-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .download-section {
+                grid-template-columns: 1fr;
+            }
+            
+            nav {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tool-title {
+                font-size: 1.8rem;
+            }
+            
+            .preview-frame {
+                width: 280px;
+                height: 360px;
+            }
+            
+            .glass-card {
+                padding: 20px;
+            }
+            
+            .enhancement-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <a href="/" class="logo">
+            <div class="logo-text">E-<span>Card</span> Cutter</div>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#tools">Tools</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <!-- Tool Header -->
+        <div class="tool-header">
+            <h1 class="tool-title">AI Passport Photo Maker <span class="hd-badge"><i class="fas fa-hd"></i> HD QUALITY</span></h1>
+            <div class="ai-badge">
+                <i class="fas fa-robot"></i> REAL AI POWERED
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="glass-card" id="uploadSection">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h3>Upload Your Photo</h3>
+                <p>AI will automatically detect face and remove background</p>
+                <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 10px;">Supported: JPG, PNG, WEBP • Max 10MB</p>
+                <button class="browse-btn" id="browseBtn">
+                    <i class="fas fa-folder-open"></i> Select Photo
+                </button>
+                <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="ai-processing">
+                <div class="pulse-loader"></div>
+                <div class="loading-text">AI is Processing Your Photo</div>
+                <div class="loading-subtext">Removing background • Enhancing quality • Optimizing for passport</div>
+            </div>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+            <div>Photo processed successfully with background removal!</div>
+        </div>
+
+        <!-- Editor Section -->
+        <div class="glass-card" id="editorSection" style="display: none;">
+            <div class="editor-layout">
+                <!-- Preview Area -->
+                <div class="preview-container">
+                    <h3 class="preview-title">
+                        <i class="fas fa-crop-alt"></i>
+                        Adjust Your Photo
+                    </h3>
+                    <div class="preview-frame" id="previewFrame">
+                        <canvas id="previewCanvas"></canvas>
+                        <div class="preview-overlay"></div>
+                    </div>
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" id="zoomOutBtn">
+                            <i class="fas fa-search-minus"></i>
+                        </button>
+                        <button class="zoom-btn" id="zoomInBtn">
+                            <i class="fas fa-search-plus"></i>
+                        </button>
+                    </div>
+                    <p class="preview-instruction">
+                        <i class="fas fa-mouse-pointer"></i> Drag to position • Head to chest should be visible
+                    </p>
+                </div>
+
+                <!-- Controls Panel -->
+                <div class="controls-panel">
+                    <!-- Size Options -->
+                    <div class="control-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-ruler-combined"></i>
+                            Photo Size
+                        </h4>
+                        <div class="size-options" id="sizeOptions">
+                            <!-- Size options will be populated by JavaScript -->
+                        </div>
+                        
+                        <!-- Custom Size Input -->
+                        <div class="custom-size-input">
+                            <div class="custom-size-title">
+                                <i class="fas fa-edit"></i> Custom Size
+                            </div>
+                            <div class="custom-size-fields">
+                                <div class="custom-size-group">
+                                    <label class="custom-size-label">Width</label>
+                                    <input type="number" class="custom-size-input-field" id="customWidth" placeholder="Width" min="1" value="413">
+                                    <div class="custom-size-unit">
+                                        <button class="unit-btn active" data-unit="px">px</button>
+                                        <button class="unit-btn" data-unit="inch">inch</button>
+                                        <button class="unit-btn" data-unit="cm">cm</button>
+                                    </div>
+                                </div>
+                                <div class="custom-size-group">
+                                    <label class="custom-size-label">Height</label>
+                                    <input type="number" class="custom-size-input-field" id="customHeight" placeholder="Height" min="1" value="531">
+                                    <div class="custom-size-unit">
+                                        <button class="unit-btn active" data-unit="px">px</button>
+                                        <button class="unit-btn" data-unit="inch">inch</button>
+                                        <button class="unit-btn" data-unit="cm">cm</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="apply-custom-size" id="applyCustomSize">
+                                <i class="fas fa-check"></i> Apply Custom Size
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Background Options -->
+                    <div class="control-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-palette"></i>
+                            Background
+                        </h4>
+                        <div class="bg-options">
+                            <div class="bg-option transparent-bg" data-bg="transparent"></div>
+                            <div class="bg-option active" style="background: white;" data-bg="#FFFFFF"></div>
+                            <div class="bg-option" style="background: #f0f0f0;" data-bg="#F0F0F0"></div>
+                            <div class="bg-option" style="background: #4f46e5;" data-bg="#4F46E5"></div>
+                            <div class="bg-option" style="background: #10b981;" data-bg="#10B981"></div>
+                            <div class="bg-option" style="background: #f59e0b;" data-bg="#F59E0B"></div>
+                            <div class="bg-option" style="background: #ef4444;" data-bg="#EF4444"></div>
+                            <div class="bg-option" style="background: #8b5cf6;" data-bg="#8B5CF6"></div>
+                            <div class="bg-option" style="background: #06b6d4;" data-bg="#06B6D4"></div>
+                            <div class="bg-option" style="background: #BED4F7;" data-bg="#BED4F7"></div>
+                            <div class="bg-option" style="background: #BFF5F5;" data-bg="#BFF5F5"></div>
+                        </div>
+                    </div>
+
+                    <!-- Enhancement Options -->
+                    <div class="control-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-magic"></i>
+                            HD Enhancement
+                        </h4>
+                        <div class="enhancement-options">
+                            <div class="enhancement-option active" data-enhancement="sharpness">
+                                <i class="fas fa-bolt"></i>
+                                <div>Sharpness</div>
+                            </div>
+                            <div class="enhancement-option active" data-enhancement="contrast">
+                                <i class="fas fa-adjust"></i>
+                                <div>Contrast</div>
+                            </div>
+                            <div class="enhancement-option active" data-enhancement="brightness">
+                                <i class="fas fa-sun"></i>
+                                <div>Brightness</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button class="action-btn crop-btn" id="cropBtn">
+                            <i class="fas fa-crop-alt"></i> Create Passport Photo
+                        </button>
+                        <button class="action-btn reset-btn" id="resetBtn">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+
+                    <!-- Windows Activation Notice -->
+                    <div class="windows-notice">
+                        <p>Activate Windows</p>
+                        <p>Go to Settings to activate Windows</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Output Section -->
+        <div class="output-section" id="outputSection">
+            <h2 style="text-align: center; margin-bottom: 30px; color: var(--dark);">
+                <i class="fas fa-download"></i> Download & Print Your Photos
+            </h2>
+            
+            <div class="sheet-options">
+                <div class="sheet-option active" data-sheet="1">
+                    <h3>Single Photo</h3>
+                    <p>1 high quality photo</p>
+                </div>
+                <div class="sheet-option" data-sheet="4">
+                    <h3>4 Photos Sheet</h3>
+                    <p>4 photos in one row</p>
+                </div>
+                <div class="sheet-option" data-sheet="8">
+                    <h3>8 Photos Sheet</h3>
+                    <p>4x2 grid layout</p>
+                </div>
+            </div>
+            
+            <div class="sheet-preview">
+                <canvas id="sheetCanvas"></canvas>
+            </div>
+            
+            <div class="download-section">
+                <button class="download-btn" id="downloadBtn">
+                    <i class="fas fa-download"></i> Download HD Photo
+                </button>
+                <button class="print-btn" id="printBtn">
+                    <i class="fas fa-print"></i> Print Directly
+                </button>
+                <p class="quality-info">
+                    <i class="fas fa-hd"></i> Optimized for 4x6 inch paper • High quality 300 DPI • Perfect for printing
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const fileInput = document.getElementById('fileInput');
+            const browseBtn = document.getElementById('browseBtn');
+            const uploadArea = document.getElementById('uploadArea');
+            const uploadSection = document.getElementById('uploadSection');
+            const editorSection = document.getElementById('editorSection');
+            const outputSection = document.getElementById('outputSection');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const successMessage = document.getElementById('successMessage');
+            const sizeOptions = document.getElementById('sizeOptions');
+            const previewFrame = document.getElementById('previewFrame');
+            
+            // Canvas elements
+            const previewCanvas = document.getElementById('previewCanvas');
+            const sheetCanvas = document.getElementById('sheetCanvas');
+            const previewCtx = previewCanvas.getContext('2d');
+            const sheetCtx = sheetCanvas.getContext('2d');
+            
+            // Control elements
+            const zoomInBtn = document.getElementById('zoomInBtn');
+            const zoomOutBtn = document.getElementById('zoomOutBtn');
+            const cropBtn = document.getElementById('cropBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const printBtn = document.getElementById('printBtn');
+            
+            // Custom size elements
+            const customWidthInput = document.getElementById('customWidth');
+            const customHeightInput = document.getElementById('customHeight');
+            const applyCustomSizeBtn = document.getElementById('applyCustomSize');
+            const unitButtons = document.querySelectorAll('.unit-btn');
+            
+            // Enhancement elements
+            const enhancementOptions = document.querySelectorAll('.enhancement-option');
+            
+            // Variables
+            let originalImage = null;
+            let processedImage = null;
+            let currentScale = 1.0;
+            let currentPosition = { x: 0, y: 0 };
+            let isDragging = false;
+            let lastMousePos = { x: 0, y: 0 };
+            let currentSheet = '1';
+            let currentBackground = '#FFFFFF'; // Default to WHITE background
+            let selectedSizeData = null;
+            let finalCroppedImage = null;
+            let currentUnit = 'px'; // Default unit
+            let activeEnhancements = ['sharpness', 'contrast', 'brightness']; // Default enhancements
+            
+            // Cache for processed images
+            const processedCache = new Map();
+            
+            // 4x6 inch paper dimensions at 300 DPI (LANDSCAPE ORIENTATION)
+            const PAPER_WIDTH = 6 * 300;  // 1800 pixels (landscape width)
+            const PAPER_HEIGHT = 4 * 300; // 1200 pixels (landscape height)
+            
+            // Country-specific photo sizes
+            const countrySizes = [
+                { name: "Custom Size", dimensions: "413 x 531", width: 413, height: 531, country: "Common Size", type: "custom_413x531" },
+                { name: "3.5 x 4.5 cm", dimensions: "413 x 531", width: 413, height: 531, country: "Common Size", type: "3.5x4.5" },
+                { name: "2 x 2 inch", dimensions: "600 x 600", width: 600, height: 600, country: "Common Size", type: "2x2" },
+                { name: "3 x 4 cm", dimensions: "354 x 472", width: 354, height: 472, country: "Common Size", type: "3x4" },
+                { name: "India (Passport)", dimensions: "413 x 531", width: 413, height: 531, country: "India", type: "custom_413x531" },
+                { name: "India (Passport 5x5 cm)", dimensions: "600 x 600", width: 600, height: 600, country: "India", type: "2x2" },
+                { name: "United States (USA)", dimensions: "600 x 600", width: 600, height: 600, country: "United States", type: "2x2" }
+            ];
+            
+            // Initialize canvas and size options
+            initializePreviewCanvas();
+            initializeSizeOptions();
+            
+            // Event Listeners
+            browseBtn.addEventListener('click', () => fileInput.click());
+            uploadArea.addEventListener('click', handleUploadClick);
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            zoomInBtn.addEventListener('click', zoomIn);
+            zoomOutBtn.addEventListener('click', zoomOut);
+            cropBtn.addEventListener('click', processCrop);
+            resetBtn.addEventListener('click', resetEditor);
+            downloadBtn.addEventListener('click', downloadSheet);
+            printBtn.addEventListener('click', printSheet);
+            
+            // Custom size event listeners
+            applyCustomSizeBtn.addEventListener('click', applyCustomSize);
+            
+            // Unit buttons event listeners
+            unitButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all unit buttons
+                    unitButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    currentUnit = this.dataset.unit;
+                });
+            });
+            
+            // Enhancement options event listeners
+            enhancementOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const enhancement = this.dataset.enhancement;
+                    
+                    if (this.classList.contains('active')) {
+                        if (!activeEnhancements.includes(enhancement)) {
+                            activeEnhancements.push(enhancement);
+                        }
+                    } else {
+                        const index = activeEnhancements.indexOf(enhancement);
+                        if (index > -1) {
+                            activeEnhancements.splice(index, 1);
+                        }
+                    }
+                    
+                    // Update preview if image exists
+                    if (processedImage) {
+                        updatePreview();
+                    }
+                });
+            });
+            
+            // Mouse events for dragging
+            previewCanvas.addEventListener('mousedown', startDragging);
+            previewCanvas.addEventListener('mousemove', dragImage);
+            previewCanvas.addEventListener('mouseup', stopDragging);
+            previewCanvas.addEventListener('mouseleave', stopDragging);
+            
+            // Touch events for mobile
+            previewCanvas.addEventListener('touchstart', handleTouchStart);
+            previewCanvas.addEventListener('touchmove', handleTouchMove);
+            previewCanvas.addEventListener('touchend', stopDragging);
+            
+            // Background options
+            document.querySelectorAll('.bg-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.bg-option').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    currentBackground = this.dataset.bg;
+                    
+                    // Update preview frame background
+                    if (currentBackground === 'transparent') {
+                        previewFrame.classList.add('transparent-bg');
+                    } else {
+                        previewFrame.classList.remove('transparent-bg');
+                    }
+                    
+                    updatePreview();
+                });
+            });
+            
+            // Sheet options
+            document.querySelectorAll('.sheet-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.sheet-option').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    currentSheet = this.dataset.sheet;
+                    if (finalCroppedImage) {
+                        updateSheetPreview();
+                    }
+                });
+            });
+            
+            // Functions
+            function initializePreviewCanvas() {
+                // Set default size (413x531)
+                previewCanvas.width = 413;
+                previewCanvas.height = 531;
+                selectedSizeData = countrySizes[0];
+                
+                // Set WHITE background by default (not transparent)
+                previewFrame.classList.remove('transparent-bg');
+            }
+            
+            function initializeSizeOptions() {
+                // Clear existing options
+                sizeOptions.innerHTML = '';
+                
+                // Add country-specific size options
+                countrySizes.forEach((size, index) => {
+                    const sizeOption = document.createElement('div');
+                    sizeOption.className = 'size-option';
+                    if (index === 0) {
+                        sizeOption.classList.add('active');
+                        selectedSizeData = size;
+                    }
+                    sizeOption.dataset.width = size.width;
+                    sizeOption.dataset.height = size.height;
+                    sizeOption.dataset.country = size.country;
+                    sizeOption.dataset.type = size.type;
+                    
+                    sizeOption.innerHTML = `
+                        <div class="size-dimensions">${size.dimensions} px</div>
+                        <div class="size-name">${size.name}</div>
+                    `;
+                    
+                    sizeOption.addEventListener('click', function() {
+                        document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('active'));
+                        this.classList.add('active');
+                        selectedSizeData = size;
+                        
+                        // Update preview canvas size
+                        previewCanvas.width = size.width;
+                        previewCanvas.height = size.height;
+                        
+                        // Update preview frame size
+                        updatePreviewFrameSize();
+                        
+                        // Update preview
+                        if (processedImage) {
+                            updatePreview();
+                        }
+                    });
+                    
+                    sizeOptions.appendChild(sizeOption);
+                });
+            }
+            
+            function updatePreviewFrameSize() {
+                const previewFrame = document.querySelector('.preview-frame');
+                previewFrame.style.width = `${selectedSizeData.width}px`;
+                previewFrame.style.height = `${selectedSizeData.height}px`;
+            }
+            
+            function handleUploadClick(e) {
+                if (e.target !== browseBtn) {
+                    fileInput.click();
+                }
+            }
+            
+            function handleFileSelect(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                if (!file.type.match('image.*')) {
+                    alert('Please select an image file (JPG, PNG, WEBP)');
+                    return;
+                }
+                
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('File size must be less than 10MB');
+                    return;
+                }
+                
+                showLoading();
+                
+                // Convert file to base64 for processing
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Use REAL AI processing with backend
+                    processImageWithAI(e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            // REAL AI PROCESSING FUNCTION - Backend Integration
+            function processImageWithAI(imageData) {
+                // Check cache first
+                const cached = getCachedProcessedImage(imageData);
+                if (cached) {
+                    loadProcessedImage(cached);
+                    return;
+                }
+                
+                // Send to backend for REAL AI processing
+                fetch("/process-image", {  // ✅ FIXED URL - Same server
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ image: imageData })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data.success) {
+                        alert("AI Error: " + data.error);
+                        hideLoading();
+                        return;
+                    }
+
+                    // Cache the result
+                    cacheProcessedImage(imageData, data.image);
+                    
+                    // Load the processed image
+                    loadProcessedImage(data.image);
+                })
+                .catch(err => {
+                    console.error("Network Error:", err);
+                    alert("Network Error: " + err);
+                    hideLoading();
+                });
+            }
+            
+            function loadProcessedImage(processedData) {
+                hideLoading();
+                showSuccessMessage();
+                
+                setTimeout(() => {
+                    hideSuccessMessage();
+                    showEditor();
+                    
+                    processedImage = new Image();
+                    processedImage.onload = function() {
+                        autoAdjustImage();
+                        updatePreview();
+                    };
+                    processedImage.src = processedData;
+                }, 800);
+            }
+            
+            function getCachedProcessedImage(imageData) {
+                return processedCache.get(imageData);
+            }
+            
+            function cacheProcessedImage(originalData, processedData) {
+                processedCache.set(originalData, processedData);
+            }
+            
+            // ✅ FIXED: Perfect Auto-Adjust Function for Head-to-Chest Framing
+            function autoAdjustImage() {
+                if (!processedImage) return;
+
+                // 1️⃣ Calculate approximate face region (top 22% to 63%)
+                const faceTop = processedImage.height * 0.22;
+                const faceBottom = processedImage.height * 0.63;
+                const faceHeight = faceBottom - faceTop;
+
+                // 2️⃣ Scale so face covers 70% of the preview height
+                currentScale = (previewCanvas.height / faceHeight) * 0.70;
+
+                // 3️⃣ Always center horizontally
+                currentPosition.x = 0;
+
+                // 4️⃣ Move face upward (passport standard framing)
+                currentPosition.y = -(processedImage.height * currentScale * 0.24);
+
+                updatePreview();
+            }
+            
+            function showLoading() {
+                loadingOverlay.style.display = 'flex';
+                uploadSection.style.display = 'none';
+            }
+            
+            function hideLoading() {
+                loadingOverlay.style.display = 'none';
+            }
+            
+            function showSuccessMessage() {
+                successMessage.style.display = 'block';
+            }
+            
+            function hideSuccessMessage() {
+                successMessage.style.display = 'none';
+            }
+            
+            function showEditor() {
+                editorSection.style.display = 'block';
+                uploadSection.style.display = 'none';
+            }
+            
+            function updatePreview() {
+                if (!processedImage) return;
+                
+                // Clear canvas based on background type
+                if (currentBackground === 'transparent') {
+                    // Clear canvas completely for transparency
+                    previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+                } else {
+                    // Fill with solid color
+                    previewCtx.fillStyle = currentBackground;
+                    previewCtx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
+                }
+                
+                const centerX = previewCanvas.width / 2;
+                const centerY = previewCanvas.height / 2;
+                
+                const scaledWidth = processedImage.width * currentScale;
+                const scaledHeight = processedImage.height * currentScale;
+                
+                const x = centerX - scaledWidth / 2 + currentPosition.x;
+                const y = centerY - scaledHeight / 2 + currentPosition.y;
+                
+                // Draw the processed image
+                previewCtx.drawImage(processedImage, x, y, scaledWidth, scaledHeight);
+                
+                // Apply enhancements if any are active
+                if (activeEnhancements.length > 0) {
+                    applyEnhancements(previewCtx, 0, 0, previewCanvas.width, previewCanvas.height);
+                }
+            }
+            
+            // ✅ NEW: Apply HD Enhancements to Canvas
+            function applyEnhancements(ctx, x, y, width, height) {
+                const imageData = ctx.getImageData(x, y, width, height);
+                const data = imageData.data;
+                
+                for (let i = 0; i < data.length; i += 4) {
+                    let r = data[i];
+                    let g = data[i + 1];
+                    let b = data[i + 2];
+                    
+                    // Apply sharpness (edge enhancement)
+                    if (activeEnhancements.includes('sharpness')) {
+                        // Simple sharpening by increasing contrast at edges
+                        if (i > 4 && (r !== data[i-4] || g !== data[i-3] || b !== data[i-2])) {
+                            r = Math.min(255, r * 1.1);
+                            g = Math.min(255, g * 1.1);
+                            b = Math.min(255, b * 1.1);
+                        }
+                    }
+                    
+                    // Apply contrast
+                    if (activeEnhancements.includes('contrast')) {
+                        const contrast = 1.1;
+                        r = ((r - 128) * contrast) + 128;
+                        g = ((g - 128) * contrast) + 128;
+                        b = ((b - 128) * contrast) + 128;
+                    }
+                    
+                    // Apply brightness
+                    if (activeEnhancements.includes('brightness')) {
+                        const brightness = 10;
+                        r = Math.min(255, r + brightness);
+                        g = Math.min(255, g + brightness);
+                        b = Math.min(255, b + brightness);
+                    }
+                    
+                    // Clamp values
+                    data[i] = Math.max(0, Math.min(255, r));
+                    data[i + 1] = Math.max(0, Math.min(255, g));
+                    data[i + 2] = Math.max(0, Math.min(255, b));
+                }
+                
+                ctx.putImageData(imageData, x, y);
+            }
+            
+            function zoomIn() {
+                currentScale = Math.min(currentScale * 1.1, 4);
+                updatePreview();
+            }
+            
+            function zoomOut() {
+                currentScale = Math.max(currentScale / 1.1, 0.3);
+                updatePreview();
+            }
+            
+            function startDragging(e) {
+                isDragging = true;
+                lastMousePos = getMousePos(e);
+                previewCanvas.style.cursor = 'grabbing';
+            }
+            
+            function dragImage(e) {
+                if (!isDragging) return;
+                
+                const currentMousePos = getMousePos(e);
+                const deltaX = currentMousePos.x - lastMousePos.x;
+                const deltaY = currentMousePos.y - lastMousePos.y;
+                
+                currentPosition.x += deltaX;
+                currentPosition.y += deltaY;
+                
+                lastMousePos = currentMousePos;
+                updatePreview();
+            }
+            
+            function stopDragging() {
+                isDragging = false;
+                previewCanvas.style.cursor = 'grab';
+            }
+            
+            function getMousePos(e) {
+                const rect = previewCanvas.getBoundingClientRect();
+                return {
+                    x: e.clientX - rect.left,
+                    y: e.clientY - rect.top
+                };
+            }
+            
+            function handleTouchStart(e) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                startDragging(touch);
+            }
+            
+            function handleTouchMove(e) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                dragImage(touch);
+            }
+            
+            function processCrop() {
+                if (!processedImage) return;
+
+                showLoading();
+
+                // ✅ IMPROVED: Create HD Canvas with higher resolution
+                const tempCanvas = document.createElement("canvas");
+                // Use 2x resolution for HD output
+                tempCanvas.width = selectedSizeData.width * 2;
+                tempCanvas.height = selectedSizeData.height * 2;
+                const tempCtx = tempCanvas.getContext("2d");
+
+                // Set background
+                if (currentBackground === "transparent") {
+                    tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+                } else {
+                    tempCtx.fillStyle = currentBackground;
+                    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                }
+
+                const centerX = tempCanvas.width / 2;
+                const centerY = tempCanvas.height / 2;
+
+                // Scale for HD output
+                const scaledWidth = processedImage.width * currentScale * 2;
+                const scaledHeight = processedImage.height * currentScale * 2;
+
+                const x = centerX - scaledWidth / 2 + (currentPosition.x * 2);
+                const y = centerY - scaledHeight / 2 + (currentPosition.y * 2);
+
+                // ✅ IMPROVED: Use image smoothing for better quality
+                tempCtx.imageSmoothingEnabled = true;
+                tempCtx.imageSmoothingQuality = 'high';
+                
+                tempCtx.drawImage(processedImage, x, y, scaledWidth, scaledHeight);
+
+                // Apply enhancements to HD image
+                if (activeEnhancements.length > 0) {
+                    applyEnhancements(tempCtx, 0, 0, tempCanvas.width, tempCanvas.height);
+                }
+
+                finalCroppedImage = new Image();
+                finalCroppedImage.onload = function () {
+                    hideLoading();
+                    updateSheetPreview();
+                    editorSection.style.display = "none";
+                    outputSection.style.display = "block";
+                };
+
+                // ✅ IMPROVED: Use PNG for lossless quality
+                finalCroppedImage.src = tempCanvas.toDataURL("image/png", 1.0);
+            }
+            
+            function updateSheetPreview() {
+                if (!finalCroppedImage) return;
+
+                showLoading();
+
+                const photosPerSheet = parseInt(currentSheet);
+                let cols, rows;
+
+                // Different layouts for different sheet options
+                if (photosPerSheet === 1) { 
+                    cols = 1; 
+                    rows = 1; 
+                }
+                else if (photosPerSheet === 4) { 
+                    cols = 4; 
+                    rows = 1; // Single row at the top
+                }
+                else if (photosPerSheet === 8) { 
+                    cols = 4; 
+                    rows = 2; // 4x2 grid
+                }
+
+                let photoWidth = selectedSizeData.width;
+                let photoHeight = selectedSizeData.height;
+
+                // FIXED: Auto-scale photos to fit properly in the sheet
+                // Calculate dynamic photo size so all photos fit
+                const gapX = 20;  // fixed gap
+                const gapY = 20;  // fixed gap
+
+                // Maximum allowed width per photo to fit in 4 columns on 4x6 paper
+                let maxWidthPerPhoto = (PAPER_WIDTH - 5 * gapX) / 4;  // 4 columns + margins
+
+                // If photo is too large, auto-scale it
+                if (photoWidth > maxWidthPerPhoto) {
+                    let scale = maxWidthPerPhoto / photoWidth;
+                    photoWidth = photoWidth * scale;
+                    photoHeight = photoHeight * scale;
+                }
+
+                // Calculate total width and height of all photos
+                const totalWidth = cols * photoWidth;
+                const totalHeight = rows * photoHeight;
+                
+                // Calculate margins to center the photos on the paper
+                const marginX = (PAPER_WIDTH - totalWidth - (cols - 1) * gapX) / 2;
+                let marginY;
+                
+                // Special positioning for 4-photo sheet (single row at the top)
+                if (photosPerSheet === 4) {
+                    marginY = 50; // Top margin for single row
+                } else {
+                    marginY = (PAPER_HEIGHT - totalHeight - (rows - 1) * gapY) / 2;
+                }
+
+                // Set canvas to 4x6 inch paper size (LANDSCAPE)
+                sheetCanvas.width = PAPER_WIDTH;
+                sheetCanvas.height = PAPER_HEIGHT;
+
+                // ✅ IMPROVED: Enable HD rendering
+                sheetCtx.imageSmoothingEnabled = true;
+                sheetCtx.imageSmoothingQuality = 'high';
+
+                // Background fill
+                if (currentBackground === 'transparent') {
+                    const patternSize = 20;
+                    for (let y = 0; y < PAPER_HEIGHT; y += patternSize) {
+                        for (let x = 0; x < PAPER_WIDTH; x += patternSize) {
+                            const isGray = ((x + y) / patternSize) % 2 === 0;
+                            sheetCtx.fillStyle = isGray ? '#f0f0f0' : '#ffffff';
+                            sheetCtx.fillRect(x, y, patternSize, patternSize);
+                        }
+                    }
+                } else {
+                    sheetCtx.fillStyle = currentBackground;
+                    sheetCtx.fillRect(0, 0, PAPER_WIDTH, PAPER_HEIGHT);
+                }
+
+                // Draw final cropped photo
+                for (let i = 0; i < photosPerSheet; i++) {
+                    const col = i % cols;
+                    const row = Math.floor(i / cols);
+
+                    const x = marginX + (col * (photoWidth + gapX));
+                    const y = marginY + (row * (photoHeight + gapY));
+
+                    sheetCtx.drawImage(finalCroppedImage, x, y, photoWidth, photoHeight);
+                    
+                    // Add thin borders on all four sides of each photo for cutting guidance
+                    if (photosPerSheet > 1) {
+                        sheetCtx.strokeStyle = '#000000';
+                        sheetCtx.lineWidth = 1;
+                        sheetCtx.strokeRect(x, y, photoWidth, photoHeight);
+                    }
+                }
+
+                // Add paper border
+                sheetCtx.strokeStyle = '#666666';
+                sheetCtx.lineWidth = 2;
+                sheetCtx.strokeRect(0, 0, PAPER_WIDTH, PAPER_HEIGHT);
+                
+                // Add paper size label
+                sheetCtx.fillStyle = '#666666';
+                sheetCtx.font = '14px Arial';
+                sheetCtx.fillText('4x6 inch Paper (Landscape) • 300 DPI HD', 10, PAPER_HEIGHT - 10);
+
+                hideLoading();
+            }
+            
+            function downloadSheet() {
+                if (!finalCroppedImage) return;
+                
+                // ✅ IMPROVED: Create HD download canvas
+                const downloadCanvas = document.createElement('canvas');
+                
+                if (currentSheet === '1') {
+                    // For single photo, download the original HD version
+                    downloadCanvas.width = selectedSizeData.width * 2;
+                    downloadCanvas.height = selectedSizeData.height * 2;
+                    const downloadCtx = downloadCanvas.getContext('2d');
+                    
+                    // Set background
+                    if (currentBackground === "transparent") {
+                        downloadCtx.clearRect(0, 0, downloadCanvas.width, downloadCanvas.height);
+                    } else {
+                        downloadCtx.fillStyle = currentBackground;
+                        downloadCtx.fillRect(0, 0, downloadCanvas.width, downloadCanvas.height);
+                    }
+                    
+                    // Draw the HD image
+                    downloadCtx.imageSmoothingEnabled = true;
+                    downloadCtx.imageSmoothingQuality = 'high';
+                    downloadCtx.drawImage(finalCroppedImage, 0, 0, downloadCanvas.width, downloadCanvas.height);
+                } else {
+                    // For sheets, use the existing sheet canvas
+                    downloadCanvas.width = sheetCanvas.width;
+                    downloadCanvas.height = sheetCanvas.height;
+                    const downloadCtx = downloadCanvas.getContext('2d');
+                    downloadCtx.drawImage(sheetCanvas, 0, 0);
+                }
+                
+                // Create download link
+                const link = document.createElement('a');
+                
+                // ✅ IMPROVED: Always use PNG for maximum quality
+                const fileName = `passport-photo-${selectedSizeData.name.replace(/\s+/g, '-')}-${currentSheet}-sheet-${Date.now()}.png`;
+                link.download = fileName;
+                link.href = downloadCanvas.toDataURL('image/png', 1.0); // Maximum quality
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Show success message
+                alert(`✅ HD Photo Downloaded Successfully!\n\nFile: ${fileName}\nQuality: 300 DPI PNG\nSize: ${downloadCanvas.width} × ${downloadCanvas.height} pixels`);
+            }
+            
+            function printSheet() {
+                if (!finalCroppedImage) return;
+                
+                // ✅ IMPROVED: HD Print with better quality
+                const printCanvas = document.createElement('canvas');
+                
+                if (currentSheet === '1') {
+                    // For single photo, print HD version
+                    printCanvas.width = selectedSizeData.width * 2;
+                    printCanvas.height = selectedSizeData.height * 2;
+                    const printCtx = printCanvas.getContext('2d');
+                    
+                    // Set background
+                    if (currentBackground === "transparent") {
+                        // For printing, use white background even if transparent was selected
+                        printCtx.fillStyle = '#FFFFFF';
+                        printCtx.fillRect(0, 0, printCanvas.width, printCanvas.height);
+                    } else {
+                        printCtx.fillStyle = currentBackground;
+                        printCtx.fillRect(0, 0, printCanvas.width, printCanvas.height);
+                    }
+                    
+                    // Draw the HD image
+                    printCtx.imageSmoothingEnabled = true;
+                    printCtx.imageSmoothingQuality = 'high';
+                    printCtx.drawImage(finalCroppedImage, 0, 0, printCanvas.width, printCanvas.height);
+                } else {
+                    // For sheets, use the existing sheet canvas but ensure white background for printing
+                    printCanvas.width = sheetCanvas.width;
+                    printCanvas.height = sheetCanvas.height;
+                    const printCtx = printCanvas.getContext('2d');
+                    
+                    // Always use white background for printing
+                    printCtx.fillStyle = '#FFFFFF';
+                    printCtx.fillRect(0, 0, printCanvas.width, printCanvas.height);
+                    printCtx.drawImage(sheetCanvas, 0, 0);
+                }
+                
+                // Create a new window for printing
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Print HD Passport Photos</title>
+                        <style>
+                            body { 
+                                margin: 0; 
+                                padding: 20px; 
+                                display: flex; 
+                                justify-content: center; 
+                                align-items: center; 
+                                min-height: 100vh;
+                                background: white;
+                            }
+                            .print-container {
+                                text-align: center;
+                                max-width: 100%;
+                            }
+                            img { 
+                                max-width: 100%; 
+                                height: auto;
+                                display: block;
+                                margin: 0 auto;
+                                border: 1px solid #ddd;
+                                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                            }
+                            .print-info {
+                                margin-top: 20px;
+                                color: #666;
+                                font-family: Arial, sans-serif;
+                                font-size: 14px;
+                            }
+                            @media print {
+                                body { margin: 0; padding: 0; }
+                                .print-container { max-width: 100%; }
+                                img { width: 100%; height: auto; box-shadow: none; border: none; }
+                                .print-info { display: none; }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="print-container">
+                            <img src="${printCanvas.toDataURL('image/png', 1.0)}" alt="HD Passport Photos">
+                            <div class="print-info">
+                                <p>🖨️ Ready to Print - 300 DPI HD Quality</p>
+                                <p>Paper Size: 4×6 inches • ${currentSheet} Photos</p>
+                            </div>
+                        </div>
+                        <script>
+                            window.onload = function() {
+                                window.focus();
+                                setTimeout(function() {
+                                    window.print();
+                                    setTimeout(function() {
+                                        window.close();
+                                    }, 1000);
+                                }, 500);
+                            }
+                        <\/script>
+                    </body>
+                    </html>
+                `);
+                printWindow.document.close();
+            }
+            
+            function resetEditor() {
+                currentScale = 1.0;
+                currentPosition = { x: 0, y: 0 };
+                autoAdjustImage();
+                updatePreview();
+            }
+            
+            function applyCustomSize() {
+                const width = parseFloat(customWidthInput.value);
+                const height = parseFloat(customHeightInput.value);
+                
+                if (isNaN(width) || isNaN(height) || width <= 0 || height <= 0) {
+                    alert('Please enter valid width and height values');
+                    return;
+                }
+                
+                let widthInPx = width;
+                let heightInPx = height;
+                
+                // Convert to pixels based on selected unit
+                if (currentUnit === 'inch') {
+                    // 1 inch = 300 pixels (for 300 DPI)
+                    widthInPx = width * 300;
+                    heightInPx = height * 300;
+                } else if (currentUnit === 'cm') {
+                    // 1 cm = 118.11 pixels (for 300 DPI)
+                    widthInPx = width * 118.11;
+                    heightInPx = height * 118.11;
+                }
+                
+                // Round to whole numbers
+                widthInPx = Math.round(widthInPx);
+                heightInPx = Math.round(heightInPx);
+                
+                // Update selected size data
+                selectedSizeData = {
+                    name: `Custom (${width}${currentUnit} x ${height}${currentUnit})`,
+                    dimensions: `${widthInPx} x ${heightInPx}`,
+                    width: widthInPx,
+                    height: heightInPx,
+                    country: "Custom",
+                    type: "custom"
+                };
+                
+                // Update preview canvas size
+                previewCanvas.width = widthInPx;
+                previewCanvas.height = heightInPx;
+                
+                // Update preview frame size
+                updatePreviewFrameSize();
+                
+                // Update preview
+                if (processedImage) {
+                    updatePreview();
+                }
+                
+                // Show success message
+                alert(`Custom size applied: ${widthInPx} x ${heightInPx} pixels`);
+            }
+            
+            // Drag and drop support
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', function() {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    handleFileSelect({ target: { files: files } });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

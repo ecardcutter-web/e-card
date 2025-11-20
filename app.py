@@ -5,7 +5,7 @@ import secrets
 from datetime import datetime, timedelta
 import zipfile
 import io
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageEnhance
 import time
 import uuid
 import json
@@ -13,6 +13,10 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4, mm
 from reportlab.lib.utils import ImageReader
 import tempfile
+import cv2
+import numpy as np
+from rembg import remove
+import base64
 
 # Static folder support
 app = Flask(__name__, static_folder='static')
@@ -23,32 +27,37 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 CROPPED_FOLDER = os.path.join(BASE_DIR, 'cropped')
 CONVERTED_FOLDER = os.path.join(BASE_DIR, 'converted')
+PASSPORT_FOLDER = os.path.join(BASE_DIR, 'passport_photos')
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(CROPPED_FOLDER, exist_ok=True)
 os.makedirs(CONVERTED_FOLDER, exist_ok=True)
+os.makedirs(PASSPORT_FOLDER, exist_ok=True)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['CROPPED_FOLDER'] = CROPPED_FOLDER
 app.config['CONVERTED_FOLDER'] = CONVERTED_FOLDER
+app.config['PASSPORT_FOLDER'] = PASSPORT_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # Store files info
 cropped_files_info = []
 converted_files_info = []
+passport_files_info = []
 
 # File Cleaner Class
 class FileCleaner:
-    def __init__(self, upload_folder, cropped_folder, converted_folder, retention_minutes=5):
+    def __init__(self, upload_folder, cropped_folder, converted_folder, passport_folder, retention_minutes=5):
         self.upload_folder = upload_folder
         self.cropped_folder = cropped_folder
         self.converted_folder = converted_folder
+        self.passport_folder = passport_folder
         self.retention_minutes = retention_minutes
     
     def cleanup_old_files(self):
         try:
             current_time = time.time()
-            folders = [self.upload_folder, self.cropped_folder, self.converted_folder]
+            folders = [self.upload_folder, self.cropped_folder, self.converted_folder, self.passport_folder]
             deleted_count = 0
             
             for folder in folders:
@@ -86,8 +95,560 @@ file_cleaner = FileCleaner(
     upload_folder=UPLOAD_FOLDER,
     cropped_folder=CROPPED_FOLDER,
     converted_folder=CONVERTED_FOLDER,
+    passport_folder=PASSPORT_FOLDER,
     retention_minutes=5
 )
+
+# ==================== IMPROVED BACKGROUND REMOVAL ====================
+
+def remove_background_improved(image_path):
+    """Improved background removal with better quality preservation"""
+    try:
+        # Read image
+        input_image = Image.open(image_path)
+        
+        # Convert to RGB if necessary
+        if input_image.mode != 'RGB':
+            input_image = input_image.convert('RGB')
+        
+        # Try to use rembg if available
+        try:
+            from rembg import remove
+            print("Using rembg for background removal...")
+            
+            # Remove background
+            output_image = remove(input_image)
+            
+            # Ensure the output is in RGBA mode for transparency
+            if output_image.mode != 'RGBA':
+                output_image = output_image.convert('RGBA')
+            
+            print("Background removal successful")
+            return output_image, "rembg_success"
+            
+        except ImportError:
+            print("Rembg not available, using fallback method")
+            # Fallback: Simple background removal using edge detection
+            return simple_background_removal(input_image), "fallback_no_rembg"
+            
+    except Exception as e:
+        print(f"Background removal failed: {e}")
+        # Ultimate fallback - return original image
+        return Image.open(image_path).convert('RGBA'), "fallback_error"
+
+def simple_background_removal(input_image):
+    """Simple background removal using edge detection and masking"""
+    try:
+        # Convert to numpy array
+        img_array = np.array(input_image)
+        
+        # Create a mask based on edge detection
+        gray = cv2.cvtColor(img_array, cv2.COLOR_RGB2GRAY)
+        edges = cv2.Canny(gray, 100, 200)
+        
+        # Dilate edges to create a better mask
+        kernel = np.ones((5,5), np.uint8)
+        dilated_edges = cv2.dilate(edges, kernel, iterations=2)
+        
+        # Create alpha channel based on edges
+        alpha = np.ones(gray.shape, dtype=np.uint8) * 255
+        alpha[dilated_edges == 0] = 0  # Set background to transparent
+        
+        # Convert back to PIL Image with alpha channel
+        rgba_array = np.dstack((img_array, alpha))
+        output_image = Image.fromarray(rgba_array, 'RGBA')
+        
+        return output_image
+        
+    except Exception as e:
+        print(f"Simple background removal failed: {e}")
+        # Return original image with white background removed
+        img_array = np.array(input_image)
+        white_threshold = 200
+        mask = np.all(img_array > white_threshold, axis=2)
+        
+        # Create alpha channel
+        alpha = np.ones(img_array.shape[:2], dtype=np.uint8) * 255
+        alpha[mask] = 0
+        
+        rgba_array = np.dstack((img_array, alpha))
+        return Image.fromarray(rgba_array, 'RGBA')
+
+# ==================== PASSPORT PHOTO CREATION ====================
+
+def create_passport_photo_improved(image, size_px=(600, 600), bg_color='#FFFFFF'):
+    """Create passport photo with improved background handling"""
+    try:
+        width_px, height_px = size_px
+        
+        # Handle background color
+        if bg_color == 'transparent':
+            # Create transparent background
+            result = Image.new('RGBA', (width_px, height_px), (255, 255, 255, 0))
+        else:
+            # Convert hex to RGB if needed
+            if isinstance(bg_color, str) and bg_color.startswith('#'):
+                bg_color_hex = bg_color.lstrip('#')
+                bg_color_rgb = tuple(int(bg_color_hex[i:i+2], 16) for i in (0, 2, 4))
+            else:
+                bg_color_rgb = (255, 255, 255)  # Default white
+            
+            # Create solid background
+            result = Image.new('RGB', (width_px, height_px), bg_color_rgb)
+        
+        # Calculate scaling to fit within passport photo while maintaining aspect ratio
+        img_ratio = image.width / image.height
+        passport_ratio = width_px / height_px
+        
+        if img_ratio > passport_ratio:
+            # Image is wider, scale by width
+            new_width = width_px
+            new_height = int(width_px / img_ratio)
+        else:
+            # Image is taller, scale by height
+            new_height = height_px
+            new_width = int(height_px * img_ratio)
+        
+        # Resize image with high quality
+        img_resized = image.resize((new_width, new_height), Image.Resampling.LANCZOS)
+        
+        # Calculate position to center the image
+        x = (width_px - new_width) // 2
+        y = (height_px - new_height) // 2
+        
+        # Paste onto result
+        if img_resized.mode == 'RGBA' and result.mode == 'RGBA':
+            result.paste(img_resized, (x, y), img_resized)
+        elif img_resized.mode == 'RGBA' and result.mode == 'RGB':
+            # Convert RGBA to RGB before pasting on RGB background
+            rgb_img = Image.new('RGB', img_resized.size, bg_color_rgb)
+            rgb_img.paste(img_resized, (0, 0), img_resized)
+            result.paste(rgb_img, (x, y))
+        else:
+            result.paste(img_resized, (x, y))
+        
+        return result
+        
+    except Exception as e:
+        print(f"Passport photo creation error: {e}")
+        raise Exception(f"Passport photo creation failed: {str(e)}")
+
+# ==================== PASSPORT PHOTO AI ROUTES - IMPROVED ====================
+
+@app.route('/process-image', methods=['POST'])
+def process_image_ai():
+    """ULTRA FAST AI background removal - MAX SPEED VERSION"""
+    try:
+        start_time = time.time()
+        
+        data = request.json
+        image_data = data.get('image')
+        
+        if not image_data:
+            return jsonify({'success': False, 'error': 'No image data provided'})
+        
+        # Fast processing
+        if ',' in image_data:
+            image_data = image_data.split(',')[1]
+        
+        image_bytes = base64.b64decode(image_data)
+        
+        # Direct processing
+        from io import BytesIO
+        input_image = Image.open(BytesIO(image_bytes))
+        
+        # Speed optimization: Smaller size for faster processing
+        original_size = input_image.size
+        if max(original_size) > 600:
+            input_image.thumbnail((600, 600), Image.Resampling.LANCZOS)
+        
+        # Fast background removal
+        try:
+            output_image = remove(input_image)
+            if output_image.mode != 'RGBA':
+                output_image = output_image.convert('RGBA')
+            method = "rembg_fast"
+        except:
+            # Ultra fast fallback
+            if input_image.mode != 'RGBA':
+                input_image = input_image.convert('RGBA')
+            output_image = input_image
+            method = "direct_fallback"
+        
+        # Fast base64 conversion
+        buffered = BytesIO()
+        output_image.save(buffered, format="PNG", optimize=True)
+        processed_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        
+        processing_time = time.time() - start_time
+        
+        return jsonify({
+            'success': True,
+            'image': f"data:image/png;base64,{processed_base64}",
+            'processing_time': f"{processing_time:.2f}s",
+            'message': f'Ultra fast processing in {processing_time:.2f} seconds!'
+        })
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Processing failed: {str(e)}'})
+
+@app.route('/create-passport-photo', methods=['POST'])
+def create_passport_photo_route():
+    """Create final passport photo with custom settings - IMPROVED VERSION"""
+    try:
+        data = request.json
+        image_data = data.get('image')
+        size_type = data.get('size_type', '2x2')
+        bg_color = data.get('bg_color', '#FFFFFF')
+        crop_data = data.get('crop_data', {})
+          
+        if not image_data:
+            return jsonify({'success': False, 'error': 'No image data provided'})
+        
+        # Remove data URL prefix
+        if ',' in image_data:
+            image_data = image_data.split(',')[1]
+        
+        # Decode base64 image
+        image_bytes = base64.b64decode(image_data)
+        
+        # Process image
+        file_id = secrets.token_hex(8)
+        temp_filename = f"{file_id}_temp.png"
+        temp_path = os.path.join(app.config['PASSPORT_FOLDER'], temp_filename)
+        
+        with open(temp_path, 'wb') as f:
+            f.write(image_bytes)
+        
+        # Define sizes in pixels (width, height)
+        sizes_px = {
+            '2x2': (600, 600),
+            '3.5x4.5': (413, 531),
+            '3x4': (354, 472),
+            'custom_413x531': (413, 531),
+            'custom_600x600': (600, 600),
+            'custom_354x472': (354, 472)
+        }
+        
+        size_px = sizes_px.get(size_type, (600, 600))
+        
+        # Load and process image
+        with Image.open(temp_path) as img:
+            # Apply cropping if crop data is provided
+            if crop_data and all(k in crop_data for k in ['x', 'y', 'width', 'height', 'scale']):
+                try:
+                    scale = crop_data['scale']
+                    x = crop_data['x']
+                    y = crop_data['y']
+                    width = crop_data['width']
+                    height = crop_data['height']
+                    
+                    # Convert preview coordinates to original image coordinates
+                    orig_x = int(x / scale)
+                    orig_y = int(y / scale)
+                    orig_width = int(width / scale)
+                    orig_height = int(height / scale)
+                    
+                    # Ensure coordinates are within image bounds
+                    orig_x = max(0, min(orig_x, img.width - 1))
+                    orig_y = max(0, min(orig_y, img.height - 1))
+                    orig_width = min(orig_width, img.width - orig_x)
+                    orig_height = min(orig_height, img.height - orig_y)
+                    
+                    if orig_width > 0 and orig_height > 0:
+                        # Crop the image
+                        img = img.crop((orig_x, orig_y, orig_x + orig_width, orig_y + orig_height))
+                        
+                except Exception as crop_error:
+                    print(f"Crop processing error: {crop_error}")
+                    # Continue without cropping
+            
+            # Create passport photo with improved function
+            passport_photo = create_passport_photo_improved(
+                img, 
+                size_px=size_px,
+                bg_color=bg_color
+            )
+        
+        # Save passport photo
+        passport_filename = f"{file_id}_passport_{size_type}.png"
+        passport_path = os.path.join(app.config['PASSPORT_FOLDER'], passport_filename)
+        
+        # Save based on background type
+        if bg_color == 'transparent':
+            passport_photo.save(passport_path, format='PNG', optimize=True)
+        else:
+            if passport_photo.mode == 'RGBA':
+                passport_photo = passport_photo.convert('RGB')
+            passport_photo.save(passport_path, format='PNG', optimize=True)
+        
+        passport_files_info.append(passport_filename)
+        
+        # Convert to base64 for response
+        with open(passport_path, 'rb') as f:
+            passport_base64 = base64.b64encode(f.read()).decode('utf-8')
+        
+        return jsonify({
+            'success': True,
+            'image': f"data:image/png;base64,{passport_base64}",
+            'filename': passport_filename,
+            'message': f'Passport photo ({size_type}) created successfully!',
+            'size': size_type,
+            'dimensions': f"{size_px[0]}x{size_px[1]}px",
+            'background': bg_color
+        })
+        
+    except Exception as e:
+        print(f"Passport photo creation error: {str(e)}")
+        return jsonify({'success': False, 'error': f'Passport photo creation failed: {str(e)}'})
+
+# ==================== EXISTING PASSPORT PHOTO ROUTES ====================
+
+@app.route('/passport-photo')
+def passport_photo():
+    return render_template('passport_photo.html')
+
+@app.route('/upload-passport-photo', methods=['POST'])
+def upload_passport_photo():
+    """Handle passport photo upload and processing"""
+    try:
+        if 'file' not in request.files:
+            return jsonify({'success': False, 'error': 'No file selected'})
+        
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'success': False, 'error': 'No file selected'})
+        
+        # Validate file type
+        allowed_extensions = {'jpg', 'jpeg', 'png', 'webp'}
+        if not '.' in file.filename or file.filename.rsplit('.', 1)[1].lower() not in allowed_extensions:
+            return jsonify({'success': False, 'error': 'Invalid file type. Please upload JPG, PNG, or WEBP.'})
+        
+        # Validate file size (10MB max)
+        file.seek(0, 2)  # Seek to end
+        file_size = file.tell()
+        file.seek(0)  # Reset to beginning
+        
+        if file_size > 10 * 1024 * 1024:
+            return jsonify({'success': False, 'error': 'File size must be less than 10MB'})
+        
+        # Save uploaded file
+        file_id = secrets.token_hex(8)
+        original_filename = f"{file_id}_original.{file.filename.rsplit('.', 1)[1].lower()}"
+        original_path = os.path.join(app.config['PASSPORT_FOLDER'], original_filename)
+        file.save(original_path)
+        
+        # Process image (background removal)
+        processed_image, method = remove_background_improved(original_path)
+        
+        # Save processed image
+        processed_filename = f"{file_id}_processed.png"
+        processed_path = os.path.join(app.config['PASSPORT_FOLDER'], processed_filename)
+        
+        processed_image.save(processed_path, 'PNG', optimize=True)
+        
+        passport_files_info.extend([original_filename, processed_filename])
+        
+        return jsonify({
+            'success': True,
+            'message': 'Photo processed successfully with background removal!',
+            'file_id': file_id,
+            'processed_file': processed_filename,
+            'method': method
+        })
+        
+    except Exception as e:
+        print(f"Passport photo upload error: {str(e)}")
+        return jsonify({'success': False, 'error': f'Photo processing failed: {str(e)}'})
+
+@app.route('/create-passport-size', methods=['POST'])
+def create_passport_size():
+    """Create passport photo with specific size"""
+    try:
+        data = request.json
+        processed_file = data.get('processed_file')
+        size_type = data.get('size_type', '2x2')
+        bg_color = data.get('bg_color', '#FFFFFF')
+        
+        if not processed_file:
+            return jsonify({'success': False, 'error': 'Processed file is required'})
+        
+        processed_path = os.path.join(app.config['PASSPORT_FOLDER'], processed_file)
+        
+        if not os.path.exists(processed_path):
+            return jsonify({'success': False, 'error': 'Processed file not found'})
+        
+        # Define sizes in pixels
+        sizes_px = {
+            '2x2': (600, 600),
+            '3.5x4.5': (413, 531),
+            '3x4': (354, 472)
+        }
+        
+        size_px = sizes_px.get(size_type, (600, 600))
+        
+        # Load processed image
+        processed_image = Image.open(processed_path)
+        
+        # Create passport photo
+        passport_photo = create_passport_photo_improved(
+            processed_image, 
+            size_px=size_px,
+            bg_color=bg_color
+        )
+        
+        # Save passport photo
+        file_id = secrets.token_hex(8)
+        passport_filename = f"{file_id}_passport_{size_type.replace('x', 'x')}.png"
+        passport_path = os.path.join(app.config['PASSPORT_FOLDER'], passport_filename)
+        
+        if passport_photo.mode == 'RGBA' and bg_color != 'transparent':
+            passport_photo = passport_photo.convert('RGB')
+        
+        passport_photo.save(passport_path, format='PNG', optimize=True)
+        passport_files_info.append(passport_filename)
+        
+        return jsonify({
+            'success': True,
+            'passport_file': passport_filename,
+            'message': f'Passport photo ({size_type}) created successfully!',
+            'size': size_type
+        })
+        
+    except Exception as e:
+        print(f"Passport size creation error: {str(e)}")
+        return jsonify({'success': False, 'error': f'Passport photo creation failed: {str(e)}'})
+
+@app.route('/create-photo-sheet', methods=['POST'])
+def create_photo_sheet_route():
+    """Create sheet with multiple passport photos"""
+    try:
+        data = request.json
+        passport_file = data.get('passport_file')
+        photos_per_sheet = int(data.get('photos_per_sheet', 4))
+        size_type = data.get('size_type', '2x2')
+        
+        if not passport_file:
+            return jsonify({'success': False, 'error': 'Passport file is required'})
+        
+        passport_path = os.path.join(app.config['PASSPORT_FOLDER'], passport_file)
+        
+        if not os.path.exists(passport_path):
+            return jsonify({'success': False, 'error': 'Passport file not found'})
+        
+        # Define sizes in pixels
+        sizes_px = {
+            '2x2': (600, 600),
+            '3.5x4.5': (413, 531),
+            '3x4': (354, 472)
+        }
+        
+        photo_size_px = sizes_px.get(size_type, (600, 600))
+        
+        # Load passport photo and resize to exact size
+        passport_photo = Image.open(passport_path)
+        if passport_photo.size != photo_size_px:
+            passport_photo = passport_photo.resize(photo_size_px, Image.Resampling.LANCZOS)
+        
+        # Create photo sheet
+        photo_sheet = create_photo_sheet_advanced(passport_photo, photos_per_sheet, photo_size_px)
+        
+        # Save photo sheet
+        file_id = secrets.token_hex(8)
+        sheet_filename = f"{file_id}_sheet_{photos_per_sheet}.png"
+        sheet_path = os.path.join(app.config['PASSPORT_FOLDER'], sheet_filename)
+        
+        photo_sheet.save(sheet_path, dpi=(300, 300), format='PNG', optimize=True)
+        passport_files_info.append(sheet_filename)
+        
+        return jsonify({
+            'success': True,
+            'sheet_file': sheet_filename,
+            'message': f'Photo sheet with {photos_per_sheet} photos created successfully!',
+            'photos_count': photos_per_sheet
+        })
+        
+    except Exception as e:
+        print(f"Photo sheet creation error: {str(e)}")
+        return jsonify({'success': False, 'error': f'Photo sheet creation failed: {str(e)}'})
+
+def create_photo_sheet_advanced(passport_photo, photos_per_sheet, photo_size_px):
+    """Create photo sheet with multiple photos"""
+    try:
+        # Calculate grid layout
+        if photos_per_sheet <= 4:
+            cols = 2
+            rows = 2
+        elif photos_per_sheet <= 6:
+            cols = 3
+            rows = 2
+        elif photos_per_sheet <= 8:
+            cols = 4
+            rows = 2
+        elif photos_per_sheet <= 12:
+            cols = 4
+            rows = 3
+        else:
+            cols = 4
+            rows = 4
+        
+        # Calculate sheet dimensions with margins
+        margin = 50
+        gap = 20
+        sheet_width = (photo_size_px[0] * cols) + (gap * (cols - 1)) + (margin * 2)
+        sheet_height = (photo_size_px[1] * rows) + (gap * (rows - 1)) + (margin * 2)
+        
+        # Create sheet with white background
+        sheet = Image.new('RGB', (sheet_width, sheet_height), 'white')
+        
+        # Paste photos in grid
+        for i in range(photos_per_sheet):
+            if i >= cols * rows:
+                break
+                
+            row = i // cols
+            col = i % cols
+            
+            x = margin + (col * (photo_size_px[0] + gap))
+            y = margin + (row * (photo_size_px[1] + gap))
+            
+            sheet.paste(passport_photo, (x, y))
+        
+        return sheet
+        
+    except Exception as e:
+        print(f"Photo sheet creation error: {e}")
+        raise Exception(f"Photo sheet creation failed: {str(e)}")
+
+@app.route('/download-passport-file/<filename>')
+def download_passport_file(filename):
+    """Download passport photo files"""
+    try:
+        file_path = os.path.join(app.config['PASSPORT_FOLDER'], filename)
+        
+        if os.path.exists(file_path):
+            return send_file(file_path, as_attachment=True)
+        else:
+            return jsonify({'success': False, 'error': 'File not found'}), 404
+            
+    except Exception as e:
+        print(f"Passport file download error: {str(e)}")
+        return jsonify({'success': False, 'error': f'Download failed: {str(e)}'}), 500
+
+@app.route('/preview-passport-file/<filename>')
+def preview_passport_file(filename):
+    """Preview passport photo files"""
+    try:
+        file_path = os.path.join(app.config['PASSPORT_FOLDER'], filename)
+        
+        if os.path.exists(file_path):
+            return send_file(file_path)
+        else:
+            return jsonify({'success': False, 'error': 'File not found'}), 404
+            
+    except Exception as e:
+        print(f"Passport file preview error: {str(e)}")
+        return jsonify({'success': False, 'error': f'Preview failed: {str(e)}'}), 500
 
 # ==================== CARD CROPPER FUNCTIONS ====================
 
@@ -133,7 +694,7 @@ def process_pdf_front_back(pdf_path, output_dir, card_type='aadhaar', pdf_passwo
             start_x = (w - total_cards_width) / 2
             
             # Front Side (Left side - Personal details with photo)
-            front_left = int(start_x + w * 0.009)
+            front_left = int(start_x + w * 0.007)
             front_top = int(h * 0.729)
             front_width = card_width - int(w * 0.01)
             front_height = card_height - int(h * 0.01)
@@ -1086,11 +1647,11 @@ def create_print_pdf_both(front_path, back_path, card_name, output_path):
     c.showPage()
     c.save()
 
-# ==================== IMAGE CONVERTER ROUTES ====================
+# ==================== IMAGE CONVERTER ROUTES - UPDATED ====================
 
 @app.route('/convert-image', methods=['POST'])
 def convert_image():
-    """Image format conversion endpoint - ALL FORMATS SUPPORTED"""
+    """Image format conversion endpoint - UPDATED VERSION"""
     try:
         if 'file' not in request.files:
             return jsonify({'success': False, 'error': 'No file selected'})
@@ -1156,18 +1717,51 @@ def convert_image():
             # Get file size for response
             file_size = os.path.getsize(output_path)
             
+            # Return JSON response with file info for frontend
             return jsonify({
                 'success': True,
                 'message': f'Image converted to {output_format.upper()} successfully!',
                 'converted_file': output_filename,
                 'format': output_format,
                 'file_id': file_id,
-                'file_size': file_size
+                'file_size': file_size,
+                'file_size_kb': round(file_size / 1024, 2),
+                'file_size_mb': round(file_size / (1024 * 1024), 2)
             })
             
     except Exception as e:
         print(f"Image conversion error: {str(e)}")
         return jsonify({'success': False, 'error': f'Conversion failed: {str(e)}'})
+
+@app.route('/download-converted/<filename>')
+def download_converted(filename):
+    """Download converted image files"""
+    try:
+        file_path = os.path.join(app.config['CONVERTED_FOLDER'], filename)
+        
+        if os.path.exists(file_path):
+            return send_file(file_path, as_attachment=True)
+        else:
+            return jsonify({'success': False, 'error': 'File not found'}), 404
+            
+    except Exception as e:
+        print(f"Download error: {str(e)}")
+        return jsonify({'success': False, 'error': f'Download failed: {str(e)}'}), 500
+
+@app.route('/preview-converted/<filename>')
+def preview_converted(filename):
+    """Preview converted image files"""
+    try:
+        file_path = os.path.join(app.config['CONVERTED_FOLDER'], filename)
+        
+        if os.path.exists(file_path):
+            return send_file(file_path)
+        else:
+            return jsonify({'success': False, 'error': 'File not found'}), 404
+            
+    except Exception as e:
+        print(f"Preview error: {str(e)}")
+        return jsonify({'success': False, 'error': f'Preview failed: {str(e)}'}), 500
 
 @app.route('/bulk-convert', methods=['POST'])
 def bulk_convert():
@@ -1194,6 +1788,7 @@ def bulk_convert():
             return jsonify({'success': False, 'error': f'Format {output_format.upper()} not supported'})
         
         converted_files = []
+        total_size = 0
         
         for file in files:
             if file.filename:
@@ -1230,7 +1825,16 @@ def bulk_convert():
                     else:
                         img.save(output_path, **save_options)
                     
-                    converted_files.append(output_filename)
+                    file_size = os.path.getsize(output_path)
+                    total_size += file_size
+                    
+                    converted_files.append({
+                        'filename': output_filename,
+                        'original_name': original_filename,
+                        'size': file_size,
+                        'size_kb': round(file_size / 1024, 2),
+                        'size_mb': round(file_size / (1024 * 1024), 2)
+                    })
                     converted_files_info.append(output_filename)
         
         # Create ZIP if multiple files
@@ -1240,8 +1844,8 @@ def bulk_convert():
             
             with zipfile.ZipFile(zip_path, 'w') as zipf:
                 for converted_file in converted_files:
-                    file_path = os.path.join(app.config['CONVERTED_FOLDER'], converted_file)
-                    zipf.write(file_path, converted_file)
+                    file_path = os.path.join(app.config['CONVERTED_FOLDER'], converted_file['filename'])
+                    zipf.write(file_path, converted_file['filename'])
             
             converted_files_info.append(zip_filename)
             
@@ -1250,13 +1854,17 @@ def bulk_convert():
                 'message': f'{len(converted_files)} files converted to {output_format.upper()} and zipped!',
                 'zip_file': zip_filename,
                 'converted_count': len(converted_files),
+                'total_size_kb': round(total_size / 1024, 2),
+                'total_size_mb': round(total_size / (1024 * 1024), 2),
                 'format': output_format
             })
         else:
             return jsonify({
                 'success': True,
                 'message': f'Image converted to {output_format.upper()} successfully!',
-                'converted_file': converted_files[0],
+                'converted_file': converted_files[0]['filename'],
+                'file_size_kb': converted_files[0]['size_kb'],
+                'file_size_mb': converted_files[0]['size_mb'],
                 'format': output_format
             })
             
@@ -1270,7 +1878,7 @@ def bulk_convert():
 def download_file(filename):
     try:
         # Check in all possible folders
-        folders = [app.config['UPLOAD_FOLDER'], app.config['CROPPED_FOLDER'], app.config['CONVERTED_FOLDER']]
+        folders = [app.config['UPLOAD_FOLDER'], app.config['CROPPED_FOLDER'], app.config['CONVERTED_FOLDER'], app.config['PASSPORT_FOLDER']]
         
         for folder in folders:
             file_path = os.path.join(folder, filename)
@@ -1286,20 +1894,15 @@ def download_file(filename):
 @app.route('/preview/<filename>')
 def serve_image(filename):
     try:
-        # Check in converted folder first for image converter files
-        file_path = os.path.join(app.config['CONVERTED_FOLDER'], filename)
+        # Check in all folders
+        folders = [app.config['UPLOAD_FOLDER'], app.config['CROPPED_FOLDER'], app.config['CONVERTED_FOLDER'], app.config['PASSPORT_FOLDER']]
         
-        if not os.path.exists(file_path):
-            folders = [app.config['UPLOAD_FOLDER'], app.config['CROPPED_FOLDER']]
-            for folder in folders:
-                file_path = os.path.join(folder, filename)
-                if os.path.exists(file_path):
-                    break
+        for folder in folders:
+            file_path = os.path.join(folder, filename)
+            if os.path.exists(file_path):
+                return send_file(file_path)
         
-        if os.path.exists(file_path):
-            return send_file(file_path)
-        else:
-            return jsonify({'success': False, 'error': 'Image not found'}), 404
+        return jsonify({'success': False, 'error': 'Image not found'}), 404
             
     except Exception as e:
         print(f"Preview error: {str(e)}")
@@ -1331,7 +1934,7 @@ def upload_file():
 @app.route('/clear-files', methods=['POST'])
 def clear_files():
     try:
-        folders = [app.config['UPLOAD_FOLDER'], app.config['CROPPED_FOLDER'], app.config['CONVERTED_FOLDER']]
+        folders = [app.config['UPLOAD_FOLDER'], app.config['CROPPED_FOLDER'], app.config['CONVERTED_FOLDER'], app.config['PASSPORT_FOLDER']]
         
         deleted_count = 0
         for folder in folders:
@@ -1344,6 +1947,7 @@ def clear_files():
         
         cropped_files_info.clear()
         converted_files_info.clear()
+        passport_files_info.clear()
         
         return jsonify({
             'success': True,
@@ -1361,21 +1965,29 @@ def health_check():
         'timestamp': datetime.now().isoformat(),
         'upload_folder': len(os.listdir(app.config['UPLOAD_FOLDER'])) if os.path.exists(app.config['UPLOAD_FOLDER']) else 0,
         'cropped_folder': len(os.listdir(app.config['CROPPED_FOLDER'])) if os.path.exists(app.config['CROPPED_FOLDER']) else 0,
-        'converted_folder': len(os.listdir(app.config['CONVERTED_FOLDER'])) if os.path.exists(app.config['CONVERTED_FOLDER']) else 0
+        'converted_folder': len(os.listdir(app.config['CONVERTED_FOLDER'])) if os.path.exists(app.config['CONVERTED_FOLDER']) else 0,
+        'passport_folder': len(os.listdir(app.config['PASSPORT_FOLDER'])) if os.path.exists(app.config['PASSPORT_FOLDER']) else 0
     })
 
 if __name__ == '__main__':
-    print("Starting Universal PVC Card Maker...")
+    print("Starting Universal PVC Card Maker & AI Passport Photo Tool...")
     print(f"Upload folder: {UPLOAD_FOLDER}")
     print(f"Cropped folder: {CROPPED_FOLDER}")
     print(f"Converted folder: {CONVERTED_FOLDER}")
+    print(f"Passport folder: {PASSPORT_FOLDER}")
     
     print("\nFeatures:")
+    print("   • IMPROVED Background Removal with better quality")
     print("   • Auto Front & Back cropping for ALL cards (Aadhaar, PAN, Voter ID, Jan-Aadhaar, Ayushman, Labour)")
     print("   • Consistent tight cropping pattern - no black borders")
     print("   • PVC Card conversion (8.6cm x 5.4cm) - NO BORDERS")
     print("   • Both sides download as combined PNG/JPG")
     print("   • Direct print functionality for all cards")
+    print("   • ADVANCED AI Passport Photo Maker with background removal")
+    print("   • Multiple passport sizes with exact pixel dimensions")
+    print("   • Photo sheets with FIXED photo sizes (all images same size)")
+    print("   • Transparent background support")
+    print("   • Real-time background color change")
     print("   • Image Converter (JPG, PNG, GIF, BMP, TIFF, WEBP, ICO, PDF) with bulk conversion")
     print("   • Auto file cleanup (5 minutes)")
     print("   • Backward compatibility with old routes")

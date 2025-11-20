@@ -13,7 +13,7 @@
     <meta property="og:description" content="Free online image converter tool. Convert between JPG, PNG, GIF, BMP, TIFF, WEBP, SVG, ICO, PSD, EPS, ODD, and PDF formats. No installation required.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://yourwebsite.com/image-converter">
-    2122.
+    
     <!-- Canonical URL -->
     <link rel="canonical" href="https://yourwebsite.com/image-converter">
     
@@ -538,6 +538,14 @@
             color: #666;
         }
 
+        .size-estimate {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: var(--image-color);
+            font-weight: 600;
+        }
+
         .preview-section {
             display: none;
             margin-top: 30px;
@@ -1046,8 +1054,11 @@
                     </div>
                     <input type="range" min="10" max="100" value="80" class="quality-slider" id="qualitySlider">
                     <div class="quality-info">
-                        <span>Smaller Size</span>
-                        <span>Better Quality</span>
+                        <span id="minSize">Smaller Size</span>
+                        <span id="maxSize">Better Quality</span>
+                    </div>
+                    <div class="size-estimate" id="sizeEstimate">
+                        Estimated size: -- KB
                     </div>
                 </div>
 
@@ -1313,9 +1324,8 @@
         <p style="margin-top: 10px; opacity: 0.8;">Your privacy is our priority - Files auto-delete in 5 minutes</p>
     </footer>
 
-    <!-- YOUR EXISTING JAVASCRIPT CODE REMAINS EXACTLY THE SAME -->
+    <!-- UPDATED JAVASCRIPT CODE -->
     <script>
-        // All your existing JavaScript code remains exactly the same
         document.addEventListener('DOMContentLoaded', function() {
             const fileInput = document.getElementById('fileInput');
             const browseBtn = document.getElementById('browseBtn');
@@ -1325,6 +1335,7 @@
             const qualityControl = document.getElementById('qualityControl');
             const qualitySlider = document.getElementById('qualitySlider');
             const qualityValue = document.getElementById('qualityValue');
+            const sizeEstimate = document.getElementById('sizeEstimate');
             const processBtn = document.getElementById('processBtn');
             const previewSection = document.getElementById('previewSection');
             const previewImage = document.getElementById('previewImage');
@@ -1415,10 +1426,23 @@
                 }, 300000); // 5 minutes
             }
 
-            // Update quality slider
+            // Update quality slider with real-time size estimation
             qualitySlider.addEventListener('input', function() {
                 currentQuality = this.value;
                 qualityValue.textContent = `${currentQuality}%`;
+                
+                // Real-time size estimation
+                if (selectedFile) {
+                    const estimatedSizeKB = Math.max(10, (selectedFile.size / 1024) * (currentQuality / 100)).toFixed(2);
+                    const estimatedSizeMB = (estimatedSizeKB / 1024).toFixed(2);
+                    
+                    let sizeText = `Estimated size: ${estimatedSizeKB} KB`;
+                    if (estimatedSizeKB > 1024) {
+                        sizeText = `Estimated size: ${estimatedSizeMB} MB`;
+                    }
+                    
+                    sizeEstimate.textContent = sizeText;
+                }
             });
 
             // Update format selection
@@ -1429,8 +1453,22 @@
                 if (selectedFormat && qualitySupportedFormats.includes(selectedFormat.toLowerCase())) {
                     qualityControl.style.display = 'block';
                     qualityValue.textContent = `${currentQuality}%`;
+                    
+                    // Update size estimate when format changes
+                    if (selectedFile) {
+                        const estimatedSizeKB = Math.max(10, (selectedFile.size / 1024) * (currentQuality / 100)).toFixed(2);
+                        const estimatedSizeMB = (estimatedSizeKB / 1024).toFixed(2);
+                        
+                        let sizeText = `Estimated size: ${estimatedSizeKB} KB`;
+                        if (estimatedSizeKB > 1024) {
+                            sizeText = `Estimated size: ${estimatedSizeMB} MB`;
+                        }
+                        
+                        sizeEstimate.textContent = sizeText;
+                    }
                 } else {
                     qualityControl.style.display = 'none';
+                    sizeEstimate.textContent = 'Estimated size: -- KB';
                 }
                 
                 hideMessages();
@@ -1459,7 +1497,7 @@
             }
 
             // Show preview based on file type
-            function showPreview(blob, format) {
+            function showPreview(blob, format, fileSizeKB, fileSizeMB) {
                 const formatLower = format.toLowerCase();
                 convertedBlob = blob;
                 
@@ -1473,7 +1511,13 @@
                     previewImage.src = previewUrl;
                     previewImage.style.display = 'block';
                     previewViewBtn.innerHTML = '<i class="fas fa-external-link-alt"></i> Open Image';
-                    fileInfoText.textContent = `Image preview - ${format.toUpperCase()} format | Size: ${(blob.size / 1024).toFixed(2)} KB`;
+                    
+                    let sizeText = `Size: ${fileSizeKB} KB`;
+                    if (fileSizeKB > 1024) {
+                        sizeText = `Size: ${fileSizeMB} MB`;
+                    }
+                    
+                    fileInfoText.textContent = `Image preview - ${format.toUpperCase()} format | ${sizeText}`;
                     
                 } else {
                     // Generic file - show placeholder with format-specific icon
@@ -1485,7 +1529,13 @@
                     `;
                     previewPlaceholder.style.display = 'flex';
                     previewViewBtn.innerHTML = '<i class="fas fa-eye"></i> View File';
-                    fileInfoText.textContent = `${format.toUpperCase()} file converted successfully | Size: ${(blob.size / 1024).toFixed(2)} KB`;
+                    
+                    let sizeText = `Size: ${fileSizeKB} KB`;
+                    if (fileSizeKB > 1024) {
+                        sizeText = `Size: ${fileSizeMB} MB`;
+                    }
+                    
+                    fileInfoText.textContent = `${format.toUpperCase()} file converted successfully | ${sizeText}`;
                 }
                 
                 fileInfo.style.display = 'block';
@@ -1560,6 +1610,17 @@
                     formatSelect.value = '';
                     selectedFormat = null;
                     qualityControl.style.display = 'block';
+                    
+                    // Update size estimate
+                    const fileSizeKB = (selectedFile.size / 1024).toFixed(2);
+                    const fileSizeMB = (selectedFile.size / (1024 * 1024)).toFixed(2);
+                    
+                    let sizeText = `Estimated size: ${fileSizeKB} KB`;
+                    if (fileSizeKB > 1024) {
+                        sizeText = `Estimated size: ${fileSizeMB} MB`;
+                    }
+                    
+                    sizeEstimate.textContent = sizeText;
                 }
             });
 
@@ -1606,15 +1667,18 @@
                     formData.append('format', selectedFormat);
                     formData.append('quality', currentQuality);
 
-                    // Send to server for REAL conversion
+                    // Send to server for conversion
                     const response = await fetch('/convert-image', {
                         method: 'POST',
                         body: formData
                     });
 
-                    if (response.ok) {
-                        // Get the converted file as blob
-                        const blob = await response.blob();
+                    const result = await response.json();
+
+                    if (result.success) {
+                        // Download the converted file
+                        const downloadResponse = await fetch(`/download-converted/${result.converted_file}`);
+                        const blob = await downloadResponse.blob();
                         
                         // Generate download filename
                         const originalName = selectedFile.name;
@@ -1626,7 +1690,7 @@
                         downloadUrl = URL.createObjectURL(blob);
                         
                         // Show preview based on file type
-                        showPreview(blob, selectedFormat);
+                        showPreview(blob, selectedFormat, result.file_size_kb, result.file_size_mb);
                         
                         // Show success and preview section
                         previewSection.style.display = 'block';
@@ -1669,8 +1733,7 @@
                         };
 
                     } else {
-                        const errorData = await response.json();
-                        throw new Error(errorData.error || 'Conversion failed');
+                        throw new Error(result.error || 'Conversion failed');
                     }
 
                 } catch (error) {
@@ -1694,6 +1757,7 @@
                 currentQuality = 80;
                 qualitySlider.value = 80;
                 qualityValue.textContent = '80%';
+                sizeEstimate.textContent = 'Estimated size: -- KB';
 
                 // Reset dropdowns
                 formatSelect.value = '';

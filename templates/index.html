@@ -66,6 +66,7 @@
             --wordpress-light-blue: #3498db;
             --ayushman-color: #1a237e;
             --labour-color: #3A425C;
+            --passport-color: #1e88e5;
         }
        
         body {
@@ -539,6 +540,24 @@
         }
 
 
+        .tool-card[data-card-type="passport"] .tool-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg,
+                rgba(30, 136, 229, 0.1) 0%,
+                rgba(30, 136, 229, 0.3) 50%,
+                rgba(30, 136, 229, 0.1) 100%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+
         /* Light Wave Animation */
         @keyframes lightWave {
             0% {
@@ -615,6 +634,12 @@
         }
 
 
+        .tool-card[data-card-type="passport"]:hover .tool-icon-image {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 20px rgba(30, 136, 229, 0.8));
+        }
+
+
         /* Activate Background Glow on Hover */
         .tool-card:hover .tool-icon::before {
             opacity: 1;
@@ -677,6 +702,13 @@
         }
 
 
+        .tool-card[data-card-type="passport"]:hover {
+            border-color: rgba(30, 136, 229, 0.3);
+            background: linear-gradient(135deg, #fff 0%, rgba(30, 136, 229, 0.05) 100%);
+            box-shadow: 0 8px 25px rgba(30, 136, 229, 0.15);
+        }
+
+
         .tool-card h3 {
             font-size: 1.6rem;
             margin-bottom: 15px;
@@ -727,6 +759,11 @@
 
         .tool-card[data-card-type="image-converter"]:hover h3 {
             color: #5dd8a5;
+        }
+
+
+        .tool-card[data-card-type="passport"]:hover h3 {
+            color: #1e88e5;
         }
        
         .tool-btn {
@@ -804,6 +841,11 @@
 
         .converter-card.image {
             border-left-color: #5dd8a5;
+        }
+
+
+        .converter-card.passport {
+            border-left-color: var(--passport-color);
         }
 
 
@@ -1261,6 +1303,7 @@
                         <a href="/pan-crop" class="dropdown-item">PAN Crop</a>
                         <a href="/voterid-crop" class="dropdown-item">Voter ID Crop</a>
                         <a href="/labour-card" class="dropdown-item">Labour Card Crop</a>
+                        <a href="/passport-photo" class="dropdown-item">Passport Photo Maker</a>
                         <div class="dropdown-divider"></div>
                         <a href="/ayushman-card" class="dropdown-item">Ayushman Card</a>
                         <a href="/image-converter" class="dropdown-item">Image Converter</a>
@@ -1327,6 +1370,18 @@
                     <h3>Labour Card Crop</h3>
                     <p>Extract Labour cards from PDF documents with perfect dimensions for employment documentation</p>
                     <button class="tool-btn" onclick="window.location.href='/labour-card'">Crop Labour Card</button>
+                </div>
+
+
+                <!-- Passport Photo Maker -->
+                <div class="tool-card" data-card-type="passport">
+                    <div class="tool-badge new">NEW</div>
+                    <div class="tool-icon">
+                        <img src="/static/images/passportsize.png" alt="Passport Photo Maker - Create Perfect Passport Size Photos Online" class="tool-icon-image">
+                    </div>
+                    <h3>Passport Photo Maker</h3>
+                    <p>Create perfect passport size photos with our online tool. Adjust background, size and format for official documents</p>
+                    <button class="tool-btn" onclick="window.location.href='/passport-photo'">Create Passport Photo</button>
                 </div>
 
 
@@ -1414,6 +1469,20 @@
                 </ul>
                 <button class="tool-btn" onclick="window.location.href='/labour-card'">Try Labour Crop</button>
             </div>
+            
+            <!-- NEW: Passport Photo Maker Info Card -->
+            <div class="converter-card passport">
+                <h3>Passport Photo Maker</h3>
+                <p>Create perfect passport size photos with our online tool. Adjust background, size and format for official documents</p>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> Perfect passport photo dimensions</li>
+                    <li><i class="fas fa-check"></i> Background removal and adjustment</li>
+                    <li><i class="fas fa-check"></i> Multiple country specifications</li>
+                    <li><i class="fas fa-check"></i> High quality output</li>
+                    <li><i class="fas fa-check"></i> Mobile-friendly interface</li>
+                </ul>
+                <button class="tool-btn" onclick="window.location.href='/passport-photo'">Try Passport Photo Maker</button>
+            </div>
         </section>
 
 
@@ -1434,13 +1503,13 @@
                 <div class="guide-step">
                     <div class="step-number">1</div>
                     <h3>Select Your Tool</h3>
-                    <p>Choose the appropriate cropping tool based on your ID card type (Aadhaar, Janaadhaar, PAN, Voter ID, Ayushman Card, or Labour Card)</p>
+                    <p>Choose the appropriate cropping tool based on your ID card type (Aadhaar, Janaadhaar, PAN, Voter ID, Ayushman Card, Labour Card, or Passport Photo)</p>
                 </div>
                
                 <div class="guide-step">
                     <div class="step-number">2</div>
-                    <h3>Upload Your PDF</h3>
-                    <p>Upload the PDF document containing your ID card. We support PDF files up to 10MB in size</p>
+                    <h3>Upload Your PDF/Image</h3>
+                    <p>Upload the PDF document containing your ID card or image for passport photo. We support PDF files up to 10MB in size</p>
                 </div>
                
                 <div class="guide-step">
@@ -1452,7 +1521,7 @@
                 <div class="guide-step">
                     <div class="step-number">4</div>
                     <h3>Download & Use</h3>
-                    <p>Get your perfectly cropped ID card image ready for printing or digital use</p>
+                    <p>Get your perfectly cropped ID card image or passport photo ready for printing or digital use</p>
                 </div>
             </div>
         </section>
@@ -1535,6 +1604,13 @@
                     </div>
                    
                     <div class="faq-item">
+                        <h3 class="faq-question">Can I create passport photos with E-Card Cutter?</h3>
+                        <div class="faq-answer">
+                            <p>Yes, our Passport Photo Maker tool helps you create perfect passport photos with proper dimensions and background.</p>
+                        </div>
+                    </div>
+                   
+                    <div class="faq-item">
                         <h3 class="faq-question">Is my data secure with this card cutter tool?</h3>
                         <div class="faq-answer">
                             <p>Absolutely secure - all files auto-delete in 5 minutes, no server storage, and 100% private processing.</p>
@@ -1574,6 +1650,7 @@
                     <li><a href="/pan-crop">Pan Crop</a></li>
                     <li><a href="/voterid-crop">Voter ID Crop</a></li>
                     <li><a href="/labour-card">Labour Card Crop</a></li>
+                    <li><a href="/passport-photo">Passport Photo Maker</a></li>
                     <li><a href="/ayushman-card">Ayushman Card</a></li>
                     <li><a href="/image-converter">Image Converter</a></li>
                 </ul>
