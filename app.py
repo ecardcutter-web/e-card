@@ -1971,7 +1971,16 @@ def health_check():
         'passport_folder': len(os.listdir(app.config['PASSPORT_FOLDER'])) if os.path.exists(app.config['PASSPORT_FOLDER']) else 0
     })
 
+# ==================== PORT BINDING FOR RENDER ====================
+
+import os
+
+def get_port():
+    """Get port from environment variable or use default"""
+    return int(os.environ.get('PORT', 10000))
+
 if __name__ == '__main__':
+    port = get_port()
     print("Starting Universal PVC Card Maker & AI Passport Photo Tool...")
     print(f"Upload folder: {UPLOAD_FOLDER}")
     print(f"Cropped folder: {CROPPED_FOLDER}")
@@ -1998,4 +2007,7 @@ if __name__ == '__main__':
     file_cleaner.start_auto_cleanup()
     print("Auto-cleanup thread started.")
 
-    print("\nApp loaded. Gunicorn will serve the application on Render.")
+    print(f"\nApp loaded. Serving on port {port}")
+    
+    # Bind to 0.0.0.0 to make it accessible externally
+    app.run(host='0.0.0.0', port=port, debug=False)
