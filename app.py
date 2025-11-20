@@ -1,7 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, send_file, jsonify
 import os
-os.environ["U2NET_HOME"] = "/tmp"
-os.environ["ONNX_RUNTIME_FORCE_CPU"] = "1"
 import fitz
 import secrets
 from datetime import datetime, timedelta
@@ -1971,25 +1969,32 @@ def health_check():
         'passport_folder': len(os.listdir(app.config['PASSPORT_FOLDER'])) if os.path.exists(app.config['PASSPORT_FOLDER']) else 0
     })
 
-# ==================== PORT BINDING FOR RENDER ====================
-
-import os
-
-def get_port():
-    """Get port from environment variable or use default"""
-    return int(os.environ.get('PORT', 10000))
-
 if __name__ == '__main__':
-    PORT = int(os.environ.get("PORT", 10000))
-
     print("Starting Universal PVC Card Maker & AI Passport Photo Tool...")
     print(f"Upload folder: {UPLOAD_FOLDER}")
     print(f"Cropped folder: {CROPPED_FOLDER}")
     print(f"Converted folder: {CONVERTED_FOLDER}")
     print(f"Passport folder: {PASSPORT_FOLDER}")
-
+    
+    print("\nFeatures:")
+    print("   • IMPROVED Background Removal with better quality")
+    print("   • Auto Front & Back cropping for ALL cards (Aadhaar, PAN, Voter ID, Jan-Aadhaar, Ayushman, Labour)")
+    print("   • Consistent tight cropping pattern - no black borders")
+    print("   • PVC Card conversion (8.6cm x 5.4cm) - NO BORDERS")
+    print("   • Both sides download as combined PNG/JPG")
+    print("   • Direct print functionality for all cards")
+    print("   • ADVANCED AI Passport Photo Maker with background removal")
+    print("   • Multiple passport sizes with exact pixel dimensions")
+    print("   • Photo sheets with FIXED photo sizes (all images same size)")
+    print("   • Transparent background support")
+    print("   • Real-time background color change")
+    print("   • Image Converter (JPG, PNG, GIF, BMP, TIFF, WEBP, ICO, PDF) with bulk conversion")
+    print("   • Auto file cleanup (5 minutes)")
+    print("   • Backward compatibility with old routes")
+    
+    # Start auto cleanup
     file_cleaner.start_auto_cleanup()
-    print("Auto-cleanup thread started.")
-    print(f"App loaded. Serving on port {PORT}")
-
-    app.run(host='0.0.0.0', port=PORT)
+    print(f"Auto-delete enabled: Files will be deleted after 5 minutes")
+    
+    print("\nServer running on: http://localhost:5000")
+    app.run(debug=True, port=5000, host='127.0.0.1')
