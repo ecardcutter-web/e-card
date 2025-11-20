@@ -1985,16 +1985,16 @@ if __name__ == '__main__':
     print("   • Direct print functionality for all cards")
     print("   • ADVANCED AI Passport Photo Maker with background removal")
     print("   • Multiple passport sizes with exact pixel dimensions")
-    print("   • Photo sheets with FIXED photo sizes")
+    print("   • Photo sheets with FIXED photo sizes (all images same size)")
     print("   • Transparent background support")
     print("   • Real-time background color change")
-    print("   • Image Converter (JPG, PNG, GIF, BMP, TIFF, WEBP, ICO, PDF)")
+    print("   • Image Converter (JPG, PNG, GIF, BMP, TIFF, WEBP, ICO, PDF) with bulk conversion")
     print("   • Auto file cleanup (5 minutes)")
     print("   • Backward compatibility with old routes")
     
     # Start auto cleanup
     file_cleaner.start_auto_cleanup()
-    print("Auto-cleanup thread started successfully.")
+    print(f"Auto-delete enabled: Files will be deleted after 5 minutes")
     
-    # IMPORTANT: DO NOT RUN FLASK ON RENDER
-    print("\nApp loaded. Gunicorn will serve the application on Render.")
+    print("\nServer running on: http://localhost:5000")
+    app.run(debug=True, port=5000, host='127.0.0.1')
