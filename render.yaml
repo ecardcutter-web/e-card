@@ -5,7 +5,7 @@ services:
     plan: free
     region: singapore
     buildCommand: "apt-get update && apt-get install -y poppler-utils && pip install --upgrade pip && pip install -r requirements.txt"
-    startCommand: "gunicorn app:app --bind 0.0.0.0:$PORT"
+    startCommand: "gunicorn --bind 0.0.0.0:$PORT app:app"
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.12
