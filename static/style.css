@@ -402,3 +402,82 @@ footer {
         max-width: 100% !important;
     }
 }
+/* Follow Us Section - Centered Below All Footer Columns */
+.follow-us-section {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin: 30px 0 20px;
+    padding: 25px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.follow-us-section h3 {
+    color: white;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 0.8rem;
+}
+
+.follow-us-section h3::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+/* Social Media Icons Styles - Improved Visibility */
+.social-icons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.4rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.social-icons a:hover {
+    background: var(--primary);
+    color: white;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(67, 97, 238, 0.5);
+    border-color: var(--primary);
+}
+
+/* Responsive adjustments for social icons */
+@media (max-width: 768px) {
+    .social-icons {
+        gap: 15px;
+    }
+    
+    .social-icons a {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
+    }
+    
+    .follow-us-section {
+        margin: 20px 0 15px;
+        padding: 20px 0;
+    }
+}

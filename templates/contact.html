@@ -81,6 +81,23 @@
             font-weight: 700;
         }
 
+        /* Header Icon Styling */
+        .header-icon-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .header-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+        }
+
         /* Card Styles */
         .card {
             background-color: var(--card);
@@ -482,6 +499,13 @@
 
     <!-- Main Content -->
     <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header Icon -->
+        <div class="header-icon-container">
+            <div class="header-icon">
+                <i class="fas fa-envelope-open-text"></i>
+            </div>
+        </div>
+
         <h1 class="text-4xl font-bold mb-6 page-title" data-testid="text-contact-title">
             Contact Us
         </h1>
@@ -602,7 +626,7 @@
         </div>
         
         <div class="copyright">
-            © 2023 E-Card Cutter. All rights reserved.
+            © 2025 E-Card Cutter. All rights reserved.
         </div>
     </footer>
 </body>

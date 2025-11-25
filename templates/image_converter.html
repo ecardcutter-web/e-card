@@ -49,15 +49,15 @@
         }
         
         :root {
-            --primary: #5dd8a5;
-            --secondary: #4ab892;
-            --accent: #3a9c7a;
+            --primary: #76B8CC;
+            --secondary: #5a9cb3;
+            --accent: #468299;
             --light: #f8f9fa;
             --dark: #2b2d42;
             --success: #4cc9f0;
             --warning: #f72585;
-            --image-color: #5dd8a5;
-            --gradient: linear-gradient(135deg, #5dd8a5 0%, #4ab892 50%, #3a9c7a 100%);
+            --image-color: #76B8CC;
+            --gradient: linear-gradient(135deg, #76B8CC 0%, #5a9cb3 50%, #468299 100%);
         }
         
         body {
@@ -100,7 +100,7 @@
         .logo h1 {
             font-size: 1.6rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--image-color), #4ab892);
+            background: linear-gradient(135deg, var(--image-color), #5a9cb3);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -123,12 +123,12 @@
         
         nav ul li a:hover {
             color: var(--image-color);
-            background: rgba(93, 216, 165, 0.1);
+            background: rgba(118, 184, 204, 0.1);
         }
 
         nav ul li a.active {
             color: var(--image-color);
-            background: rgba(93, 216, 165, 0.1);
+            background: rgba(118, 184, 204, 0.1);
         }
 
         /* NEW: Dropdown Menu Styles */
@@ -175,7 +175,7 @@
         }
 
         .dropdown-item:hover {
-            background: rgba(67, 97, 238, 0.1);
+            background: rgba(118, 184, 204, 0.1);
             color: var(--primary);
             border-left-color: var(--primary);
             padding-left: 25px;
@@ -278,10 +278,10 @@
         .tool-header {
             text-align: center;
             margin-bottom: 40px;
-            background: linear-gradient(135deg, var(--image-color), #4ab892);
+            background: linear-gradient(135deg, var(--image-color), #5a9cb3);
             padding: 50px 20px 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(93, 216, 165, 0.2);
+            box-shadow: 0 10px 30px rgba(118, 184, 204, 0.2);
             margin-top: 40px;
             position: relative;
             overflow: hidden;
@@ -301,10 +301,10 @@
             color: white;
             max-width: 600px;
             margin: 0 auto;
-            background: rgba(93, 216, 165, 0.9);
+            background: rgba(118, 184, 204, 0.9);
             padding: 15px 30px;
             border-radius: 25px;
-            box-shadow: 0 5px 15px rgba(93, 216, 165, 0.3);
+            box-shadow: 0 5px 15px rgba(118, 184, 204, 0.3);
             position: relative;
             line-height: 1.5;
             font-weight: 500;
@@ -334,7 +334,7 @@
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(93, 216, 165, 0.1);
+            border: 1px solid rgba(118, 184, 204, 0.1);
             margin-bottom: 40px;
             position: relative;
             overflow: hidden;
@@ -347,7 +347,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--image-color), #4ab892);
+            background: linear-gradient(90deg, var(--image-color), #5a9cb3);
         }
 
         .upload-area {
@@ -363,13 +363,13 @@
 
         .upload-area:hover {
             border-color: var(--image-color);
-            background: #f0fff8;
+            background: #f0f9fc;
             transform: translateY(-2px);
         }
 
         .upload-area.dragover {
             border-color: var(--image-color);
-            background: #e8fcf3;
+            background: #e6f4f9;
         }
 
         .upload-icon {
@@ -390,7 +390,7 @@
         }
 
         .browse-btn {
-            background: linear-gradient(135deg, var(--image-color), #4ab892);
+            background: linear-gradient(135deg, var(--image-color), #5a9cb3);
             color: white;
             border: none;
             padding: 12px 30px;
@@ -403,7 +403,7 @@
 
         .browse-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(93, 216, 165, 0.3);
+            box-shadow: 0 8px 20px rgba(118, 184, 204, 0.3);
         }
 
         .process-btn {
@@ -472,7 +472,7 @@
         .format-select:focus {
             outline: none;
             border-color: var(--image-color);
-            box-shadow: 0 0 0 3px rgba(93, 216, 165, 0.1);
+            box-shadow: 0 0 0 3px rgba(118, 184, 204, 0.1);
         }
 
         .quality-control {
@@ -539,6 +539,7 @@
         }
 
         .size-estimate {
+            display: none;
             text-align: center;
             margin-top: 8px;
             font-size: 0.8rem;
@@ -702,7 +703,7 @@
             margin: 20px auto;
             width: 40px;
             height: 40px;
-            border: 4px solid rgba(93, 216, 165, 0.2);
+            border: 4px solid rgba(118, 184, 204, 0.2);
             border-radius: 50%;
             border-top-color: var(--image-color);
             animation: spin 1s ease-in-out infinite;
@@ -1324,7 +1325,7 @@
         <p style="margin-top: 10px; opacity: 0.8;">Your privacy is our priority - Files auto-delete in 5 minutes</p>
     </footer>
 
-    <!-- UPDATED JAVASCRIPT CODE -->
+    <!-- OPTIMIZED JAVASCRIPT CODE -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const fileInput = document.getElementById('fileInput');
@@ -1431,7 +1432,7 @@
                 currentQuality = this.value;
                 qualityValue.textContent = `${currentQuality}%`;
                 
-                // Real-time size estimation
+                // Real-time size estimation (hidden)
                 if (selectedFile) {
                     const estimatedSizeKB = Math.max(10, (selectedFile.size / 1024) * (currentQuality / 100)).toFixed(2);
                     const estimatedSizeMB = (estimatedSizeKB / 1024).toFixed(2);
@@ -1454,7 +1455,7 @@
                     qualityControl.style.display = 'block';
                     qualityValue.textContent = `${currentQuality}%`;
                     
-                    // Update size estimate when format changes
+                    // Update size estimate when format changes (hidden)
                     if (selectedFile) {
                         const estimatedSizeKB = Math.max(10, (selectedFile.size / 1024) * (currentQuality / 100)).toFixed(2);
                         const estimatedSizeMB = (estimatedSizeKB / 1024).toFixed(2);
@@ -1568,6 +1569,227 @@
                 }
             }
 
+            // OPTIMIZED: Fast image conversion using Canvas API
+            function convertImageFast(file, format, quality) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        const img = new Image();
+                        
+                        img.onload = function() {
+                            // Create canvas with image dimensions
+                            const canvas = document.createElement('canvas');
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                            
+                            const ctx = canvas.getContext('2d');
+                            
+                            // Draw image on canvas
+                            ctx.drawImage(img, 0, 0);
+                            
+                            // Convert to desired format
+                            let mimeType;
+                            switch(format) {
+                                case 'jpg':
+                                case 'jpeg':
+                                    mimeType = 'image/jpeg';
+                                    break;
+                                case 'png':
+                                    mimeType = 'image/png';
+                                    break;
+                                case 'webp':
+                                    mimeType = 'image/webp';
+                                    break;
+                                case 'bmp':
+                                    mimeType = 'image/bmp';
+                                    break;
+                                default:
+                                    mimeType = 'image/png';
+                            }
+                            
+                            // Convert to blob
+                            canvas.toBlob(function(blob) {
+                                resolve(blob);
+                            }, mimeType, quality / 100);
+                        };
+                        
+                        img.onerror = function() {
+                            reject(new Error('Failed to load image'));
+                        };
+                        
+                        img.src = e.target.result;
+                    };
+                    
+                    reader.onerror = function() {
+                        reject(new Error('Failed to read file'));
+                    };
+                    
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            // OPTIMIZED: SVG conversion support
+            function convertToSVG(file) {
+                return new Promise((resolve, reject) => {
+                    // For SVG files, we can return as-is
+                    if (file.type === 'image/svg+xml') {
+                        resolve(file);
+                        return;
+                    }
+                    
+                    // For other formats to SVG, we need to convert
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        const img = new Image();
+                        
+                        img.onload = function() {
+                            // Create SVG with embedded image
+                            const svgContent = `
+                                <svg xmlns="http://www.w3.org/2000/svg" width="${img.width}" height="${img.height}">
+                                    <image href="${e.target.result}" width="${img.width}" height="${img.height}"/>
+                                </svg>
+                            `;
+                            
+                            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+                            resolve(blob);
+                        };
+                        
+                        img.onerror = function() {
+                            reject(new Error('Failed to load image for SVG conversion'));
+                        };
+                        
+                        img.src = e.target.result;
+                    };
+                    
+                    reader.onerror = function() {
+                        reject(new Error('Failed to read file for SVG conversion'));
+                    };
+                    
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            // OPTIMIZED: Fast conversion process
+            async function processConversion() {
+                if (!selectedFile) {
+                    showError('Please select an image file first.');
+                    return;
+                }
+
+                if (!selectedFormat) {
+                    showError('Please select a conversion format.');
+                    return;
+                }
+
+                processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Converting...';
+                processBtn.disabled = true;
+                loadingSpinner.style.display = 'block';
+                hideMessages();
+
+                try {
+                    let blob;
+                    const startTime = performance.now();
+                    
+                    // OPTIMIZED: Use client-side conversion for supported formats
+                    if (['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(selectedFormat.toLowerCase())) {
+                        // Use fast canvas-based conversion
+                        blob = await convertImageFast(selectedFile, selectedFormat, currentQuality);
+                    } else if (selectedFormat.toLowerCase() === 'svg') {
+                        // Use SVG conversion
+                        blob = await convertToSVG(selectedFile);
+                    } else {
+                        // For other formats, use server-side conversion
+                        const formData = new FormData();
+                        formData.append('file', selectedFile);
+                        formData.append('format', selectedFormat);
+                        formData.append('quality', currentQuality);
+
+                        const response = await fetch('/convert-image', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            const downloadResponse = await fetch(`/download-converted/${result.converted_file}`);
+                            blob = await downloadResponse.blob();
+                        } else {
+                            throw new Error(result.error || 'Conversion failed');
+                        }
+                    }
+                    
+                    const endTime = performance.now();
+                    console.log(`Conversion took ${(endTime - startTime).toFixed(2)} milliseconds`);
+                    
+                    // Generate download filename
+                    const originalName = selectedFile.name;
+                    const baseName = originalName.substring(0, originalName.lastIndexOf('.'));
+                    const convertedFileName = `${baseName}.${selectedFormat}`;
+                    currentConvertedFileName = convertedFileName;
+                    
+                    // Create download URL from blob
+                    downloadUrl = URL.createObjectURL(blob);
+                    
+                    // Calculate file size
+                    const fileSizeKB = (blob.size / 1024).toFixed(2);
+                    const fileSizeMB = (blob.size / (1024 * 1024)).toFixed(2);
+                    
+                    // Show preview based on file type
+                    showPreview(blob, selectedFormat, fileSizeKB, fileSizeMB);
+                    
+                    // Show success and preview section
+                    previewSection.style.display = 'block';
+                    processBtn.style.display = 'none';
+                    showSuccess(`Image converted to ${selectedFormat.toUpperCase()} successfully! File will auto-delete in 5 minutes.`);
+
+                    // Start auto-delete timer
+                    startAutoDeleteTimer();
+
+                    // Set up download button
+                    previewDownloadBtn.onclick = function() {
+                        const a = document.createElement('a');
+                        a.href = downloadUrl;
+                        a.download = convertedFileName;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    };
+
+                    // Set up preview view button
+                    previewViewBtn.onclick = viewFullContent;
+
+                    newConvertBtn.onclick = function() {
+                        // Clean up URL objects
+                        if (downloadUrl) {
+                            URL.revokeObjectURL(downloadUrl);
+                        }
+                        if (previewUrl) {
+                            URL.revokeObjectURL(previewUrl);
+                        }
+                        // Clear auto-delete timer
+                        if (deleteTimer) {
+                            clearTimeout(deleteTimer);
+                        }
+                        resetUploadArea();
+                        previewSection.style.display = 'none';
+                        processBtn.style.display = 'block';
+                        processBtn.disabled = false;
+                        processBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Convert Image';
+                    };
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    showError('Error converting image: ' + error.message);
+                } finally {
+                    processBtn.disabled = false;
+                    processBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Convert Image';
+                    loadingSpinner.style.display = 'none';
+                }
+            }
+
             browseBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 fileInput.click();
@@ -1611,7 +1833,7 @@
                     selectedFormat = null;
                     qualityControl.style.display = 'block';
                     
-                    // Update size estimate
+                    // Update size estimate (hidden)
                     const fileSizeKB = (selectedFile.size / 1024).toFixed(2);
                     const fileSizeMB = (selectedFile.size / (1024 * 1024)).toFixed(2);
                     
@@ -1644,107 +1866,8 @@
                 }
             });
 
-            processBtn.addEventListener('click', async function() {
-                if (!selectedFile) {
-                    showError('Please select an image file first.');
-                    return;
-                }
-
-                if (!selectedFormat) {
-                    showError('Please select a conversion format.');
-                    return;
-                }
-
-                processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Converting Image...';
-                processBtn.disabled = true;
-                loadingSpinner.style.display = 'block';
-                hideMessages();
-
-                try {
-                    // Create FormData for actual file upload to server
-                    const formData = new FormData();
-                    formData.append('file', selectedFile);
-                    formData.append('format', selectedFormat);
-                    formData.append('quality', currentQuality);
-
-                    // Send to server for conversion
-                    const response = await fetch('/convert-image', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    const result = await response.json();
-
-                    if (result.success) {
-                        // Download the converted file
-                        const downloadResponse = await fetch(`/download-converted/${result.converted_file}`);
-                        const blob = await downloadResponse.blob();
-                        
-                        // Generate download filename
-                        const originalName = selectedFile.name;
-                        const baseName = originalName.substring(0, originalName.lastIndexOf('.'));
-                        const convertedFileName = `${baseName}.${selectedFormat}`;
-                        currentConvertedFileName = convertedFileName;
-                        
-                        // Create download URL from blob
-                        downloadUrl = URL.createObjectURL(blob);
-                        
-                        // Show preview based on file type
-                        showPreview(blob, selectedFormat, result.file_size_kb, result.file_size_mb);
-                        
-                        // Show success and preview section
-                        previewSection.style.display = 'block';
-                        processBtn.style.display = 'none';
-                        showSuccess(`Image converted to ${selectedFormat.toUpperCase()} successfully! File will auto-delete in 5 minutes.`);
-
-                        // Start auto-delete timer
-                        startAutoDeleteTimer();
-
-                        // Set up download button
-                        previewDownloadBtn.onclick = function() {
-                            const a = document.createElement('a');
-                            a.href = downloadUrl;
-                            a.download = convertedFileName;
-                            document.body.appendChild(a);
-                            a.click();
-                            document.body.removeChild(a);
-                        };
-
-                        // Set up preview view button
-                        previewViewBtn.onclick = viewFullContent;
-
-                        newConvertBtn.onclick = function() {
-                            // Clean up URL objects
-                            if (downloadUrl) {
-                                URL.revokeObjectURL(downloadUrl);
-                            }
-                            if (previewUrl) {
-                                URL.revokeObjectURL(previewUrl);
-                            }
-                            // Clear auto-delete timer
-                            if (deleteTimer) {
-                                clearTimeout(deleteTimer);
-                            }
-                            resetUploadArea();
-                            previewSection.style.display = 'none';
-                            processBtn.style.display = 'block';
-                            processBtn.disabled = false;
-                            processBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Convert Image';
-                        };
-
-                    } else {
-                        throw new Error(result.error || 'Conversion failed');
-                    }
-
-                } catch (error) {
-                    console.error('Error:', error);
-                    showError('Error converting image: ' + error.message);
-                } finally {
-                    processBtn.disabled = false;
-                    processBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Convert Image';
-                    loadingSpinner.style.display = 'none';
-                }
-            });
+            // OPTIMIZED: Use the new fast conversion process
+            processBtn.addEventListener('click', processConversion);
 
             function resetUploadArea() {
                 fileName.style.display = 'none';

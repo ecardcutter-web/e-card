@@ -793,7 +793,32 @@
             color: var(--gray);
             font-size: 0.9rem;
         }
+/* Google AdSense Slot */
+.adsense-slot {
+    width: 100%;
+    margin: 30px 0;
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    color: #333;
+    border: 2px dashed #dee2e6;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
 
+.adsense-slot::before {
+    content: "Advertisement";
+    font-size: 0.8rem;
+    color: #6c757d;
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    font-weight: 600;
+}
         /* Responsive Design */
         @media (max-width: 1024px) {
             .editor-layout {
@@ -860,8 +885,9 @@
     <!-- Header -->
     <header>
         <a href="/" class="logo">
-            <div class="logo-text">E-<span>Card</span> Cutter</div>
-        </a>
+        <img src="/static/images/logo.png" alt="E-Card Cutter - Free Online Tools" class="logo-image">
+        <div class="logo-text">Passport<span> Size</span> Photo Maker</div>
+    </a>
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
@@ -1064,7 +1090,21 @@
                     <p>4x2 grid layout</p>
                 </div>
             </div>
-            
+            <!-- YAHAN PASTE KARO - Photo Sheet ke Baad AdSense Slot -->
+    <div class="adsense-slot">
+        <!-- Google AdSense Code Here -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+                 crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="XXXXXXXXXX"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
             <div class="sheet-preview">
                 <canvas id="sheetCanvas"></canvas>
             </div>

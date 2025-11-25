@@ -28,36 +28,41 @@ UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 CROPPED_FOLDER = os.path.join(BASE_DIR, 'cropped')
 CONVERTED_FOLDER = os.path.join(BASE_DIR, 'converted')
 PASSPORT_FOLDER = os.path.join(BASE_DIR, 'passport_photos')
+RESUME_FOLDER = os.path.join(BASE_DIR, 'resumes')
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(CROPPED_FOLDER, exist_ok=True)
 os.makedirs(CONVERTED_FOLDER, exist_ok=True)
 os.makedirs(PASSPORT_FOLDER, exist_ok=True)
+os.makedirs(RESUME_FOLDER, exist_ok=True)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['CROPPED_FOLDER'] = CROPPED_FOLDER
 app.config['CONVERTED_FOLDER'] = CONVERTED_FOLDER
 app.config['PASSPORT_FOLDER'] = PASSPORT_FOLDER
+app.config['RESUME_FOLDER'] = RESUME_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 # Store files info
 cropped_files_info = []
 converted_files_info = []
 passport_files_info = []
+resume_files_info = []
 
 # File Cleaner Class
 class FileCleaner:
-    def __init__(self, upload_folder, cropped_folder, converted_folder, passport_folder, retention_minutes=5):
+    def __init__(self, upload_folder, cropped_folder, converted_folder, passport_folder, resume_folder, retention_minutes=5):
         self.upload_folder = upload_folder
         self.cropped_folder = cropped_folder
         self.converted_folder = converted_folder
         self.passport_folder = passport_folder
+        self.resume_folder = resume_folder
         self.retention_minutes = retention_minutes
     
     def cleanup_old_files(self):
         try:
             current_time = time.time()
-            folders = [self.upload_folder, self.cropped_folder, self.converted_folder, self.passport_folder]
+            folders = [self.upload_folder, self.cropped_folder, self.converted_folder, self.passport_folder, self.resume_folder]
             deleted_count = 0
             
             for folder in folders:
@@ -96,8 +101,659 @@ file_cleaner = FileCleaner(
     cropped_folder=CROPPED_FOLDER,
     converted_folder=CONVERTED_FOLDER,
     passport_folder=PASSPORT_FOLDER,
+    resume_folder=RESUME_FOLDER,
     retention_minutes=5
 )
+
+# ==================== RESUME BUILDER ROUTES - COMPLETELY FIXED VERSION ====================
+
+@app.route('/resume-builder')
+def resume_builder():
+    return render_template('resume_builder.html')
+
+@app.route('/save-resume', methods=['POST'])
+def save_resume():
+    """Save resume data and generate PDF - COMPLETELY FIXED VERSION"""
+    try:
+        # Get form data from request
+        resume_data = {
+            'personal_info': {
+                'name': request.form.get('fullName', 'Your Name'),
+                'title': request.form.get('jobTitle', 'Job Title'),
+                'email': request.form.get('email', ''),
+                'phone': request.form.get('phone', ''),
+                'address': request.form.get('address', '')
+            },
+            'summary': request.form.get('careerObjective', ''),
+            'profile': request.form.get('personalProfile', ''),
+            'education': request.form.get('education', ''),
+            'experience': request.form.get('experience', ''),
+            'skills': request.form.get('skills', ''),
+            'signature_name': request.form.get('signatureName', ''),
+            'date': request.form.get('date', ''),
+            'place': request.form.get('place', '')
+        }
+
+        # Get template and photo settings
+        template = request.form.get('template', '1')
+        include_photo = request.form.get('include_photo', 'false') == 'true'
+        
+        # Handle photo data
+        photo_data = None
+        if 'photo' in request.files:
+            photo_file = request.files['photo']
+            if photo_file and photo_file.filename != '':
+                photo_data = base64.b64encode(photo_file.read()).decode('utf-8')
+
+        # Generate unique filename
+        file_id = secrets.token_hex(8)
+        pdf_filename = f"{file_id}_resume.pdf"
+        pdf_path = os.path.join(app.config['RESUME_FOLDER'], pdf_filename)
+        
+        # Create PDF resume using the FIXED backend function
+        create_resume_pdf_fixed(resume_data, template, include_photo, photo_data, pdf_path)
+        
+        resume_files_info.append(pdf_filename)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Resume created successfully!',
+            'pdf_file': pdf_filename,
+            'download_url': f'/download-resume/{pdf_filename}'
+        })
+        
+    except Exception as e:
+        print(f"Resume creation error: {str(e)}")
+        import traceback
+        print(f"Traceback: {traceback.format_exc()}")
+        return jsonify({'success': False, 'error': f'Resume creation failed: {str(e)}'})
+
+def create_resume_pdf_fixed(resume_data, template, include_photo, photo_data, output_path):
+    """Fixed PDF creation function with PROPER CONTACT INFORMATION LINE BREAKS"""
+    try:
+        from reportlab.lib.pagesizes import A4
+        from reportlab.pdfgen import canvas
+        from reportlab.lib.units import inch
+        from reportlab.lib import colors
+        from reportlab.lib.utils import ImageReader
+        import base64
+        from io import BytesIO
+        
+        # Create PDF with canvas
+        c = canvas.Canvas(output_path, pagesize=A4)
+        width, height = A4
+        
+        # Set margins based on template
+        if template in ['4', '8']:  # Two-column templates
+            left_margin = 0.5 * inch
+        else:
+            left_margin = 0.7 * inch
+            
+        top_margin = height - (0.7 * inch)
+        current_y = top_margin
+        line_height = 18
+        
+        # Personal Information
+        personal_info = resume_data.get('personal_info', {})
+        
+        # TEMPLATE-SPECIFIC STYLING
+        template_styles = {
+            '1': {'primary_color': colors.HexColor('#2c3e50'), 'secondary_color': colors.HexColor('#3498db')},
+            '2': {'primary_color': colors.HexColor('#2c3e50'), 'secondary_color': colors.HexColor('#e74c3c')},
+            '3': {'primary_color': colors.HexColor('#3498db'), 'secondary_color': colors.HexColor('#2c3e50')},
+            '4': {'primary_color': colors.HexColor('#27ae60'), 'secondary_color': colors.HexColor('#2c3e50')},
+            '5': {'primary_color': colors.HexColor('#e67e22'), 'secondary_color': colors.HexColor('#2c3e50')},
+            '6': {'primary_color': colors.HexColor('#9b59b6'), 'secondary_color': colors.HexColor('#3498db')},
+            '7': {'primary_color': colors.HexColor('#e74c3c'), 'secondary_color': colors.HexColor('#2c3e50')},
+            '8': {'primary_color': colors.HexColor('#34495e'), 'secondary_color': colors.HexColor('#e74c3c')},
+            '9': {'primary_color': colors.HexColor('#d35400'), 'secondary_color': colors.HexColor('#27ae60')},
+            '10': {'primary_color': colors.black, 'secondary_color': colors.HexColor('#666666')}
+        }
+        
+        style = template_styles.get(template, template_styles['1'])
+        primary_color = style['primary_color']
+        secondary_color = style['secondary_color']
+        
+        # Add photo if included
+        if include_photo and photo_data:
+            try:
+                if ',' in photo_data:
+                    photo_data = photo_data.split(',')[1]
+                
+                photo_bytes = base64.b64decode(photo_data)
+                photo_img = ImageReader(BytesIO(photo_bytes))
+                
+                # Photo positioning based on template
+                if template in ['4', '8']:  # Two-column templates
+                    photo_size = 1.0 * inch
+                    photo_x = width - photo_size - left_margin
+                    photo_y = top_margin - photo_size
+                else:
+                    photo_size = 1.2 * inch
+                    photo_x = width - photo_size - left_margin
+                    photo_y = top_margin - photo_size
+                
+                c.drawImage(photo_img, photo_x, photo_y, width=photo_size, height=photo_size, mask='auto')
+                
+                # Adjust current_y based on template
+                if template in ['1', '3', '5']:
+                    current_y -= photo_size + 10
+                
+            except Exception as e:
+                print(f"Photo processing error: {e}")
+        
+        # HEADER SECTION
+        if template in ['4', '8']:  # Two-column templates
+            # Name and title on left, photo already placed on right
+            name = personal_info.get('name', 'Your Name')
+            c.setFont("Helvetica-Bold", 20)
+            c.setFillColor(primary_color)
+            c.drawString(left_margin, current_y, name)
+            current_y -= 25
+            
+            title = personal_info.get('title', 'Job Title')
+            c.setFont("Helvetica", 16)
+            c.setFillColor(secondary_color)
+            c.drawString(left_margin, current_y, title)
+            current_y -= 35
+            
+        else:  # Centered header for other templates
+            name = personal_info.get('name', 'Your Name')
+            c.setFont("Helvetica-Bold", 24)
+            c.setFillColor(primary_color)
+            name_width = c.stringWidth(name, "Helvetica-Bold", 24)
+            c.drawString((width - name_width) / 2, current_y, name)
+            current_y -= 30
+            
+            title = personal_info.get('title', 'Job Title')
+            c.setFont("Helvetica", 18)
+            c.setFillColor(secondary_color)
+            title_width = c.stringWidth(title, "Helvetica", 18)
+            c.drawString((width - title_width) / 2, current_y, title)
+            current_y -= 35
+        
+        # FIXED: Contact Information with PROPER LINE BREAKS
+        contact_parts = []
+        if personal_info.get('email'):
+            contact_parts.append(f"Email: {personal_info['email']}")
+        if personal_info.get('phone'):
+            contact_parts.append(f"Phone: {personal_info['phone']}")
+        if personal_info.get('address'):
+            contact_parts.append(f"Address: {personal_info['address']}")
+        
+        # Display contact information with proper line breaks
+        if contact_parts:
+            c.setFont("Helvetica", 12)
+            c.setFillColor(colors.black)
+            
+            contact_y = current_y
+            
+            # Display each contact item on separate lines
+            for i, contact_item in enumerate(contact_parts):
+                if template in ['4', '8']:
+                    # Left aligned for two-column templates
+                    c.drawString(left_margin, contact_y, contact_item)
+                else:
+                    # Centered for other templates
+                    contact_width = c.stringWidth(contact_item, "Helvetica", 12)
+                    c.drawString((width - contact_width) / 2, contact_y, contact_item)
+                
+                contact_y -= 20  # Move down for next line
+            
+            current_y = contact_y - 10  # Extra space after contact info
+            
+        else:
+            # Default contact info if nothing provided
+            default_contacts = [
+                "Email: your.email@example.com",
+                "Phone: (123) 456-7890", 
+                "Address: Your Address"
+            ]
+            
+            c.setFont("Helvetica", 12)
+            c.setFillColor(colors.black)
+            
+            contact_y = current_y
+            for contact_item in default_contacts:
+                if template in ['4', '8']:
+                    c.drawString(left_margin, contact_y, contact_item)
+                else:
+                    contact_width = c.stringWidth(contact_item, "Helvetica", 12)
+                    c.drawString((width - contact_width) / 2, contact_y, contact_item)
+                contact_y -= 20
+            
+            current_y = contact_y - 10
+        
+        # Draw a line separator
+        c.setStrokeColor(primary_color)
+        if template == '5':
+            c.setLineWidth(2)
+            c.line(left_margin, current_y, width - left_margin, current_y)
+            current_y -= 30
+        else:
+            c.setLineWidth(1)
+            c.line(left_margin, current_y, width - left_margin, current_y)
+            current_y -= 25
+        
+        # TWO-COLUMN LAYOUT for templates 4 and 8
+        if template in ['4', '8']:
+            current_y = create_two_column_resume(c, resume_data, width, height, left_margin, current_y, 
+                                               primary_color, secondary_color, line_height)
+        else:
+            # SINGLE COLUMN LAYOUT for other templates
+            current_y = create_single_column_resume(c, resume_data, width, left_margin, current_y, 
+                                                  primary_color, secondary_color, line_height, template)
+        
+        # Declaration Section
+        if template in ['4', '8']:
+            # Declaration in left column (already handled in two-column function)
+            pass
+        else:
+            c.setFont("Helvetica-Bold", 16)
+            c.setFillColor(primary_color)
+            c.drawString(left_margin, current_y, "DECLARATION")
+            current_y -= 20
+            
+            c.setFont("Helvetica", 14)
+            c.setFillColor(colors.black)
+            c.drawString(left_margin, current_y, "I hereby declare that all information provided is true to the best of my knowledge.")
+            current_y -= 35
+            
+            # Signature area
+            signature_name = resume_data.get('signature_name', '')
+            date = resume_data.get('date', '')
+            place = resume_data.get('place', '')
+            
+            signature_y = current_y
+            c.line(left_margin, signature_y, left_margin + 200, signature_y)
+            c.setFont("Helvetica", 14)
+            c.drawString(left_margin, signature_y - 20, signature_name or "Your Name")
+            c.drawString(left_margin, signature_y - 40, "Signature")
+            
+            date_text = f"Date: {date}" if date else "Date: ________"
+            place_text = f"Place: {place}" if place else "Place: _______"
+            
+            c.drawString(width - 200, signature_y - 20, date_text)
+            c.drawString(width - 200, signature_y - 40, place_text)
+        
+        # Save PDF
+        c.save()
+        print(f"Resume PDF created successfully with template {template}: {output_path}")
+        
+    except Exception as e:
+        print(f"PDF creation error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise Exception(f"Failed to create PDF: {str(e)}")
+
+def create_single_column_resume(c, resume_data, width, left_margin, current_y, primary_color, secondary_color, line_height, template):
+    """Create single column resume layout with LARGER FONTS"""
+    from reportlab.lib import colors
+    
+    sections = [
+        ('summary', 'CAREER OBJECTIVE'),
+        ('profile', 'PERSONAL PROFILE'), 
+        ('education', 'EDUCATION'),
+        ('experience', 'EXPERIENCE'),
+        ('skills', 'SKILLS')
+    ]
+    
+    for section_key, section_title in sections:
+        content = resume_data.get(section_key, '')
+        if content:
+            # Section title with template-specific styling and LARGER FONTS
+            if template == '3':
+                c.setFillColor(colors.white)
+                c.setStrokeColor(primary_color)
+                c.setFont("Helvetica-Bold", 16)  # Increased from 12
+                title_width = c.stringWidth(section_title, "Helvetica-Bold", 16)
+                c.roundRect(left_margin, current_y - 5, title_width + 10, 25, 5, fill=1)  # Increased height
+                c.setFillColor(primary_color)
+                c.drawString(left_margin + 5, current_y, section_title)
+                current_y -= 30  # Increased from 25
+            elif template == '6':
+                c.setFont("Helvetica-Bold", 16)  # Increased from 12
+                c.setFillColor(primary_color)
+                c.drawString(left_margin, current_y, section_title)
+                c.setStrokeColor(primary_color)
+                c.setLineWidth(2)
+                c.line(left_margin, current_y - 2, left_margin + 100, current_y - 2)
+                current_y -= 25  # Increased from 20
+            else:
+                c.setFont("Helvetica-Bold", 16)  # Increased from 12
+                c.setFillColor(primary_color)
+                c.drawString(left_margin, current_y, section_title)
+                current_y -= 20  # Increased from 15
+            
+            # Content with LARGER FONT
+            c.setFont("Helvetica", 14)  # Increased from 10
+            c.setFillColor(colors.black)
+            
+            if section_key == 'profile':
+                # Process as bullet points
+                content_lines = content.split('\n')
+                for line in content_lines:
+                    if line.strip():
+                        c.drawString(left_margin, current_y, "• " + line.strip())
+                        current_y -= line_height
+                        if current_y < 100:
+                            c.showPage()
+                            current_y = 750
+            else:
+                # Process as wrapped text
+                words = content.split()
+                line = ""
+                for word in words:
+                    test_line = line + word + " "
+                    if c.stringWidth(test_line, "Helvetica", 14) < (width - 2 * left_margin):  # Increased font size
+                        line = test_line
+                    else:
+                        c.drawString(left_margin, current_y, line.strip())
+                        current_y -= line_height
+                        line = word + " "
+                        if current_y < 100:
+                            c.showPage()
+                            current_y = 750
+                
+                if line:
+                    c.drawString(left_margin, current_y, line.strip())
+                    current_y -= line_height
+            
+            current_y -= 15  # Increased from 10
+    
+    return current_y
+
+def create_two_column_resume(c, resume_data, width, height, left_margin, start_y, primary_color, secondary_color, line_height):
+    """Create two-column resume layout for templates 4 and 8 with LARGER FONTS"""
+    from reportlab.lib import colors
+    
+    col_width = (width - 2 * left_margin - 20) / 2
+    left_col_x = left_margin
+    right_col_x = left_margin + col_width + 20
+    current_y_left = start_y
+    current_y_right = start_y
+    
+    # Left column sections
+    left_sections = [
+        ('summary', 'CAREER OBJECTIVE'),
+        ('education', 'EDUCATION'),
+        ('skills', 'SKILLS')
+    ]
+    
+    # Right column sections  
+    right_sections = [
+        ('profile', 'PERSONAL PROFILE'),
+        ('experience', 'EXPERIENCE')
+    ]
+    
+    # Process left column with LARGER FONTS
+    for section_key, section_title in left_sections:
+        content = resume_data.get(section_key, '')
+        if content:
+            c.setFont("Helvetica-Bold", 14)  # Increased from 11
+            c.setFillColor(primary_color)
+            c.drawString(left_col_x, current_y_left, section_title)
+            current_y_left -= 20  # Increased from 15
+            
+            c.setFont("Helvetica", 12)  # Increased from 9
+            c.setFillColor(colors.black)
+            
+            if section_key == 'skills':
+                content_lines = content.split('\n')
+                for line in content_lines:
+                    if line.strip():
+                        c.drawString(left_col_x, current_y_left, "• " + line.strip())
+                        current_y_left -= line_height - 2
+            else:
+                words = content.split()
+                line = ""
+                for word in words:
+                    test_line = line + word + " "
+                    if c.stringWidth(test_line, "Helvetica", 12) < col_width:  # Increased font size
+                        line = test_line
+                    else:
+                        c.drawString(left_col_x, current_y_left, line.strip())
+                        current_y_left -= line_height - 2
+                        line = word + " "
+                
+                if line:
+                    c.drawString(left_col_x, current_y_left, line.strip())
+                    current_y_left -= line_height - 2
+            
+            current_y_left -= 15  # Increased from 10
+    
+    # Process right column with LARGER FONTS
+    for section_key, section_title in right_sections:
+        content = resume_data.get(section_key, '')
+        if content:
+            c.setFont("Helvetica-Bold", 14)  # Increased from 11
+            c.setFillColor(primary_color)
+            c.drawString(right_col_x, current_y_right, section_title)
+            current_y_right -= 20  # Increased from 15
+            
+            c.setFont("Helvetica", 12)  # Increased from 9
+            c.setFillColor(colors.black)
+            
+            content_lines = content.split('\n')
+            for line in content_lines:
+                if line.strip():
+                    c.drawString(right_col_x, current_y_right, "• " + line.strip())
+                    current_y_right -= line_height - 2
+            
+            current_y_right -= 15  # Increased from 10
+    
+    # Declaration at bottom with LARGER FONTS
+    declaration_y = min(current_y_left, current_y_right) - 50  # Increased from 40
+    c.setFont("Helvetica-Bold", 14)  # Increased from 11
+    c.setFillColor(primary_color)
+    c.drawString(left_col_x, declaration_y, "DECLARATION")
+    declaration_y -= 15  # Increased from 12
+    
+    c.setFont("Helvetica", 12)  # Increased from 9
+    c.setFillColor(colors.black)
+    c.drawString(left_col_x, declaration_y, "I hereby declare that all information provided is true to the best of my knowledge.")
+    declaration_y -= 35  # Increased from 30
+    
+    # Signature with LARGER FONTS
+    signature_name = resume_data.get('signature_name', '')
+    date = resume_data.get('date', '')
+    place = resume_data.get('place', '')
+    
+    c.line(left_col_x, declaration_y, left_col_x + 150, declaration_y)
+    c.setFont("Helvetica", 12)  # Increased from 9
+    c.drawString(left_col_x, declaration_y - 15, signature_name or "Your Name")  # Increased spacing
+    c.drawString(left_col_x, declaration_y - 30, "Signature")  # Increased spacing
+    
+    date_text = f"Date: {date}" if date else "Date: ________"
+    place_text = f"Place: {place}" if place else "Place: _______"
+    
+    c.drawString(right_col_x, declaration_y - 15, date_text)  # Increased spacing
+    c.drawString(right_col_x, declaration_y - 30, place_text)  # Increased spacing
+    
+    return declaration_y - 60  # Increased from 50
+
+@app.route('/download-resume/<filename>')
+def download_resume(filename):
+    """Download resume PDF"""
+    try:
+        file_path = os.path.join(app.config['RESUME_FOLDER'], filename)
+        
+        if os.path.exists(file_path):
+            return send_file(
+                file_path, 
+                as_attachment=True,
+                download_name=f"resume_{filename}",
+                mimetype='application/pdf'
+            )
+        else:
+            return jsonify({'success': False, 'error': 'File not found'}), 404
+            
+    except Exception as e:
+        print(f"Resume download error: {str(e)}")
+        return jsonify({'success': False, 'error': f'Download failed: {str(e)}'}), 500
+
+# ==================== SIMPLE RESUME DOWNLOAD (ALTERNATIVE) ====================
+
+@app.route('/simple-download-resume', methods=['POST'])
+def simple_download_resume():
+    """Simple resume download - direct from frontend data"""
+    try:
+        from reportlab.lib.pagesizes import A4
+        from reportlab.pdfgen import canvas
+        from reportlab.lib.units import inch
+        from reportlab.lib import colors
+        
+        # Get data from request
+        data = request.json
+        
+        # Create PDF
+        file_id = secrets.token_hex(8)
+        pdf_filename = f"{file_id}_resume.pdf"
+        pdf_path = os.path.join(app.config['RESUME_FOLDER'], pdf_filename)
+        
+        c = canvas.Canvas(pdf_path, pagesize=A4)
+        width, height = A4
+        
+        # Set starting position
+        y_position = height - 50
+        
+        # Name
+        c.setFont("Helvetica-Bold", 20)
+        c.setFillColor(colors.HexColor('#2c3e50'))
+        c.drawString(50, y_position, data.get('name', 'Your Name'))
+        y_position -= 30
+        
+        # Title
+        c.setFont("Helvetica", 14)
+        c.setFillColor(colors.HexColor('#3498db'))
+        c.drawString(50, y_position, data.get('title', 'Job Title'))
+        y_position -= 40
+        
+        # Contact Info
+        c.setFont("Helvetica", 10)
+        c.setFillColor(colors.black)
+        
+        contact_info = []
+        if data.get('email'): contact_info.append(f"Email: {data['email']}")
+        if data.get('phone'): contact_info.append(f"Phone: {data['phone']}")
+        if data.get('address'): contact_info.append(f"Address: {data['address']}")
+        
+        if contact_info:
+            contact_text = " | ".join(contact_info)
+            c.drawString(50, y_position, contact_text)
+            y_position -= 30
+        
+        # Draw separator line
+        c.line(50, y_position, width-50, y_position)
+        y_position -= 30
+        
+        # Career Objective
+        if data.get('objective'):
+            c.setFont("Helvetica-Bold", 12)
+            c.drawString(50, y_position, "CAREER OBJECTIVE")
+            y_position -= 20
+            
+            c.setFont("Helvetica", 10)
+            objective = data.get('objective', '')
+            # Simple text wrapping
+            words = objective.split()
+            line = ""
+            for word in words:
+                test_line = line + word + " "
+                if c.stringWidth(test_line, "Helvetica", 10) < (width - 100):
+                    line = test_line
+                else:
+                    c.drawString(50, y_position, line.strip())
+                    y_position -= 15
+                    line = word + " "
+            if line:
+                c.drawString(50, y_position, line.strip())
+                y_position -= 20
+        
+        # Skills
+        if data.get('skills'):
+            c.setFont("Helvetica-Bold", 12)
+            c.drawString(50, y_position, "SKILLS")
+            y_position -= 20
+            
+            c.setFont("Helvetica", 10)
+            skills = data.get('skills', '')
+            skills_lines = skills.split('\n')
+            for skill in skills_lines:
+                if skill.strip():
+                    c.drawString(50, y_position, "• " + skill.strip())
+                    y_position -= 15
+        
+        # Save PDF
+        c.save()
+        
+        return jsonify({
+            'success': True,
+            'pdf_file': pdf_filename,
+            'download_url': f'/download-resume/{pdf_filename}'
+        })
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+# ==================== PASSPORT PHOTO AI ROUTES - IMPROVED ====================
+
+@app.route('/process-image', methods=['POST'])
+def process_image_ai():
+    """ULTRA FAST AI background removal - MAX SPEED VERSION"""
+    try:
+        start_time = time.time()
+        
+        data = request.json
+        image_data = data.get('image')
+        
+        if not image_data:
+            return jsonify({'success': False, 'error': 'No image data provided'})
+        
+        # Fast processing
+        if ',' in image_data:
+            image_data = image_data.split(',')[1]
+        
+        image_bytes = base64.b64decode(image_data)
+        
+        # Direct processing
+        from io import BytesIO
+        input_image = Image.open(BytesIO(image_bytes))
+        
+        # Speed optimization: Smaller size for faster processing
+        original_size = input_image.size
+        if max(original_size) > 600:
+            input_image.thumbnail((600, 600), Image.Resampling.LANCZOS)
+        
+        # Fast background removal
+        try:
+            output_image = remove(input_image)
+            if output_image.mode != 'RGBA':
+                output_image = output_image.convert('RGBA')
+            method = "rembg_fast"
+        except:
+            # Ultra fast fallback
+            if input_image.mode != 'RGBA':
+                input_image = input_image.convert('RGBA')
+            output_image = input_image
+            method = "direct_fallback"
+        
+        # Fast base64 conversion
+        buffered = BytesIO()
+        output_image.save(buffered, format="PNG", optimize=True)
+        processed_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        
+        processing_time = time.time() - start_time
+        
+        return jsonify({
+            'success': True,
+            'image': f"data:image/png;base64,{processed_base64}",
+            'processing_time': f"{processing_time:.2f}s",
+            'message': f'Ultra fast processing in {processing_time:.2f} seconds!'
+        })
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'Processing failed: {str(e)}'})
 
 # ==================== IMPROVED BACKGROUND REMOVAL ====================
 
@@ -232,65 +888,6 @@ def create_passport_photo_improved(image, size_px=(600, 600), bg_color='#FFFFFF'
     except Exception as e:
         print(f"Passport photo creation error: {e}")
         raise Exception(f"Passport photo creation failed: {str(e)}")
-
-# ==================== PASSPORT PHOTO AI ROUTES - IMPROVED ====================
-
-@app.route('/process-image', methods=['POST'])
-def process_image_ai():
-    """ULTRA FAST AI background removal - MAX SPEED VERSION"""
-    try:
-        start_time = time.time()
-        
-        data = request.json
-        image_data = data.get('image')
-        
-        if not image_data:
-            return jsonify({'success': False, 'error': 'No image data provided'})
-        
-        # Fast processing
-        if ',' in image_data:
-            image_data = image_data.split(',')[1]
-        
-        image_bytes = base64.b64decode(image_data)
-        
-        # Direct processing
-        from io import BytesIO
-        input_image = Image.open(BytesIO(image_bytes))
-        
-        # Speed optimization: Smaller size for faster processing
-        original_size = input_image.size
-        if max(original_size) > 600:
-            input_image.thumbnail((600, 600), Image.Resampling.LANCZOS)
-        
-        # Fast background removal
-        try:
-            output_image = remove(input_image)
-            if output_image.mode != 'RGBA':
-                output_image = output_image.convert('RGBA')
-            method = "rembg_fast"
-        except:
-            # Ultra fast fallback
-            if input_image.mode != 'RGBA':
-                input_image = input_image.convert('RGBA')
-            output_image = input_image
-            method = "direct_fallback"
-        
-        # Fast base64 conversion
-        buffered = BytesIO()
-        output_image.save(buffered, format="PNG", optimize=True)
-        processed_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-        
-        processing_time = time.time() - start_time
-        
-        return jsonify({
-            'success': True,
-            'image': f"data:image/png;base64,{processed_base64}",
-            'processing_time': f"{processing_time:.2f}s",
-            'message': f'Ultra fast processing in {processing_time:.2f} seconds!'
-        })
-        
-    except Exception as e:
-        return jsonify({'success': False, 'error': f'Processing failed: {str(e)}'})
 
 @app.route('/create-passport-photo', methods=['POST'])
 def create_passport_photo_route():
@@ -1878,7 +2475,7 @@ def bulk_convert():
 def download_file(filename):
     try:
         # Check in all possible folders
-        folders = [app.config['UPLOAD_FOLDER'], app.config['CROPPED_FOLDER'], app.config['CONVERTED_FOLDER'], app.config['PASSPORT_FOLDER']]
+        folders = [app.config['UPLOAD_FOLDER'], app.config['CROPPED_FOLDER'], app.config['CONVERTED_FOLDER'], app.config['PASSPORT_FOLDER'], app.config['RESUME_FOLDER']]
         
         for folder in folders:
             file_path = os.path.join(folder, filename)
@@ -1895,7 +2492,7 @@ def download_file(filename):
 def serve_image(filename):
     try:
         # Check in all folders
-        folders = [app.config['UPLOAD_FOLDER'], app.config['CROPPED_FOLDER'], app.config['CONVERTED_FOLDER'], app.config['PASSPORT_FOLDER']]
+        folders = [app.config['UPLOAD_FOLDER'], app.config['CROPPED_FOLDER'], app.config['CONVERTED_FOLDER'], app.config['PASSPORT_FOLDER'], app.config['RESUME_FOLDER']]
         
         for folder in folders:
             file_path = os.path.join(folder, filename)
@@ -1934,7 +2531,7 @@ def upload_file():
 @app.route('/clear-files', methods=['POST'])
 def clear_files():
     try:
-        folders = [app.config['UPLOAD_FOLDER'], app.config['CROPPED_FOLDER'], app.config['CONVERTED_FOLDER'], app.config['PASSPORT_FOLDER']]
+        folders = [app.config['UPLOAD_FOLDER'], app.config['CROPPED_FOLDER'], app.config['CONVERTED_FOLDER'], app.config['PASSPORT_FOLDER'], app.config['RESUME_FOLDER']]
         
         deleted_count = 0
         for folder in folders:
@@ -1948,6 +2545,7 @@ def clear_files():
         cropped_files_info.clear()
         converted_files_info.clear()
         passport_files_info.clear()
+        resume_files_info.clear()
         
         return jsonify({
             'success': True,
@@ -1966,17 +2564,20 @@ def health_check():
         'upload_folder': len(os.listdir(app.config['UPLOAD_FOLDER'])) if os.path.exists(app.config['UPLOAD_FOLDER']) else 0,
         'cropped_folder': len(os.listdir(app.config['CROPPED_FOLDER'])) if os.path.exists(app.config['CROPPED_FOLDER']) else 0,
         'converted_folder': len(os.listdir(app.config['CONVERTED_FOLDER'])) if os.path.exists(app.config['CONVERTED_FOLDER']) else 0,
-        'passport_folder': len(os.listdir(app.config['PASSPORT_FOLDER'])) if os.path.exists(app.config['PASSPORT_FOLDER']) else 0
+        'passport_folder': len(os.listdir(app.config['PASSPORT_FOLDER'])) if os.path.exists(app.config['PASSPORT_FOLDER']) else 0,
+        'resume_folder': len(os.listdir(app.config['RESUME_FOLDER'])) if os.path.exists(app.config['RESUME_FOLDER']) else 0
     })
 
 if __name__ == '__main__':
-    print("Starting Universal PVC Card Maker & AI Passport Photo Tool...")
+    print("Starting Universal PVC Card Maker & AI Passport Photo Tool & Resume Builder...")
     print(f"Upload folder: {UPLOAD_FOLDER}")
     print(f"Cropped folder: {CROPPED_FOLDER}")
     print(f"Converted folder: {CONVERTED_FOLDER}")
     print(f"Passport folder: {PASSPORT_FOLDER}")
+    print(f"Resume folder: {RESUME_FOLDER}")
     
     print("\nFeatures:")
+    print("   • FIXED Professional Resume Builder with PDF download")
     print("   • IMPROVED Background Removal with better quality")
     print("   • Auto Front & Back cropping for ALL cards (Aadhaar, PAN, Voter ID, Jan-Aadhaar, Ayushman, Labour)")
     print("   • Consistent tight cropping pattern - no black borders")
@@ -1997,4 +2598,4 @@ if __name__ == '__main__':
     print(f"Auto-delete enabled: Files will be deleted after 5 minutes")
     
     print("\nServer running on: http://localhost:5000")
-    app.run(debug=True, port=5000, host='127.0.0.1')
+    app.run(debug=True, port=5000, host='localhost')

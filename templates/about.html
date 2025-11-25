@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About E-Card Cutter - Your All-in-One Document & Image Solution</title>
+    <title>About E-Card Cutter - Free Document & Image Processing Tools</title>
+    <meta name="description" content="E-Card Cutter offers free online tools for ID card cropping, passport photo maker, resume builder, and image conversion. 100% secure browser-based processing with auto file deletion.">
+    <meta name="keywords" content="aadhaar card crop, pan card crop, passport photo maker, resume builder, image converter, free online tools, document processing">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -368,35 +370,37 @@
             opacity: 0.9;
         }
 
-        /* Security Features */
-        .security-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+        /* Security Features - UPDATED: Stacked Layout */
+        .security-features-stacked {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
             margin-top: 1.5rem;
         }
 
-        .security-feature {
+        .security-feature-stacked {
             background: #f0f9ff;
             border: 2px solid #e0f2fe;
             border-radius: 10px;
             padding: 1.5rem;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
         }
 
-        .security-feature i {
+        .security-feature-stacked i {
             font-size: 2rem;
             color: #0369a1;
-            margin-bottom: 1rem;
+            flex-shrink: 0;
         }
 
-        .security-feature h3 {
+        .security-feature-stacked h3 {
             font-size: 1.2rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
             color: #0c4a6e;
         }
 
-        .security-feature p {
+        .security-feature-stacked p {
             color: #475569;
             font-size: 0.95rem;
             margin-bottom: 0;
@@ -544,6 +548,12 @@
                 grid-template-columns: 1fr;
             }
             
+            .security-feature-stacked {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            
             .footer-container {
                 grid-template-columns: 1fr;
                 text-align: center;
@@ -602,7 +612,7 @@
             <!-- Header -->
             <div class="header">
                 <h1>About E-Card Cutter</h1>
-                <p>Your complete solution for document processing, ID card cropping, PDF conversion, and image format conversion - all in one secure platform.</p>
+                <p>Free online tools for ID card cropping, passport photos, resume building, and image conversion - 100% secure browser-based processing.</p>
             </div>
 
             <!-- What is E-Card Cutter Section -->
@@ -612,20 +622,20 @@
                     What is E-Card Cutter?
                 </h2>
                 <p>
-                    E-Card Cutter by ecardcutter.in is a comprehensive suite of free online tools that help you process documents and images quickly and securely. From cropping ID cards from PDFs to converting between different file formats, we provide powerful solutions that run entirely in your browser.
+                    E-Card Cutter is a comprehensive suite of free online document processing tools that help you manage digital documents and images securely. Our platform offers specialized tools for ID card cropping, professional passport photo creation, resume building, and image format conversion.
                 </p>
                 <p>
-                    Our platform has evolved from a simple ID card cropping tool to a complete document processing solution, offering multiple specialized tools to meet all your digital document needs.
+                    All processing happens directly in your browser, ensuring complete privacy and security for your sensitive documents. Our tools are designed to be fast, reliable, and accessible to everyone without any registration or fees.
                 </p>
             </div>
 
-            <!-- Our Tools Section - NEW -->
+            <!-- Our Tools Section - UPDATED -->
             <div class="section">
                 <h2 class="section-title">
                     <i class="fas fa-tools"></i>
                     Our Complete Tool Suite
                 </h2>
-                <p>We offer a range of specialized tools designed to make your digital life easier:</p>
+                <p>We offer specialized tools for all your document and image processing needs:</p>
                 
                 <div class="tools-grid">
                     <div class="tool-card">
@@ -644,15 +654,29 @@
                     
                     <div class="tool-card">
                         <div class="tool-icon">
-                            <i class="fas fa-file-pdf"></i>
+                            <i class="fas fa-camera"></i>
                         </div>
-                        <h3>PDF Converter</h3>
-                        <p>Convert PDF files to various formats and vice versa with high quality</p>
+                        <h3>Passport Photo Maker</h3>
+                        <p>Create professional passport photos with AI background removal and exact sizes</p>
                         <ul class="tool-features">
-                            <li><i class="fas fa-check"></i> PDF to Word, Excel, PowerPoint</li>
-                            <li><i class="fas fa-check"></i> PDF to JPG, PNG images</li>
-                            <li><i class="fas fa-check"></i> Multiple format support</li>
-                            <li><i class="fas fa-check"></i> Preserve formatting</li>
+                            <li><i class="fas fa-check"></i> AI background removal</li>
+                            <li><i class="fas fa-check"></i> Multiple standard sizes</li>
+                            <li><i class="fas fa-check"></i> Custom background colors</li>
+                            <li><i class="fas fa-check"></i> Photo sheet printing</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tool-card">
+                        <div class="tool-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>Resume Builder</h3>
+                        <p>Create professional resumes with multiple templates and instant PDF download</p>
+                        <ul class="tool-features">
+                            <li><i class="fas fa-check"></i> 10+ professional templates</li>
+                            <li><i class="fas fa-check"></i> Photo integration</li>
+                            <li><i class="fas fa-check"></i> Real-time preview</li>
+                            <li><i class="fas fa-check"></i> PDF export</li>
                         </ul>
                     </div>
                     
@@ -661,12 +685,12 @@
                             <i class="fas fa-file-image"></i>
                         </div>
                         <h3>Image Converter</h3>
-                        <p>Convert between 12+ image formats with quality control options</p>
+                        <p>Convert between 12+ image formats with quality control and batch processing</p>
                         <ul class="tool-features">
                             <li><i class="fas fa-check"></i> JPG, PNG, GIF, WEBP, SVG</li>
                             <li><i class="fas fa-check"></i> BMP, TIFF, ICO, PSD, EPS</li>
-                            <li><i class="fas fa-check"></i> Quality adjustment slider</li>
-                            <li><i class="fas fa-check"></i> Batch conversion support</li>
+                            <li><i class="fas fa-check"></i> Quality adjustment</li>
+                            <li><i class="fas fa-check"></i> Batch conversion</li>
                         </ul>
                     </div>
                 </div>
@@ -696,7 +720,7 @@
                 </div>
             </div>
 
-            <!-- Supported Card Types -->
+            <!-- Supported Card Types - UPDATED -->
             <div class="section">
                 <h2 class="section-title">
                     <i class="fas fa-id-card"></i>
@@ -705,7 +729,7 @@
                 <div class="card-types">
                     <div class="card-type">
                         <h3>Aadhaar Cards</h3>
-                        <p>e-Aadhaar PDFs from UIDAI</p>
+                        <p>e-Aadhaar PDFs from UIDAI with secure processing</p>
                     </div>
                     <div class="card-type">
                         <h3>PAN Cards</h3>
@@ -713,11 +737,19 @@
                     </div>
                     <div class="card-type">
                         <h3>Voter ID</h3>
-                        <p>e-EPIC PDFs from Election Commission</p>
+                        <p>e-EPIC PDFs from Election Commission of India</p>
                     </div>
                     <div class="card-type">
                         <h3>JAN Aadhaar</h3>
-                        <p>Rajasthan government ID cards</p>
+                        <p>Rajasthan government ID cards with secure cropping</p>
+                    </div>
+                    <div class="card-type">
+                        <h3>Ayushman Card</h3>
+                        <p>Ayushman Bharat health insurance cards</p>
+                    </div>
+                    <div class="card-type">
+                        <h3>Labour Card</h3>
+                        <p>Labor department identity cards</p>
                     </div>
                 </div>
             </div>
@@ -733,68 +765,74 @@
                         <div class="feature-icon">🔒</div>
                         <div class="feature-content">
                             <h3>100% Secure Processing</h3>
-                            <p>All tools process files locally in your browser for maximum security.</p>
+                            <p>All tools process files locally in your browser for maximum security and privacy protection.</p>
                         </div>
                     </div>
                     <div class="feature">
                         <div class="feature-icon">⚡</div>
                         <div class="feature-content">
                             <h3>Lightning Fast</h3>
-                            <p>Process documents and images in seconds with optimized algorithms.</p>
+                            <p>Process documents and images in seconds with optimized algorithms and efficient processing.</p>
                         </div>
                     </div>
                     <div class="feature">
                         <div class="feature-icon">💯</div>
                         <div class="feature-content">
                             <h3>Always Free</h3>
-                            <p>No registration, subscriptions, or hidden charges for any tool.</p>
+                            <p>No registration, subscriptions, or hidden charges for any tool. Completely free forever.</p>
                         </div>
                     </div>
                     <div class="feature">
                         <div class="feature-icon">📱</div>
                         <div class="feature-content">
                             <h3>Mobile Friendly</h3>
-                            <p>All tools work perfectly on phones, tablets, and desktop computers.</p>
+                            <p>All tools work perfectly on phones, tablets, and desktop computers with responsive design.</p>
                         </div>
                     </div>
                     <div class="feature">
                         <div class="feature-icon">🎯</div>
                         <div class="feature-content">
                             <h3>Professional Quality</h3>
-                            <p>High-quality output with precise formatting and dimensions.</p>
+                            <p>High-quality output with precise formatting, dimensions, and professional results.</p>
                         </div>
                     </div>
                     <div class="feature">
                         <div class="feature-icon">🛡️</div>
                         <div class="feature-content">
                             <h3>Auto-Cleanup</h3>
-                            <p>Files automatically deleted within 5 minutes for complete privacy.</p>
+                            <p>Files automatically deleted within 5 minutes for complete privacy and data protection.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Security Features -->
+            <!-- Security Features - UPDATED: Stacked Layout -->
             <div class="section">
                 <h2 class="section-title">
                     <i class="fas fa-shield-alt"></i>
                     Security & Privacy Features
                 </h2>
-                <div class="security-features">
-                    <div class="security-feature">
+                <div class="security-features-stacked">
+                    <div class="security-feature-stacked">
                         <i class="fas fa-clock"></i>
-                        <h3>Automatic File Deletion</h3>
-                        <p>All uploaded files and processed outputs are automatically deleted within 5 minutes</p>
+                        <div>
+                            <h3>Automatic File Deletion</h3>
+                            <p>All uploaded files and processed outputs are automatically deleted within 5 minutes of processing. This ensures your sensitive documents like Aadhaar cards, PAN cards, and passport photos are never stored on any server.</p>
+                        </div>
                     </div>
-                    <div class="security-feature">
+                    <div class="security-feature-stacked">
                         <i class="fas fa-browser"></i>
-                        <h3>Browser-Only Processing</h3>
-                        <p>Your files never leave your device - all processing happens locally in your browser</p>
+                        <div>
+                            <h3>Browser-Only Processing</h3>
+                            <p>Your files never leave your device - all processing happens locally in your browser using advanced JavaScript and WebAssembly technologies. This means your documents remain completely private and secure.</p>
+                        </div>
                     </div>
-                    <div class="security-feature">
+                    <div class="security-feature-stacked">
                         <i class="fas fa-database"></i>
-                        <h3>No Server Storage</h3>
-                        <p>We don't store any of your files on our servers - complete data protection</p>
+                        <div>
+                            <h3>No Server Storage</h3>
+                            <p>We don't store any of your files on our servers. The entire processing workflow from ID card cropping to passport photo creation happens in your browser, ensuring complete data protection and privacy.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -811,39 +849,39 @@
                     <div class="step">
                         <div class="step-number">1</div>
                         <h3>Choose Tool</h3>
-                        <p>Select the appropriate tool for your needs</p>
+                        <p>Select the appropriate tool for your document processing needs</p>
                     </div>
                     <div class="step">
                         <div class="step-number">2</div>
                         <h3>Upload File</h3>
-                        <p>Upload your file (drag & drop supported)</p>
+                        <p>Upload your file securely (drag & drop supported for convenience)</p>
                     </div>
                     <div class="step">
                         <div class="step-number">3</div>
                         <h3>Configure Settings</h3>
-                        <p>Adjust format, quality, or other options</p>
+                        <p>Adjust format, quality, size, or other processing options</p>
                     </div>
                     <div class="step">
                         <div class="step-number">4</div>
                         <h3>Process</h3>
-                        <p>Let our tool do the work securely</p>
+                        <p>Let our tool do the work securely in your browser</p>
                     </div>
                     <div class="step">
                         <div class="step-number">5</div>
                         <h3>Download</h3>
-                        <p>Get your processed file instantly</p>
+                        <p>Get your processed file instantly with professional quality</p>
                     </div>
                 </div>
                 
                 <p style="margin-top: 1.5rem;">
-                    Our advanced processing engines ensure high-quality results while maintaining the highest security standards — so your documents are always safe and your results are professional.
+                    Our advanced processing engines ensure high-quality results while maintaining the highest security standards. Whether you're cropping ID cards, creating passport photos, building resumes, or converting images, your documents are always safe and your results are professional.
                 </p>
             </div>
 
             <!-- Footer Note -->
             <div class="section" style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
                 <p>
-                    E-Card Cutter is developed and maintained by ECardCutter.in. We believe in building simple, secure, and free tools that make everyday digital tasks easier for everyone. Our platform continues to grow with new tools and features to serve your document processing needs.
+                    E-Card Cutter is developed to provide free, secure, and efficient document processing tools for everyone. We believe in building simple, secure, and free tools that make everyday digital tasks easier while protecting your privacy. Our platform continues to evolve with new tools and features to serve your document processing needs.
                 </p>
             </div>
         </div>
@@ -866,8 +904,9 @@
                 <ul class="footer-links">
                     <li><a href="/aadhaar-crop">Aadhaar Crop</a></li>
                     <li><a href="/pan-crop">PAN Crop</a></li>
+                    <li><a href="/passport-photo">Passport Photo</a></li>
+                    <li><a href="/resume-builder">Resume Builder</a></li>
                     <li><a href="/image-converter">Image Converter</a></li>
-                    <li><a href="/pdf-converter">PDF Converter</a></li>
                 </ul>
             </div>
             
@@ -906,7 +945,7 @@
         <div class="footer-privacy">
             <div class="footer-privacy-content">
                 <i class="fas fa-shield-alt"></i>
-                <span>All files automatically deleted within 5 minutes for your privacy</span>
+                <span>All files automatically deleted within 5 minutes for your privacy and security</span>
             </div>
         </div>
         

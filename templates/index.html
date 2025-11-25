@@ -67,6 +67,7 @@
             --ayushman-color: #1a237e;
             --labour-color: #3A425C;
             --passport-color: #1e88e5;
+            --resume-color: #e74c3c;
         }
        
         body {
@@ -558,6 +559,24 @@
         }
 
 
+        .tool-card[data-card-type="resume"] .tool-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg,
+                rgba(231, 76, 60, 0.1) 0%,
+                rgba(231, 76, 60, 0.3) 50%,
+                rgba(231, 76, 60, 0.1) 100%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+
         /* Light Wave Animation */
         @keyframes lightWave {
             0% {
@@ -640,6 +659,12 @@
         }
 
 
+        .tool-card[data-card-type="resume"]:hover .tool-icon-image {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 20px rgba(231, 76, 60, 0.8));
+        }
+
+
         /* Activate Background Glow on Hover */
         .tool-card:hover .tool-icon::before {
             opacity: 1;
@@ -709,6 +734,13 @@
         }
 
 
+        .tool-card[data-card-type="resume"]:hover {
+            border-color: rgba(231, 76, 60, 0.3);
+            background: linear-gradient(135deg, #fff 0%, rgba(231, 76, 60, 0.05) 100%);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.15);
+        }
+
+
         .tool-card h3 {
             font-size: 1.6rem;
             margin-bottom: 15px;
@@ -764,6 +796,11 @@
 
         .tool-card[data-card-type="passport"]:hover h3 {
             color: #1e88e5;
+        }
+
+
+        .tool-card[data-card-type="resume"]:hover h3 {
+            color: #e74c3c;
         }
        
         .tool-btn {
@@ -846,6 +883,11 @@
 
         .converter-card.passport {
             border-left-color: var(--passport-color);
+        }
+
+
+        .converter-card.resume {
+            border-left-color: var(--resume-color);
         }
 
 
@@ -1304,6 +1346,7 @@
                         <a href="/voterid-crop" class="dropdown-item">Voter ID Crop</a>
                         <a href="/labour-card" class="dropdown-item">Labour Card Crop</a>
                         <a href="/passport-photo" class="dropdown-item">Passport Photo Maker</a>
+                        <a href="/resume-builder" class="dropdown-item">Resume Builder</a>
                         <div class="dropdown-divider"></div>
                         <a href="/ayushman-card" class="dropdown-item">Ayushman Card</a>
                         <a href="/image-converter" class="dropdown-item">Image Converter</a>
@@ -1382,6 +1425,18 @@
                     <h3>Passport Photo Maker</h3>
                     <p>Create perfect passport size photos with our online tool. Adjust background, size and format for official documents</p>
                     <button class="tool-btn" onclick="window.location.href='/passport-photo'">Create Passport Photo</button>
+                </div>
+
+
+                <!-- Resume Builder -->
+                <div class="tool-card" data-card-type="resume">
+                    <div class="tool-badge new">NEW</div>
+                    <div class="tool-icon">
+                        <img src="/static/images/resume.png" alt="Professional Resume Builder - Create Modern Resumes Online" class="tool-icon-image">
+                    </div>
+                    <h3>Resume Builder</h3>
+                    <p>Create professional resumes with modern templates. Download in PDF format with perfect formatting</p>
+                    <button class="tool-btn" onclick="window.location.href='/resume-builder'">Build Resume</button>
                 </div>
 
 
@@ -1482,6 +1537,20 @@
                     <li><i class="fas fa-check"></i> Mobile-friendly interface</li>
                 </ul>
                 <button class="tool-btn" onclick="window.location.href='/passport-photo'">Try Passport Photo Maker</button>
+            </div>
+            
+            <!-- NEW: Resume Builder Info Card -->
+            <div class="converter-card resume">
+                <h3>Professional Resume Builder</h3>
+                <p>Create professional resumes with modern templates. Download in PDF format with perfect formatting for job applications</p>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> 10+ professional templates</li>
+                    <li><i class="fas fa-check"></i> A4 size perfect formatting</li>
+                    <li><i class="fas fa-check"></i> Photo upload and cropping</li>
+                    <li><i class="fas fa-check"></i> Instant PDF download</li>
+                    <li><i class="fas fa-check"></i> Mobile-friendly interface</li>
+                </ul>
+                <button class="tool-btn" onclick="window.location.href='/resume-builder'">Try Resume Builder</button>
             </div>
         </section>
 
@@ -1611,6 +1680,13 @@
                     </div>
                    
                     <div class="faq-item">
+                        <h3 class="faq-question">Can I create professional resumes with E-Card Cutter?</h3>
+                        <div class="faq-answer">
+                            <p>Yes, our Resume Builder tool helps you create professional resumes with modern templates and perfect formatting.</p>
+                        </div>
+                    </div>
+                   
+                    <div class="faq-item">
                         <h3 class="faq-question">Is my data secure with this card cutter tool?</h3>
                         <div class="faq-answer">
                             <p>Absolutely secure - all files auto-delete in 5 minutes, no server storage, and 100% private processing.</p>
@@ -1643,15 +1719,11 @@
             </div>
            
             <div class="footer-section">
-                <h3>Our Tools</h3>
+                <h3>popular Tools</h3>
                 <ul class="footer-links">
                     <li><a href="/aadhaar-crop">Aadhaar Crop</a></li>
-                    <li><a href="/janaadhaar-crop">Janaadhaar Crop</a></li>
-                    <li><a href="/pan-crop">Pan Crop</a></li>
-                    <li><a href="/voterid-crop">Voter ID Crop</a></li>
-                    <li><a href="/labour-card">Labour Card Crop</a></li>
                     <li><a href="/passport-photo">Passport Photo Maker</a></li>
-                    <li><a href="/ayushman-card">Ayushman Card</a></li>
+                    <li><a href="/resume-builder">Resume Builder</a></li>
                     <li><a href="/image-converter">Image Converter</a></li>
                 </ul>
             </div>
