@@ -1735,20 +1735,9 @@
                 sheetCtx.imageSmoothingEnabled = true;
                 sheetCtx.imageSmoothingQuality = 'high';
 
-                // Background fill
-                if (currentBackground === 'transparent') {
-                    const patternSize = 20;
-                    for (let y = 0; y < PAPER_HEIGHT; y += patternSize) {
-                        for (let x = 0; x < PAPER_WIDTH; x += patternSize) {
-                            const isGray = ((x + y) / patternSize) % 2 === 0;
-                            sheetCtx.fillStyle = isGray ? '#f0f0f0' : '#ffffff';
-                            sheetCtx.fillRect(x, y, patternSize, patternSize);
-                        }
-                    }
-                } else {
-                    sheetCtx.fillStyle = currentBackground;
-                    sheetCtx.fillRect(0, 0, PAPER_WIDTH, PAPER_HEIGHT);
-                }
+                // ✅ FIXED: ALWAYS USE WHITE BACKGROUND FOR SHEET (ignore currentBackground)
+                sheetCtx.fillStyle = '#FFFFFF'; // Always white for printing sheet
+                sheetCtx.fillRect(0, 0, PAPER_WIDTH, PAPER_HEIGHT);
 
                 // Draw final cropped photo
                 for (let i = 0; i < photosPerSheet; i++) {
@@ -1793,7 +1782,7 @@
                     downloadCanvas.height = selectedSizeData.height * 2;
                     const downloadCtx = downloadCanvas.getContext('2d');
                     
-                    // Set background
+                    // Set background - USE SELECTED BACKGROUND for single photo
                     if (currentBackground === "transparent") {
                         downloadCtx.clearRect(0, 0, downloadCanvas.width, downloadCanvas.height);
                     } else {
@@ -1806,10 +1795,14 @@
                     downloadCtx.imageSmoothingQuality = 'high';
                     downloadCtx.drawImage(finalCroppedImage, 0, 0, downloadCanvas.width, downloadCanvas.height);
                 } else {
-                    // For sheets, use the existing sheet canvas
+                    // For sheets, use the existing sheet canvas BUT ALWAYS WHITE BACKGROUND
                     downloadCanvas.width = sheetCanvas.width;
                     downloadCanvas.height = sheetCanvas.height;
                     const downloadCtx = downloadCanvas.getContext('2d');
+                    
+                    // ✅ FIXED: ALWAYS WHITE BACKGROUND FOR SHEETS
+                    downloadCtx.fillStyle = '#FFFFFF';
+                    downloadCtx.fillRect(0, 0, downloadCanvas.width, downloadCanvas.height);
                     downloadCtx.drawImage(sheetCanvas, 0, 0);
                 }
                 
@@ -1841,7 +1834,7 @@
                     printCanvas.height = selectedSizeData.height * 2;
                     const printCtx = printCanvas.getContext('2d');
                     
-                    // Set background
+                    // Set background - USE SELECTED BACKGROUND for single photo
                     if (currentBackground === "transparent") {
                         // For printing, use white background even if transparent was selected
                         printCtx.fillStyle = '#FFFFFF';
@@ -1861,7 +1854,7 @@
                     printCanvas.height = sheetCanvas.height;
                     const printCtx = printCanvas.getContext('2d');
                     
-                    // Always use white background for printing
+                    // ✅ FIXED: ALWAYS WHITE BACKGROUND FOR SHEETS
                     printCtx.fillStyle = '#FFFFFF';
                     printCtx.fillRect(0, 0, printCanvas.width, printCanvas.height);
                     printCtx.drawImage(sheetCanvas, 0, 0);
