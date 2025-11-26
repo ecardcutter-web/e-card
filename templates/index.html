@@ -17,6 +17,9 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://ecardcutter.in">
    
+    <!-- FAVICON FIXED -->
+    <link rel="icon" type="image/png" href="/static/images/logo.png" sizes="42x42">
+   
     <!-- Structured Data (Schema.org) -->
     <script type="application/ld+json">
     {
@@ -77,8 +80,7 @@
             overflow-x: hidden;
         }
 
-
-        /* Header - UPDATED with Blog Link */
+        /* Header - UPDATED: Blog Link Removed */
         header {
             position: fixed;
             top: 0;
@@ -120,7 +122,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-
         nav ul {
             display: flex;
             list-style: none;
@@ -144,31 +145,10 @@
             transform: translateY(-2px);
         }
 
-
-        /* NEW: Blog Link Style with WordPress Colors */
-        .blog-link {
-            background: linear-gradient(135deg, var(--wordpress-blue), var(--wordpress-light-blue));
-            color: white !important;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(33, 117, 155, 0.3);
-            transition: all 0.3s ease;
-        }
-
-
-        .blog-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(33, 117, 155, 0.4);
-            background: linear-gradient(135deg, #1a5f7a, #2980b9);
-        }
-
-
         /* Dropdown Menu Styles */
         .dropdown {
             position: relative;
         }
-
 
         .dropdown-toggle {
             display: flex;
@@ -176,7 +156,6 @@
             gap: 8px;
             cursor: pointer;
         }
-
 
         .dropdown-menu {
             position: absolute;
@@ -194,13 +173,11 @@
             z-index: 1000;
         }
 
-
         .dropdown:hover .dropdown-menu {
             opacity: 1;
             visibility: visible;
             transform: translateY(0);
         }
-
 
         .dropdown-item {
             display: block;
@@ -211,7 +188,6 @@
             border-left: 3px solid transparent;
         }
 
-
         .dropdown-item:hover {
             background: rgba(67, 97, 238, 0.1);
             color: var(--primary);
@@ -219,13 +195,11 @@
             padding-left: 25px;
         }
 
-
         .dropdown-divider {
             height: 1px;
             background: #e9ecef;
             margin: 8px 0;
         }
-
 
         .mobile-menu {
             display: none;
@@ -234,14 +208,12 @@
             color: var(--dark);
         }
 
-
         /* Main Container */
         .main-container {
             max-width: 1400px;
             margin: 80px auto 0;
             padding: 0 20px;
         }
-
 
         /* Quick Tools Section - NOW AT TOP */
         .quick-tools {
@@ -278,7 +250,6 @@
             margin-right: auto;
         }
 
-
         /* Banner ad styles - Auto size responsive */
         .banner-ad {
             width: 100%;
@@ -306,7 +277,6 @@
             top: 5px;
             left: 10px;
         }
-
 
         /* Responsive Auto-Size Ad Slot */
         .responsive-ad-slot {
@@ -352,7 +322,6 @@
             height: auto;
             border-radius: 8px;
         }
-
 
         /* Tools Grid - Three Columns */
         .tools-grid {
@@ -403,7 +372,6 @@
             margin-right: auto;
         }
 
-
         .tool-icon-image {
             width: 70px;
             height: 70px;
@@ -412,7 +380,6 @@
             position: relative;
             z-index: 2;
         }
-
 
         /* Advanced Glow Effects with Light Wave Animation */
         .tool-card[data-card-type="aadhaar"] .tool-icon::before {
@@ -432,7 +399,6 @@
             z-index: 1;
         }
 
-
         .tool-card[data-card-type="pan"] .tool-icon::before {
             content: '';
             position: absolute;
@@ -449,7 +415,6 @@
             transition: opacity 0.3s ease;
             z-index: 1;
         }
-
 
         .tool-card[data-card-type="voterid"] .tool-icon::before {
             content: '';
@@ -468,7 +433,6 @@
             z-index: 1;
         }
 
-
         .tool-card[data-card-type="janaadhaar"] .tool-icon::before {
             content: '';
             position: absolute;
@@ -485,7 +449,6 @@
             transition: opacity 0.3s ease;
             z-index: 1;
         }
-
 
         .tool-card[data-card-type="ayushman"] .tool-icon::before {
             content: '';
@@ -504,7 +467,6 @@
             z-index: 1;
         }
 
-
         .tool-card[data-card-type="labour"] .tool-icon::before {
             content: '';
             position: absolute;
@@ -521,7 +483,6 @@
             transition: opacity 0.3s ease;
             z-index: 1;
         }
-
 
         .tool-card[data-card-type="image-converter"] .tool-icon::before {
             content: '';
@@ -540,7 +501,6 @@
             z-index: 1;
         }
 
-
         .tool-card[data-card-type="passport"] .tool-icon::before {
             content: '';
             position: absolute;
@@ -557,7 +517,6 @@
             transition: opacity 0.3s ease;
             z-index: 1;
         }
-
 
         .tool-card[data-card-type="resume"] .tool-icon::before {
             content: '';
@@ -576,7 +535,6 @@
             z-index: 1;
         }
 
-
         /* Light Wave Animation */
         @keyframes lightWave {
             0% {
@@ -591,7 +549,6 @@
                 opacity: 0;
             }
         }
-
 
         .tool-card .tool-icon::after {
             content: '';
@@ -609,73 +566,61 @@
             z-index: 1;
         }
 
-
         /* Hover Effects with Advanced Glow and Light Wave */
         .tool-card[data-card-type="aadhaar"]:hover .tool-icon-image {
             transform: scale(1.15);
             filter: drop-shadow(0 0 20px rgba(255, 87, 34, 0.8));
         }
 
-
         .tool-card[data-card-type="pan"]:hover .tool-icon-image {
             transform: scale(1.15);
             filter: drop-shadow(0 0 20px rgba(0, 102, 255, 0.8));
         }
-
 
         .tool-card[data-card-type="voterid"]:hover .tool-icon-image {
             transform: scale(1.15);
             filter: drop-shadow(0 0 20px rgba(155, 39, 176, 0.8));
         }
 
-
         .tool-card[data-card-type="janaadhaar"]:hover .tool-icon-image {
             transform: scale(1.15);
             filter: drop-shadow(0 0 20px rgba(76, 175, 80, 0.8));
         }
-
 
         .tool-card[data-card-type="ayushman"]:hover .tool-icon-image {
             transform: scale(1.15);
             filter: drop-shadow(0 0 20px rgba(26, 35, 126, 0.8));
         }
 
-
         .tool-card[data-card-type="labour"]:hover .tool-icon-image {
             transform: scale(1.15);
             filter: drop-shadow(0 0 20px rgba(58, 66, 92, 0.8));
         }
-
 
         .tool-card[data-card-type="image-converter"]:hover .tool-icon-image {
             transform: scale(1.15);
             filter: drop-shadow(0 0 20px rgba(93, 216, 165, 0.8));
         }
 
-
         .tool-card[data-card-type="passport"]:hover .tool-icon-image {
             transform: scale(1.15);
             filter: drop-shadow(0 0 20px rgba(30, 136, 229, 0.8));
         }
-
 
         .tool-card[data-card-type="resume"]:hover .tool-icon-image {
             transform: scale(1.15);
             filter: drop-shadow(0 0 20px rgba(231, 76, 60, 0.8));
         }
 
-
         /* Activate Background Glow on Hover */
         .tool-card:hover .tool-icon::before {
             opacity: 1;
         }
 
-
         /* Activate Light Wave Animation on Hover */
         .tool-card:hover .tool-icon::after {
             animation: lightWave 1s ease-out;
         }
-
 
         /* Card Background Glow Effects */
         .tool-card[data-card-type="aadhaar"]:hover {
@@ -684,13 +629,11 @@
             box-shadow: 0 8px 25px rgba(255, 87, 34, 0.15);
         }
 
-
         .tool-card[data-card-type="pan"]:hover {
             border-color: rgba(0, 102, 255, 0.3);
             background: linear-gradient(135deg, #fff 0%, rgba(0, 102, 255, 0.05) 100%);
             box-shadow: 0 8px 25px rgba(0, 102, 255, 0.15);
         }
-
 
         .tool-card[data-card-type="voterid"]:hover {
             border-color: rgba(155, 39, 176, 0.3);
@@ -698,13 +641,11 @@
             box-shadow: 0 8px 25px rgba(155, 39, 176, 0.15);
         }
 
-
         .tool-card[data-card-type="janaadhaar"]:hover {
             border-color: rgba(76, 175, 80, 0.3);
             background: linear-gradient(135deg, #fff 0%, rgba(76, 175, 80, 0.05) 100%);
             box-shadow: 0 8px 25px rgba(76, 175, 80, 0.15);
         }
-
 
         .tool-card[data-card-type="ayushman"]:hover {
             border-color: rgba(26, 35, 126, 0.3);
@@ -712,13 +653,11 @@
             box-shadow: 0 8px 25px rgba(26, 35, 126, 0.15);
         }
 
-
         .tool-card[data-card-type="labour"]:hover {
             border-color: rgba(58, 66, 92, 0.3);
             background: linear-gradient(135deg, #fff 0%, rgba(58, 66, 92, 0.05) 100%);
             box-shadow: 0 8px 25px rgba(58, 66, 92, 0.15);
         }
-
 
         .tool-card[data-card-type="image-converter"]:hover {
             border-color: rgba(93, 216, 165, 0.3);
@@ -726,20 +665,17 @@
             box-shadow: 0 8px 25px rgba(93, 216, 165, 0.15);
         }
 
-
         .tool-card[data-card-type="passport"]:hover {
             border-color: rgba(30, 136, 229, 0.3);
             background: linear-gradient(135deg, #fff 0%, rgba(30, 136, 229, 0.05) 100%);
             box-shadow: 0 8px 25px rgba(30, 136, 229, 0.15);
         }
 
-
         .tool-card[data-card-type="resume"]:hover {
             border-color: rgba(231, 76, 60, 0.3);
             background: linear-gradient(135deg, #fff 0%, rgba(231, 76, 60, 0.05) 100%);
             box-shadow: 0 8px 25px rgba(231, 76, 60, 0.15);
         }
-
 
         .tool-card h3 {
             font-size: 1.6rem;
@@ -757,47 +693,38 @@
             transition: color 0.3s ease;
         }
 
-
         /* Text Color Change on Hover */
         .tool-card[data-card-type="aadhaar"]:hover h3 {
             color: #ff5722;
         }
 
-
         .tool-card[data-card-type="pan"]:hover h3 {
             color: #0066ff;
         }
-
 
         .tool-card[data-card-type="voterid"]:hover h3 {
             color: #9c27b0;
         }
 
-
         .tool-card[data-card-type="janaadhaar"]:hover h3 {
             color: #4caf50;
         }
-
 
         .tool-card[data-card-type="ayushman"]:hover h3 {
             color: #1a237e;
         }
 
-
         .tool-card[data-card-type="labour"]:hover h3 {
             color: #3A425C;
         }
-
 
         .tool-card[data-card-type="image-converter"]:hover h3 {
             color: #5dd8a5;
         }
 
-
         .tool-card[data-card-type="passport"]:hover h3 {
             color: #1e88e5;
         }
-
 
         .tool-card[data-card-type="resume"]:hover h3 {
             color: #e74c3c;
@@ -823,7 +750,6 @@
             box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
         }
 
-
         .tool-badge {
             position: absolute;
             top: 20px;
@@ -836,16 +762,13 @@
             font-weight: 700;
         }
 
-
         .tool-badge.popular {
             background: var(--warning);
         }
 
-
         .tool-badge.new {
             background: var(--success);
         }
-
 
         /* Converter Info Section */
         .converter-info {
@@ -854,7 +777,6 @@
             gap: 40px;
             margin: 60px 0;
         }
-
 
         .converter-card {
             background: white;
@@ -865,31 +787,25 @@
             border-left: 5px solid var(--primary);
         }
 
-
         .converter-card.ayushman {
             border-left-color: var(--ayushman-color);
         }
-
 
         .converter-card.labour {
             border-left-color: var(--labour-color);
         }
 
-
         .converter-card.image {
             border-left-color: #5dd8a5;
         }
-
 
         .converter-card.passport {
             border-left-color: var(--passport-color);
         }
 
-
         .converter-card.resume {
             border-left-color: var(--resume-color);
         }
-
 
         .converter-card h3 {
             font-size: 1.8rem;
@@ -897,19 +813,16 @@
             color: var(--dark);
         }
 
-
         .converter-card p {
             color: #666;
             margin-bottom: 25px;
             line-height: 1.6;
         }
 
-
         .feature-list {
             text-align: left;
             margin-bottom: 25px;
         }
-
 
         .feature-list li {
             margin-bottom: 10px;
@@ -919,11 +832,9 @@
             gap: 10px;
         }
 
-
         .feature-list li i {
             color: var(--success);
         }
-
 
         /* User Guide Section */
         .user-guide {
@@ -976,7 +887,6 @@
             line-height: 1.6;
         }
 
-
         /* Features */
         .features {
             display: grid;
@@ -1018,7 +928,6 @@
             line-height: 1.6;
         }
 
-
         /* Stats Section */
         .stats {
             display: grid;
@@ -1050,7 +959,6 @@
             font-size: 1.2rem;
             font-weight: 600;
         }
-
 
         /* FAQ Section - SEO OPTIMIZED */
         .faq-section {
@@ -1126,7 +1034,6 @@
             line-height: 1.6;
         }
 
-
         /* Privacy Message Section */
         .privacy-message {
             background: #ff3b30;
@@ -1152,7 +1059,6 @@
             margin-right: auto;
             line-height: 1.5;
         }
-
 
         /* Footer */
         footer {
@@ -1218,26 +1124,22 @@
             font-size: 1rem;
         }
 
-
         /* Responsive Design */
         @media (max-width: 1024px) {
             .section-title {
                 font-size: 2.5rem;
             }
 
-
             .tools-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-
 
         @media (max-width: 768px) {
             .tools-grid {
                 grid-template-columns: 1fr;
                 gap: 25px;
             }
-
 
             .converter-info {
                 grid-template-columns: 1fr;
@@ -1272,12 +1174,9 @@
                 gap: 10px;
             }
 
-
-            .dropdown-menu {
-                position: static;
-                box-shadow: none;
-                background: #f8f9fa;
-                margin-top: 10px;
+            /* HIDE TOOLS DROPDOWN IN MOBILE MENU */
+            .dropdown {
+                display: none;
             }
            
             .mobile-menu {
@@ -1297,7 +1196,6 @@
             }
         }
 
-
         @media (max-width: 480px) {
             .section-title {
                 font-size: 1.8rem;
@@ -1306,7 +1204,6 @@
             .tool-card {
                 padding: 25px 20px;
             }
-
 
             .converter-card {
                 padding: 25px 20px;
@@ -1323,7 +1220,7 @@
     </style>
 </head>
 <body>
-    <!-- Header - UPDATED with Blog Link -->
+    <!-- Header - UPDATED: Blog Link Removed -->
     <header>
         <a href="/" class="logo">
             <img src="/static/images/logo.png" alt="E-Card Cutter Logo - Free ID Card Cropping Tools" class="logo-image">
@@ -1335,7 +1232,8 @@
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
-                <li class="dropdown">
+                <!-- Desktop Tools Dropdown (Hidden in Mobile) -->
+                <li class="dropdown desktop-only">
                     <a href="#tools" class="dropdown-toggle">
                         Tools <i class="fas fa-chevron-down"></i>
                     </a>
@@ -1352,8 +1250,7 @@
                         <a href="/image-converter" class="dropdown-item">Image Converter</a>
                     </div>
                 </li>
-                <!-- NEW: Blog Link with WordPress Colors -->
-                <li><a href="https://ecardcutter.in/" class="blog-link" target="_blank">Blog</a></li>
+                <!-- Blog Link Removed -->
                 <li><a href="/about">About</a></li>
                 <li><a href="/faq">FAQ</a></li>
                 <li><a href="/contact">Contact</a></li>
@@ -1363,10 +1260,8 @@
         </nav>
     </header>
 
-
     <!-- Main Content -->
     <div class="main-container">
-
 
         <!-- Quick Tools Section - NOW AT TOP -->
         <section class="quick-tools" id="tools">
@@ -1391,7 +1286,6 @@
                     <button class="tool-btn" onclick="window.location.href='/aadhaar-crop'">Crop Aadhaar Card</button>
                 </div>
 
-
                 <!-- Ayushman Card Crop -->
                 <div class="tool-card" data-card-type="ayushman">
                     <div class="tool-badge new">NEW</div>
@@ -1402,7 +1296,6 @@
                     <p>Crop Ayushman Bharat cards from PDFs with perfect dimensions for healthcare documentation</p>
                     <button class="tool-btn" onclick="window.location.href='/ayushman-card'">Crop Ayushman Card</button>
                 </div>
-
 
                 <!-- Labour Card Crop -->
                 <div class="tool-card" data-card-type="labour">
@@ -1415,7 +1308,6 @@
                     <button class="tool-btn" onclick="window.location.href='/labour-card'">Crop Labour Card</button>
                 </div>
 
-
                 <!-- Passport Photo Maker -->
                 <div class="tool-card" data-card-type="passport">
                     <div class="tool-badge new">NEW</div>
@@ -1426,7 +1318,6 @@
                     <p>Create perfect passport size photos with our online tool. Adjust background, size and format for official documents</p>
                     <button class="tool-btn" onclick="window.location.href='/passport-photo'">Create Passport Photo</button>
                 </div>
-
 
                 <!-- Resume Builder -->
                 <div class="tool-card" data-card-type="resume">
@@ -1439,7 +1330,6 @@
                     <button class="tool-btn" onclick="window.location.href='/resume-builder'">Build Resume</button>
                 </div>
 
-
                 <!-- Image Converter -->
                 <div class="tool-card" data-card-type="image-converter">
                     <div class="tool-badge new">NEW</div>
@@ -1451,7 +1341,6 @@
                     <button class="tool-btn" onclick="window.location.href='/image-converter'">Convert Images</button>
                 </div>
 
-
                 <!-- Janaadhaar Crop -->
                 <div class="tool-card" data-card-type="janaadhaar">
                     <div class="tool-icon">
@@ -1462,7 +1351,6 @@
                     <button class="tool-btn" onclick="window.location.href='/janaadhaar-crop'">Crop Janaadhaar Card</button>
                 </div>
 
-
                 <!-- Pan Crop -->
                 <div class="tool-card" data-card-type="pan">
                     <div class="tool-icon">
@@ -1472,7 +1360,6 @@
                     <p>Extract PAN cards from NSDL, UTITSL, and Income Tax PDFs with accurate dimensions</p>
                     <button class="tool-btn" onclick="window.location.href='/pan-crop'">Crop PAN Card</button>
                 </div>
-
 
                 <!-- Voter ID Crop -->
                 <div class="tool-card" data-card-type="voterid">
@@ -1495,7 +1382,6 @@
             </div>
         </section>
 
-
         <!-- NEW: Converter Info Section -->
         <section class="converter-info">
             <div class="converter-card ayushman">
@@ -1510,7 +1396,6 @@
                 </ul>
                 <button class="tool-btn" onclick="window.location.href='/ayushman-card'">Try Ayushman Crop</button>
             </div>
-
 
             <div class="converter-card labour">
                 <h3>Labour Card Crop Tool</h3>
@@ -1554,12 +1439,10 @@
             </div>
         </section>
 
-
         <!-- Banner Ad Between Sections -->
         <div class="banner-ad">
             Responsive Banner Ad Slot
         </div>
-
 
         <!-- User Guide Section -->
         <section class="user-guide">
@@ -1595,7 +1478,6 @@
             </div>
         </section>
 
-
         <!-- Features Section -->
         <section class="features" id="features">
             <div class="feature">
@@ -1616,7 +1498,6 @@
                 <p>No hidden costs, no subscriptions, no watermarks. Our tools are 100% free forever.</p>
             </div>
         </section>
-
 
         <!-- Stats Section -->
         <section class="stats">
@@ -1640,7 +1521,6 @@
                 <div class="stat-label">Browser Processing</div>
             </div>
         </section>
-
 
         <!-- FAQ Section - SEO OPTIMIZED -->
         <section class="faq-section">
@@ -1696,14 +1576,12 @@
             </div>
         </section>
 
-
         <!-- Privacy Message Section -->
         <section class="privacy-message">
             <h2>Your Privacy is Our Priority</h2>
             <p>All uploaded files are automatically deleted after 5 minutes. No server storage. 100% browser processing.</p>
         </section>
     </div>
-
 
     <!-- Footer -->
     <footer>
@@ -1752,13 +1630,11 @@
         </div>
     </footer>
 
-
     <script>
         // Mobile Menu Toggle
         document.querySelector('.mobile-menu').addEventListener('click', function() {
             document.querySelector('nav').classList.toggle('active');
         });
-
 
         // FAQ Accordion
         document.querySelectorAll('.faq-question').forEach(question => {
@@ -1786,14 +1662,12 @@
             });
         });
 
-
         // Tool Button Actions
         document.querySelectorAll('.tool-btn').forEach(button => {
             button.addEventListener('click', function() {
                 // Button actions remain the same
             });
         });
-
 
         // Close mobile menu when clicking on a link
         document.querySelectorAll('nav a').forEach(link => {
@@ -1802,7 +1676,6 @@
             });
         });
 
-
         // Smooth scroll for Tools navigation link
         document.querySelector('a[href="#tools"]').addEventListener('click', function(e) {
             e.preventDefault();
@@ -1810,7 +1683,6 @@
                 behavior: 'smooth'
             });
         });
-
 
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {

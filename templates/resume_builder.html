@@ -91,22 +91,6 @@
             transform: translateY(-2px);
         }
 
-        .blog-link {
-            background: linear-gradient(135deg, #21759b, #3498db);
-            color: white !important;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(33, 117, 155, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .blog-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(33, 117, 155, 0.4);
-            background: linear-gradient(135deg, #1a5f7a, #2980b9);
-        }
-
         .mobile-menu {
             display: none;
             font-size: 1.5rem;
@@ -547,10 +531,11 @@
             font-family: 'Poppins', sans-serif;
         }
 
+        /* FIXED: Resume header alignment */
         .resume-header{
             display:flex;
             justify-content:space-between;
-            align-items:center;
+            align-items:flex-start; /* Changed from center to flex-start */
             padding-bottom:20px;
             border-bottom:3px solid #2c3e50;
             margin-bottom: 25px;
@@ -560,10 +545,12 @@
             font-size:42px;
             font-weight:700;
             color: #2c3e50;
+            margin-bottom: 5px; /* Added margin to separate from title */
         }
         .resume-title{
             font-size:28px;
             color:#3498db;
+            margin-bottom: 10px; /* Added margin to separate from contact info */
         }
 
         .resume-photo{
@@ -572,6 +559,7 @@
             border-radius:50%;
             overflow:hidden;
             border:2px solid #3498db;
+            margin-top: 0; /* Ensure photo is aligned to top */
         }
         .resume-photo img{
             width:100%;
@@ -935,7 +923,7 @@
         <nav class="main-nav">
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="https://ecardcutter.in/" class="blog-link" target="_blank">Blog</a></li>
+                <!-- Blog Link REMOVED -->
                 <li><a href="/about">About</a></li>
                 <li><a href="/faq">FAQ</a></li>
                 <li><a href="/contact">Contact</a></li>
@@ -1088,19 +1076,17 @@ Easy adaptability to situations.</textarea>
                             <div>
                                 <h1 class="resume-name" id="previewName">Your Name</h1>
                                 <p class="resume-title" id="previewTitle">Job Title</p>
+                                <!-- FIXED: Contact information moved inside the header div -->
+                                <div class="resume-section">
+                                    <div class="contact-info-container" id="previewContact">
+                                        <div class="contact-item">Email: your.email@example.com</div>
+                                        <div class="contact-item">Phone: (123) 456-7890</div>
+                                        <div class="contact-item">Address: Your Address</div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="resume-photo">
                                 <img id="previewPhoto" src="" style="display:none;">
-                            </div>
-                        </div>
-
-                        <!-- CONTACT - FIXED: Now with proper line breaks -->
-                        <div class="resume-section">
-                            <h2 class="resume-section-title">Contact Information</h2>
-                            <div class="contact-info-container" id="previewContact">
-                                <div class="contact-item">Email: your.email@example.com</div>
-                                <div class="contact-item">Phone: (123) 456-7890</div>
-                                <div class="contact-item">Address: Your Address</div>
                             </div>
                         </div>
 
