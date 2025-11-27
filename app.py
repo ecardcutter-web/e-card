@@ -108,6 +108,7 @@ file_cleaner = FileCleaner(
 # ==================== RESUME BUILDER ROUTES - COMPLETELY FIXED VERSION ====================
 
 @app.route('/resume-builder')
+@app.route('/free-resume-builder')
 def resume_builder():
     return render_template('resume_builder.html')
 
@@ -1002,6 +1003,7 @@ def create_passport_photo_route():
 # ==================== EXISTING PASSPORT PHOTO ROUTES ====================
 
 @app.route('/passport-photo')
+@app.route('/passport-size-photo-maker')  # ✅ Dono URLs ek hi function se
 def passport_photo():
     return render_template('passport_photo.html')
 
