@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for, send_file, jsonify
+from flask import Flask, render_template, request, flash, redirect, url_for, send_file, jsonify, Response
 import os
 import fitz
 import secrets
@@ -107,7 +107,6 @@ file_cleaner = FileCleaner(
 
 # ==================== RESUME BUILDER ROUTES - COMPLETELY FIXED VERSION ====================
 
-@app.route('/resume-builder')
 @app.route('/free-resume-builder')
 def resume_builder():
     return render_template('resume_builder.html')
@@ -1002,9 +1001,9 @@ def create_passport_photo_route():
 
 # ==================== EXISTING PASSPORT PHOTO ROUTES ====================
 
-@app.route('/passport-photo')
-@app.route('/passport-size-photo-maker')  # ✅ Dono URLs ek hi function se
-def passport_photo():
+@app.route('/passport-size-photo-maker')
+def passport_size_photo_maker():
+    """Route for passport size photo maker"""
     return render_template('passport_photo.html')
 
 @app.route('/upload-passport-photo', methods=['POST'])
@@ -1463,9 +1462,200 @@ def process_pdf_front_back(pdf_path, output_dir, card_type='aadhaar', pdf_passwo
         import traceback
         print(f"Traceback: {traceback.format_exc()}")
         return {'success': False, 'error': str(e)}
+# ==================== STATIC SITEMAP & ROBOTS ROUTES ====================
 
+@app.route('/sitemap.xml')
+def serve_sitemap():
+    """Serve sitemap.xml content directly"""
+    try:
+        sitemap_content = '''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+        
+  <!-- Home Page -->
+  <url>
+    <loc>https://ecardcutter.in/</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- Card Crop Tools -->
+  <url>
+    <loc>https://ecardcutter.in/aadhaar-crop</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecardcutter.in/pan-crop</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecardcutter.in/voterid-crop</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecardcutter.in/janaadhaar-crop</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecardcutter.in/ayushman-card</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecardcutter.in/labour-card</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Other Tools -->
+  <url>
+    <loc>https://ecardcutter.in/image-converter</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecardcutter.in/passport-size-photo-maker</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecardcutter.in/free-resume-builder</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Informational Pages -->
+  <url>
+    <loc>https://ecardcutter.in/about</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecardcutter.in/contact</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecardcutter.in/faq</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Legal Pages -->
+  <url>
+    <loc>https://ecardcutter.in/privacy</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+  <url>
+    <loc>https://ecardcutter.in/terms</loc>
+    <lastmod>2024-01-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+</urlset>'''
+        return Response(sitemap_content, mimetype='application/xml')
+    except Exception as e:
+        print(f"Sitemap error: {e}")
+        return "Sitemap Error", 500
+
+@app.route('/robots.txt')
+def serve_robots():
+    """Serve robots.txt content directly"""
+    try:
+        robots_content = """User-agent: *
+Allow: /
+Allow: /aadhaar-crop
+Allow: /pan-crop
+Allow: /voterid-crop
+Allow: /janaadhaar-crop
+Allow: /ayushman-card
+Allow: /labour-card
+Allow: /image-converter
+Allow: /passport-size-photo-maker
+Allow: /free-resume-builder
+Allow: /about
+Allow: /faq
+Allow: /contact
+Allow: /privacy
+Allow: /terms
+
+Disallow: /uploads/
+Disallow: /cropped/
+Disallow: /converted/
+Disallow: /passport_photos/
+Disallow: /resumes/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /tmp/
+
+# Sitemap location
+Sitemap: https://ecardcutter.in/sitemap.xml
+
+# Crawl delay (1 second between requests)
+Crawl-delay: 1"""
+        return Response(robots_content, mimetype='text/plain')
+    except Exception as e:
+        print(f"Robots.txt error: {e}")
+        return "Robots.txt Error", 500
 # ==================== ROUTES ====================
+@app.route('/favicon.ico')
+def favicon():
+    """Serve logo.png as favicon.ico"""
+    try:
+        return send_from_directory(
+            os.path.join(app.root_path, 'static', 'images'),
+            'logo.png',
+            mimetype='image/png'
+        )
+    except Exception as e:
+        print(f"Favicon error: {e}")
+        # Return empty response instead of 404
+        return '', 204
 
+@app.route('/logo.png')
+def serve_logo():
+    """Serve logo.png directly"""
+    try:
+        return send_from_directory(
+            os.path.join(app.root_path, 'static', 'images'),
+            'logo.png', 
+            mimetype='image/png'
+        )
+    except Exception as e:
+        print(f"Logo error: {e}")
+        return '', 204
 @app.route('/')
 def index():
     return render_template('index.html')
