@@ -1,23 +1,57 @@
 User-agent: *
 Allow: /
 Allow: /aadhaar-crop
-Allow: /janaadhaar-crop
 Allow: /pan-crop
 Allow: /voterid-crop
-Allow: /pdf-converter
+Allow: /janaadhaar-crop
+Allow: /ayushman-card
+Allow: /labour-card
 Allow: /image-converter
+Allow: /passport-size-photo-maker
+Allow: /free-resume-builder
 Allow: /about
 Allow: /faq
 Allow: /contact
 Allow: /privacy
 Allow: /terms
 
+# Disallow sensitive directories
+Disallow: /uploads/
+Disallow: /cropped/
+Disallow: /converted/
+Disallow: /passport_photos/
+Disallow: /resumes/
 Disallow: /admin/
 Disallow: /private/
 Disallow: /tmp/
+Disallow: /cgi-bin/
+Disallow: /wp-admin/
 
 # Sitemap location
 Sitemap: https://ecardcutter.in/sitemap.xml
 
 # Crawl delay (1 second between requests)
 Crawl-delay: 1
+
+# Specific bots instructions
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Crawl-delay: 5
+
+User-agent: YandexBot
+Crawl-delay: 5
